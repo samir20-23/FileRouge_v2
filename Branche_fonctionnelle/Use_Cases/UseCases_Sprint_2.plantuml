@@ -15,3 +15,22 @@ U -- UC3 : "Partage"
 A -- UC4 : "Organise"
 A -- UC5 : "Crée un rapport"
 @enduml
+
+
+' @startuml
+' title Partage de documents et de ressources - Cas d'Utilisation - Sprint 2
+' left to right direction
+
+' actor Utilisateur as U
+' actor Responsable_des_stagiaires as A
+
+' rectangle "Sprint 2" {
+'     usecase UC3 as "Partager un document"
+'     usecase UC4 as "Organiser les ressources"
+'     usecase UC5 as "Générer un rapport d'accès"
+' }
+
+' U -- UC3 : "Partage"
+' A -- UC4 : "Organise"
+' A -- UC5 : "Crée un rapport"
+' @enduml
