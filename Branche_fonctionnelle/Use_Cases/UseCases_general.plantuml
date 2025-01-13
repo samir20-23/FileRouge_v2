@@ -19,25 +19,4 @@ A -- UC4 : "Organise"
 A -- UC5 : "Crée un rapport"
 @enduml
 
-' new
-
-' @startuml
-' title Partage de documents et de ressources - Cas d'Utilisation
-' left to right direction
-' actor Utilisateur as U
-' actor Responsable_des_stagiaires as A
-
-' rectangle "Actions" {
-'     usecase UC1 as "Télécharger un document"
-'     usecase UC2 as "Partager un document"
-'     usecase UC3 as "Consulter les ressources partagées"
-'     usecase UC4 as "Organiser les ressources"
-'     usecase UC5 as "Générer un rapport d'accès"
-' }
-
-' U -- UC1 : "Télécharge"
-' U -- UC2 : "Partage"
-' U -- UC3 : "Consulte"
-' A -- UC4 : "Organise"
-' A -- UC5 : "Crée un rapport"
-' @enduml
+    
