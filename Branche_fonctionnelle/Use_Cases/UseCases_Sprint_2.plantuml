@@ -1,17 +1,18 @@
+
 @startuml
 title Partage de documents et de ressources - Cas d'Utilisation - Sprint 2
 left to right direction
 
 actor Utilisateur as U
-actor Responsable_des_stagiaires as A
+actor Formateur as F
 
 rectangle "Sprint 2" {
     usecase UC3 as "Partager un document"
     usecase UC4 as "Organiser les ressources"
-    usecase UC5 as "Générer un rapport d'accès"
+    usecase UC6 as "Valider ou refuser un document"
 }
 
 U -- UC3 : "Partage"
-A -- UC4 : "Organise"
-A -- UC5 : "Crée un rapport"
+F -- UC4 : "Organise"
+F -- UC6 : "Valide ou refuse"
 @enduml
