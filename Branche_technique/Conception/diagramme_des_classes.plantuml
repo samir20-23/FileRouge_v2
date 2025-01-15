@@ -1,6 +1,14 @@
 
+
+
+
+
+
+        ' the utilisarur can  just show the resource .
 @startuml
 left to right direction
+
+title 21 - Partage de documents et de ressources - Partage centralisé de documents et ressources pédagogiques
 
 class Utilisateur {
     +id: Int
@@ -16,6 +24,7 @@ class Document {
     +titre: String
     +chemin_fichier: String
     +date_telechargement: timestamp
+    +etat_validation: String
     +created_at: timestamp
     +updated_at: timestamp
 }
@@ -42,7 +51,16 @@ class Partage {
     +document_id: Int
     +utilisateur_id: Int
     +date_partage: timestamp
-    +niveau_permission: String
+    +niveau_permission: String  "read, write, admin"
+}
+
+class Validation {
+    +id: Int
+    +formateur_id: Int
+    +document_id: Int
+    +etat: String
+    +commentaire: String
+    +date_validation: timestamp
 }
 
 Utilisateur "1" -- "*" Document : "Télécharge"
@@ -51,4 +69,88 @@ Partage "*" -- "1" Document : "Contient"
 Utilisateur "1" -- "*" Ressource : "Accède à"
 Document "1" -- "*" Categorie : "Classifie sous"
 Ressource "1" -- "*" Categorie : "Classifie sous"
+Document "1" -- "1" Validation : "Est validé par"
+Ressource "1" -- "1" Validation : "Est validé par"
 @enduml
+
+
+
+'         ' the formateur  can  create the resource .
+' @startuml
+' left to right direction
+
+' title 21 - Partage de documents et de ressources - Partage centralisé de documents et ressources pédagogiques
+
+' class Utilisateur {
+'     +id: Int
+'     +nom: String
+'     +email: String
+'     +role: String  "Utilisateur, Formateur"
+'     +created_at: timestamp
+'     +updated_at: timestamp
+' }
+
+' class Formateur {
+'     +id: Int
+'     +nom: String
+'     +email: String
+'     +role: String  "Formateur"
+'     +created_at: timestamp
+'     +updated_at: timestamp
+' }
+
+' class Document {
+'     +id: Int
+'     +titre: String
+'     +chemin_fichier: String
+'     +date_telechargement: timestamp
+'     +etat_validation: String
+'     +created_at: timestamp
+'     +updated_at: timestamp
+' }
+
+' class Ressource {
+'     +id: Int
+'     +nom: String
+'     +type: String
+'     +description: String
+'     +created_at: timestamp
+'     +updated_at: timestamp
+' }
+
+' class Categorie {
+'     +id: Int
+'     +nom: String
+'     +description: String
+'     +created_at: timestamp
+'     +updated_at: timestamp
+' }
+
+' class Partage {
+'     +id: Int
+'     +document_id: Int
+'     +utilisateur_id: Int
+'     +date_partage: timestamp
+'     +niveau_permission: String  "read, write, admin"
+' }
+
+' class Validation {
+'     +id: Int
+'     +formateur_id: Int
+'     +document_id: Int
+'     +etat: String
+'     +commentaire: String
+'     +date_validation: timestamp
+' }
+
+' Formateur "1" -- "*" Ressource : "Crée et télécharge"
+' Utilisateur "1" -- "*" Document : "Télécharge"
+' Utilisateur "1" -- "*" Partage : "Partage des documents"
+' Partage "*" -- "1" Document : "Contient"
+' Utilisateur "1" -- "*" Ressource : "Accède à"
+' Document "1" -- "*" Categorie : "Classifie sous"
+' Ressource "1" -- "*" Categorie : "Classifie sous"
+' Document "1" -- "1" Validation : "Est validé par"
+' Ressource "1" -- "1" Validation : "Est validé par"
+' Formateur "1" -- "*" Validation : "Valide les ressources"
+' @enduml
