@@ -1,0 +1,20 @@
+
+@startuml
+title Partage de documents et de ressources - Cas d'Utilisation - Sprint 2
+left to right direction
+
+actor Formateur as F
+
+rectangle "Sprint 2" {
+    usecase UC1 as "Créer et télécharger un document"
+    usecase UC2 as "Créer et télécharger une ressourcet"
+    usecase UC3 as "Ajouter une catégorie"
+    usecase UC4 as "Mettre à jour une catégorie"
+    
+}
+
+F -- UC1 : ""
+F -- UC2 : ""
+F -- UC3 : ""
+F -- UC4 : ""
+@enduml
