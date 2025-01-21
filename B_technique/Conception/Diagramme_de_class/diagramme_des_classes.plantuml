@@ -3,32 +3,23 @@ left to right direction
 
 title 21 - Partage de documents et de ressources - Partage centralisé de documents et ressources pédagogiques
 
-' Define the Utilisateur (User) class with role as an attribute
-class Utilisateur {
+' Define the User (User) class with role as an attribute
+class User {
     +id: Integer
     +nom: String
     +email: String
-    +role: String "Utilisateur, Formateur"
+    +role: String 
     +created_at: DateTime
     +updated_at: DateTime
 }
 
-
-' Define the Formateur (Trainer) class which extends Utilisateur
-class Formateur {
-    +id: Integer
-    +nom: String
-    +email: String
-    +role: String "Formateur"
-    +created_at: DateTime
-    +updated_at: DateTime
-} 
  
 ' Define the Document class with attributes specific to documents
 class Document {
     +id: Integer
     +title: String
     +chemin_fichier: String
+    +type:String
     +Validation: String "Pending, Approved, Rejected"
     +date_telechargement: DateTime
     +etat_validation: String "Not Validated, Validated"
@@ -37,16 +28,6 @@ class Document {
     +updated_at: DateTime
 }
 
-' Define the Ressource class with specific attributes
-class Ressource {
-    +id: Integer
-    +nom: String
-    +type: String
-    +description: String
-    +category_id: Integer
-    +created_at: DateTime
-    +updated_at: DateTime
-}
 
 ' Define the Categorie class to organize documents and resources
 class Categorie {
@@ -59,16 +40,10 @@ class Categorie {
 
 ' Define the relationships between classes
 
-' Formateur can create and upload resources
-Formateur "1" -- "*" Ressource : "Crée et télécharge"
-Formateur "1" -- "*" Document : "Crée et télécharge"
-
-' Utilisateur can download documents and access resources
-Utilisateur "1" -- "*" Document : "Télécharge"
-Utilisateur "1" -- "*" Ressource : "Accède à"
+' User can create and upload resources
+User "1" -- "*" Document : "Crée et télécharge"
 
 ' Documents and resources are classified under categories
 Document "1" -- "*" Categorie : "Classifie sous"
-Ressource "1" -- "*" Categorie : "Classifie sous"
 
 @enduml
