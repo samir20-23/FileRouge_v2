@@ -16,11 +16,9 @@ return new class extends Migration
             $table->string('title');
             $table->string('type');
             $table->string('chemin_fichier');
-            $table->string('etat_validation')->default('En attente');
             $table->unsignedBigInteger('categorie_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
-    
             $table->foreign('categorie_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         

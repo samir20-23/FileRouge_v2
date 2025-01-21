@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
+            $table->string('name');
             $table->text('description')->nullable();
             $table->timestamps();
         });
     }
     // +id: Integer
-    // +nom: String
+    // +name: String
     // +description: String
     // +created_at: DateTime
     // +updated_at: DateTime
