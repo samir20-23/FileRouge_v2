@@ -1,0 +1,39 @@
+@startuml
+
+left to right direction
+actor User as user
+actor Editor as editor
+actor Admin as admin
+
+rectangle "Blog System" {
+    usecase "View All Articles" as UC_ViewArticles
+    usecase "View Single Article" as UC_ViewArticle
+    usecase "Add comments" as UC_AddComments
+
+    usecase "Crud articles" as UC_CrudArticles
+    usecase "Crud categories" as UC_CrudCategories
+    usecase "Crud tags" as UC_CrudTags
+
+    usecase "Crud users" as UC_CrudUsers
+    usecase "Validate articles" as UC_ValidateArticles
+
+}
+
+
+user -- UC_ViewArticle
+user -- UC_ViewArticles
+user -- UC_AddComments
+
+editor -- UC_CrudArticles
+editor -- UC_CrudCategories
+editor -- UC_CrudTags
+
+
+admin -- UC_CrudArticles
+admin -- UC_CrudCategories
+admin -- UC_CrudTags
+admin -- UC_CrudUsers
+admin -- UC_ValidateArticles
+
+
+@enduml
