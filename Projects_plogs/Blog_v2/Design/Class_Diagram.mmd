@@ -1,0 +1,57 @@
+classDiagram
+  class User {
+    +int id
+    +string name
+    +string email
+    +string password
+    +created_at
+    +updated_at
+  }
+
+  class Article {
+    +int id
+    +string title
+    +string content
+    +int user_id
+    +int category_id
+    +created_at
+    +updated_at
+  }
+
+  class Category {
+    +int id
+    +string name
+    +created_at
+    +updated_at
+  }
+
+  class Tag {
+    +int id
+    +string name
+    +created_at
+    +updated_at
+  }
+
+  class Article_Tag {
+    +int article_id
+    +int tag_id
+    +created_at
+    +updated_at
+  }
+
+  class Comment {
+    +int id
+    +string content
+    +int commentable_id
+    +string commentable_type
+    +int user_id
+    +created_at
+    +updated_at
+  }
+
+  Article "n" --> "1" Category
+  Article "1" --> "n" Comment
+  Article "1" -- "n" Article_Tag
+  Tag "1" -- "n" Article_Tag
+  User "1" --> "n" Comment
+  User "1" --> "n" Article

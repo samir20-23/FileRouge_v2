@@ -13,6 +13,7 @@ class Utilisateur {
     +updated_at: DateTime
 }
 
+
 ' Define the Formateur (Trainer) class which extends Utilisateur
 class Formateur {
     +id: Integer
@@ -21,8 +22,8 @@ class Formateur {
     +role: String "Formateur"
     +created_at: DateTime
     +updated_at: DateTime
-}
-
+} 
+ 
 ' Define the Document class with attributes specific to documents
 class Document {
     +id: Integer

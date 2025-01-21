@@ -1,0 +1,44 @@
+@startuml
+class User {
+    +id: Int
+    +name: String
+    +email: String
+    +password: String
+    +created_at: timestamp
+    +updated_at: timestamp
+}
+class Article {
+    +id: Int
+    +title: String
+    +content: text
+    +created_at: timestamp
+    +updated_at: timestamp
+}
+
+class Category {
+    +id: Int
+    +name: String
+    +slug: String
+    +created_at: timestamp
+    +updated_at: timestamp
+}
+class Tag {
+    +id: Int
+    +name: String
+    +slug: String
+    +created_at: timestamp
+    +updated_at: timestamp
+}
+class Comment {
+    +id: Int
+    +content: String
+    +created_at: timestamp
+    +updated_at: timestamp
+}
+
+Category "1" -- "*" Article : Contient
+Article "0..*" -- "0..*" Tag : Est associé à
+Article "1" -- "0..*" Comment : Contient
+User "1" -- "0..*" Comment : Publie
+User "1" -- "0..*" Article : Crée
+@enduml

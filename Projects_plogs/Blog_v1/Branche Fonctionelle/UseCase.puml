@@ -1,0 +1,36 @@
+@startuml
+left to right direction
+
+actor Visiteur
+actor Utilisateur
+actor Administrateur
+
+rectangle PkgPublic {
+  usecase "Consulter les articles et leurs commentaires" as UC2
+  usecase "Filtrer les articles par catégorie ou auteur" as UC3
+  usecase "Publier et modifier les commentaires" as UC1
+}
+rectangle PkgAdmin {
+  usecase "Gérer les tags" as UC4
+  usecase "Gérer les catégories" as UC5
+  usecase "Gérer les articles" as UC6
+  usecase "Gérer les rôles" as UC7
+  usecase "Modérer les commentaires" as UC8
+  usecase "Consulter les statistiques" as UC9
+}
+
+Utilisateur -- UC1
+Visiteur -- UC2
+Visiteur -- UC3
+Utilisateur -- UC2
+Utilisateur -- UC3
+Administrateur -- UC4
+Administrateur -- UC5
+Administrateur -- UC6
+Administrateur -- UC7
+Administrateur -- UC8
+Administrateur -- UC9
+
+Utilisateur --|> Visiteur
+Administrateur --|> Utilisateur
+@enduml
