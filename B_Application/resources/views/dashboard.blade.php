@@ -1,16 +1,37 @@
-@extends('layout.app')
+@extends('layouts.app')
 
 @section('content')
-    <h1>Dashboard</h1>
-
-    <div class="stats">
-        <p>Total Documents: {{ $documentsCount }}</p>
-        <p>Total Categories: {{ $categoriesCount }}</p>
+<div class="container">
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="small-box bg-info card-custom">
+                <div class="inner p-3">
+                    <h3 class="display-4">{{ $totalDocuments }}</h3>
+                    <p class="lead">Total Documents</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-file fa-3x"></i>
+                </div>
+                <a href="{{ route('documents.index') }}" class="small-box-footer">
+                    View Documents <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="small-box bg-success card-custom">
+                <div class="inner p-3">
+                    <h3 class="display-4">{{ $totalCategories }}</h3>
+                    <p class="lead">Total Categories</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-list fa-3x"></i>
+                </div>
+                <a href="{{ route('categories.index') }}" class="small-box-footer">
+                    View Categories <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
     </div>
-
-    <div class="buttons">
-        <a href="{{ route('documents.index') }}" class="btn btn-primary">View Documents</a>
-        <a href="{{ route('documents.create') }}" class="btn btn-success">Create Document</a>
-    </div>
+</div>
 @endsection
-<!-- dashboard.blade.php -->
