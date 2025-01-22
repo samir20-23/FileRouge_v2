@@ -9,9 +9,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $documentsCount = Document::count();  // Get the total number of documents
-        $categoriesCount = Categorie::count();  // Get the total number of categories
-        
-        return view('dashboard', compact('documentsCount', 'categoriesCount'));
+        $totalDocuments = Document::count();
+        $totalCategories = Categorie::count();
+
+        return view('dashboard', compact('totalDocuments', 'totalCategories'));
     }
 }

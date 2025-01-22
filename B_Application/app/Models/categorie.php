@@ -2,19 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Categorie extends Model
 {
-    // Specify the table name if it's not the plural form of the model name
-    protected $table = 'Categories';
+    use HasFactory;
 
-    // Define the fillable properties (fields you can mass assign)
-    protected $fillable = [
-        'name',         // Document title
-        'description',          // Document type (e.g., PDF, DOCX)
-        'created_at', // File path (where the document is stored)
-        'updated_at', 
-    ];
+    protected $fillable = ['id','name', 'description','created_at','updated_at'];
 
+    public function documents()
+    {
+        return $this->hasMany(Document::class, 'categorie_id');
+    }
 }
