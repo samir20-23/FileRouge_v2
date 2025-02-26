@@ -1,0 +1,14 @@
+@startuml Cas_utilisation
+left to right direction
+actor "Formateur" as fr
+rectangle System {
+  usecase "Voir les analyses" as UC1
+  usecase "CRUD Branche" as UC2
+  usecase "CRUD Question" as UC3
+  usecase "Entretien" as UC4
+}
+fr -- UC1
+fr -- UC2
+UC2 <.. UC3 : <<extends>>
+fr -- UC4
+@enduml

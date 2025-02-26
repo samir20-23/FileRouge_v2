@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Document;
 use App\Models\Categorie;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -11,7 +12,9 @@ class DashboardController extends Controller
     {
         $totalDocuments = Document::count();
         $totalCategories = Categorie::count();
-
-        return view('dashboard', compact('totalDocuments', 'totalCategories'));
+        $totalUsers = User::count();
+    
+        return view('dashboard', compact('totalDocuments', 'totalCategories', 'totalUsers'));
     }
+    
 }

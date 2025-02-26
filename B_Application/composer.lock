@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d78b93e9eb249f91746a459d8dcd2d00",
+    "content-hash": "8c4a51d912328cc936bd33155c49e285",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -1099,25 +1099,25 @@
         },
         {
             "name": "jeroennoten/laravel-adminlte",
-            "version": "v3.14.3",
+            "version": "v3.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jeroennoten/Laravel-AdminLTE.git",
-                "reference": "76b776f86ba70431cd2acb174caf31cb6559c67a"
+                "reference": "0269331f55fa8385413895225d6d89b85babe3de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jeroennoten/Laravel-AdminLTE/zipball/76b776f86ba70431cd2acb174caf31cb6559c67a",
-                "reference": "76b776f86ba70431cd2acb174caf31cb6559c67a",
+                "url": "https://api.github.com/repos/jeroennoten/Laravel-AdminLTE/zipball/0269331f55fa8385413895225d6d89b85babe3de",
+                "reference": "0269331f55fa8385413895225d6d89b85babe3de",
                 "shasum": ""
             },
             "require": {
                 "almasaeed2010/adminlte": "3.2.*",
-                "laravel/framework": ">=7.0",
-                "php": ">=7.2.5"
+                "laravel/framework": ">=8.0",
+                "php": ">=7.3"
             },
             "require-dev": {
-                "orchestra/testbench": ">=4.0",
+                "orchestra/testbench": ">=6.0",
                 "phpunit/phpunit": ">=9.1"
             },
             "type": "library",
@@ -1152,9 +1152,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jeroennoten/Laravel-AdminLTE/issues",
-                "source": "https://github.com/jeroennoten/Laravel-AdminLTE/tree/v3.14.3"
+                "source": "https://github.com/jeroennoten/Laravel-AdminLTE/tree/v3.15.0"
             },
-            "time": "2025-01-11T22:02:34+00:00"
+            "time": "2025-02-24T22:20:15+00:00"
         },
         {
             "name": "laravel/framework",
