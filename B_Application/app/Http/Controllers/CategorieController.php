@@ -10,7 +10,8 @@ class CategorieController extends Controller
     public function index()
     {
         $categories = Categorie::all();  // Retrieve all categories
-        return view('categories.index', compact('categories'));
+        $meisthebest = "im the best";
+        return view('categories.index', compact('categories','meisthebest'));
     }
 
     public function create()
