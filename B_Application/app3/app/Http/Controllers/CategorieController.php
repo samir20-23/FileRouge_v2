@@ -2,63 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CategorieService;
 use Illuminate\Http\Request;
+use App\Models\Categorie;
 
 class CategorieController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $categories;
+
+    public function __construct(CategorieService $categories)
+    {
+        $this->middleware('auth');
+        $this->categories = $categories;
+    }
+
     public function index()
     {
-        //
+        $cats = $this->categories->getAll();
+        return view('categories.index', compact('cats'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('categories.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name'        => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+        $this->categories->create($data);
+        return redirect()->route('categories.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Categorie $categorie)
     {
-        //
+        return view('categories.edit', compact('categorie'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Categorie $categorie)
     {
-        //
+        $data = $request->validate([
+            'name'        => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+        $categorie->update($data);
+        return redirect()->route('categories.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Categorie $categorie)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $categorie->delete();
+        return redirect()->route('categories.index');
     }
 }

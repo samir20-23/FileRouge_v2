@@ -2,63 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ValidationService;
 use Illuminate\Http\Request;
+use App\Models\Validation;
 
 class ValidationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $validations;
+
+    public function __construct(ValidationService $validations)
+    {
+        $this->middleware('auth');
+        $this->validations = $validations;
+    }
+
     public function index()
     {
-        //
+        $vals = $this->validations->getAll();
+        return view('validations.index', compact('vals'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'document_id'  => 'required|exists:documents,id',
+            'formateur_id' => 'required|exists:formateurs,id',
+        ]);
+        $this->validations->validateDocument($data['document_id'], $data['formateur_id']);
+        return redirect()->route('validations.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy(Validation $validation)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $validation->delete();
+        return redirect()->route('validations.index');
     }
 }
