@@ -1,20 +1,29 @@
-
 @startuml
-title Partage de documents et de ressources - Cas d'Utilisation - Sprint 2
-left to right direction
+title Partage centralisé – Cas d'utilisation global
 
-actor Formateur as F
+actor Formateur   as F
+actor Apprenant   as U
 
-rectangle "Sprint 2" {
-    usecase UC1 as "Créer et télécharger un document"
-    usecase UC2 as "Créer et télécharger une ressourcet"
-    usecase UC3 as "Ajouter une catégorie"
-    usecase UC4 as "Mettre à jour une catégorie"
-    
+package "Gestion des Documents & Ressources" {
+  usecase "Créer et téléverser\nun document"   as UC_A
+  usecase "Téléverser une ressource"           as UC_B
+  usecase "Télécharger un document"            as UC_C
+  usecase "Consulter une ressource"            as UC_D
 }
 
-F -- UC1 : ""
-F -- UC2 : ""
-F -- UC3 : ""
-F -- UC4 : ""
+package "Gestion des Catégories" {
+  usecase "Ajouter une catégorie"   as UC_E
+  usecase "Modifier une catégorie"  as UC_F
+  usecase "Supprimer une catégorie" as UC_G
+}
+
+F -- UC_A : crée
+F -- UC_B : crée
+U -- UC_C : télécharge
+U -- UC_D : consulte
+
+F -- UC_E : gère
+F -- UC_F : gère
+F -- UC_G : gère
+
 @enduml

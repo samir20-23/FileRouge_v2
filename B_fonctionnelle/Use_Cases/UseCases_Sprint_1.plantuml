@@ -1,18 +1,15 @@
 @startuml
-title Partage de documents et de ressources - Cas d'Utilisation - Sprint 1
+title Partage de documents et de ressources – Use Cases Sprint 1
 left to right direction
 
 actor Utilisateur as U
 
-rectangle "Sprint 1" {
-    usecase UC1 as "Télécharger un document"
-    usecase UC2 as "Consulter les ressources partagées"
+package "Sprint 1" {
+  usecase "Téléverser un document"           as UC1
+  usecase "Consulter les ressources partagées" as UC2
 }
 
-U -- UC1 : "Télécharge"
-U -- UC2 : "Consulte"
+U -- UC1 : téléverse
+U -- UC2 : consulte
+
 @enduml
-
-
-
-

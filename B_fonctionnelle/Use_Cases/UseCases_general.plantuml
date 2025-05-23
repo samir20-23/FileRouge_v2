@@ -1,95 +1,36 @@
-'' ' ' version 3
-
 @startuml
 left to right direction
 
-title Use Case - Partage centralisé de documents et ressources pédagogiques
+title Centralized Sharing – Global Use Cases (with Validation)
 
-actor Formateur as F
-actor Utilisateur as U
+actor Formateur    as F
+actor utilisateur       as U
 
-rectangle "Gestion des Documents et Ressources" {
-    F -- (Créer et télécharger un document)
-    F -- (Créer et télécharger une ressource)
-    
-    U -- (Télécharger un document)
-    U -- (Accéder à une ressource)
+package "Document & Resource Management" {
+  usecase "Upload Document"      as UC_UD
+  usecase "Download Document"    as UC_DD
+  usecase "Validate Document"    as UC_VD
+  usecase "Upload Resource"      as UC_UR
+  usecase "Download Resource"    as UC_DR
+  usecase "Validate Resource"    as UC_VR
 }
 
-rectangle "Gestion des Catégories" {
-    F -- (Ajouter une catégorie)
-    F -- (Mettre à jour une catégorie)
-}
+' Trainer can upload, download and validate
+F -- UC_UD : uploads  
+F -- UC_DD : downloads  
+F -- UC_VD : validates  
+F -- UC_UR : uploads  
+F -- UC_DR : downloads  
+F -- UC_VR : validates  
 
-
+' User can upload and download only
+U -- UC_UD : uploads  
+U -- UC_DD : downloads  
+U -- UC_UR : uploads  
+U -- UC_DR : downloads  
 @enduml
 
 
 
 
-
-'  ' ' versin 2
-
-
-' @startuml
-' top to bottom direction
-
-' title Use Case - Partage centralisé de documents et ressources pédagogiques
-
-' actor Formateur as F
-' actor Utilisateur as U
-
-' rectangle "Gestion des Documents et Ressources" {
-'     (Créer et télécharger un document) as UC1
-'     (Créer et télécharger une ressource) as UC2
-'     (Valider un document) as UC3
-'     (Accéder à une ressource) as UC5
-'     (Consulter les documents validés) as UC6
-
-'     F --> UC1
-'     F --> UC2
-'     U --> UC1
-'     F --> UC3 
-'     U --> UC5
-'     U --> UC6
-' }
-
-' rectangle "Gestion des Catégories" {
-'     (Ajouter une catégorie) as UC7
-'     (Mettre à jour une catégorie) as UC8
-
-'     F --> UC7
-'     F --> UC8
-' }
-
-' UC1 ..> UC3 : dépend de
-
-' @enduml
-
-
-
-
-
-
-'  ' ' versin 1
-' @startuml
-' title Partage de documents et de ressources - Cas d'Utilisation Général
-' left to right direction
-' actor Utilisateur as U
-' actor Formateur as F
-
-' rectangle "Actions" {
-'     usecase UC1 as "Télécharger un document"
-'     usecase UC2 as "Partager un document"
-'     usecase UC3 as "Consulter les ressources partagées"
-'     usecase UC4 as "Organiser les ressources"
-'     usecase UC6 as "Valider ou refuser un document"
-' }
-
-' U -- UC1 : "Télécharge"
-' U -- UC2 : "Partage"
-' U -- UC3 : "Consulte"
-' F -- UC4 : "Organise"
-' F -- UC6 : "Valide ou refuse"
-' @enduml
  
