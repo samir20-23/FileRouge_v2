@@ -45,4 +45,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Add these relationships for the dashboard
+    public function documents()
+    {
+        return $this->hasMany(Document::class, 'user_id');
+    }
+
+    public function validations()
+    {
+        return $this->hasMany(Validation::class, 'validated_by');
+    }
 }

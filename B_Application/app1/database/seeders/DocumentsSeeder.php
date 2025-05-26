@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
 class DocumentsSeeder extends Seeder
 {
     /**
@@ -13,8 +12,12 @@ class DocumentsSeeder extends Seeder
      *
      * @return void
      */
+    
+
     public function run()
     {
+
+
         // Insert documents data
         DB::table('documents')->insert([
             [
