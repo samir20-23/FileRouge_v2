@@ -1,5 +1,9 @@
 @extends('adminlte::page')
 
+@section('content_header')
+
+@if (auth()->check() && auth()->user()->isAdmin())
+    
 @section('title', 'Upload Document')
 
 @section('content_header')
@@ -7,6 +11,8 @@
         <h1 class="font-weight-bold text-dark">
             <i class="fas fa-upload"></i>
             Upload New Document
+            <h1>
+          
         </h1>
         <div>
             <a href="{{ route('documents.my-documents') }}" class="btn btn-info">
@@ -18,8 +24,9 @@
         </div>
     </div>
 @stop
-
+    
 @section('content')
+
     <div class="row">
         <!-- Upload Form -->
         <div class="col-md-8">
@@ -34,8 +41,9 @@
                             Select File <span class="text-danger">*</span>
                         </label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input @error('file') is-invalid @enderror" 
-                                   id="file" name="file" required accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif">
+                            <input type="file" class="custom-file-input @error('file') is-invalid @enderror"
+                                id="file" name="file" required
+                                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif">
                             <label class="custom-file-label" for="file">Choose file...</label>
                         </div>
                         @error('file')
@@ -52,9 +60,8 @@
                             <i class="fas fa-heading"></i>
                             Document Title <span class="text-danger">*</span>
                         </label>
-                        <input type="text" class="form-control @error('title') is-invalid @enderror" 
-                               id="title" name="title" value="{{ old('title') }}" required 
-                               placeholder="Enter document title...">
+                        <input type="text" class="form-control @error('title') is-invalid @enderror" id="title"
+                            name="title" value="{{ old('title') }}" required placeholder="Enter document title...">
                         @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -66,9 +73,8 @@
                             <i class="fas fa-align-left"></i>
                             Description
                         </label>
-                        <textarea class="form-control @error('description') is-invalid @enderror" 
-                                  id="description" name="description" rows="4" 
-                                  placeholder="Enter document description...">{{ old('description') }}</textarea>
+                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                            rows="4" placeholder="Enter document description...">{{ old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -83,11 +89,12 @@
                             <i class="fas fa-folder"></i>
                             Category <span class="text-danger">*</span>
                         </label>
-                        <select class="form-control @error('categorie_id') is-invalid @enderror" 
-                                id="categorie_id" name="categorie_id" required>
+                        <select class="form-control @error('categorie_id') is-invalid @enderror" id="categorie_id"
+                            name="categorie_id" required>
                             <option value="">Select Category</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ old('categorie_id') == $category->id ? 'selected' : '' }}>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ old('categorie_id') == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
@@ -105,8 +112,8 @@
                                     <i class="fas fa-flag"></i>
                                     Status <span class="text-danger">*</span>
                                 </label>
-                                <select class="form-control @error('status') is-invalid @enderror" 
-                                        id="status" name="status" required>
+                                <select class="form-control @error('status') is-invalid @enderror" id="status"
+                                    name="status" required>
                                     <option value="draft" {{ old('status', 'draft') === 'draft' ? 'selected' : '' }}>
                                         <i class="fas fa-edit"></i> Draft
                                     </option>
@@ -129,8 +136,8 @@
                                     Visibility
                                 </label>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="is_public" name="is_public" value="1" 
-                                           {{ old('is_public') ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="checkbox" id="is_public" name="is_public"
+                                        value="1" {{ old('is_public') ? 'checked' : '' }}>
                                     <label class="form-check-label" for="is_public">
                                         <i class="fas fa-globe"></i> Make this document public
                                     </label>
@@ -170,7 +177,7 @@
                     <i class="fas fa-info-circle"></i>
                     <strong>File Requirements:</strong>
                 </div>
-                
+
                 <h6><i class="fas fa-check-circle text-success"></i> Supported Formats:</h6>
                 <ul class="list-unstyled">
                     <li><i class="fas fa-file-pdf text-danger"></i> PDF Documents</li>
@@ -232,123 +239,150 @@
 @stop
 
 @push('js')
-<script>
-$(document).ready(function() {
-    // File input change handler
-    $('#file').change(function() {
-        const file = this.files[0];
-        if (file) {
-            // Update file label
-            $(this).next('.custom-file-label').text(file.name);
-            
-            // Auto-fill title if empty
-            if (!$('#title').val()) {
-                const fileName = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
-                $('#title').val(fileName);
+    <script>
+        $(document).ready(function() {
+            // File input change handler
+            $('#file').change(function() {
+                const file = this.files[0];
+                if (file) {
+                    // Update file label
+                    $(this).next('.custom-file-label').text(file.name);
+
+                    // Auto-fill title if empty
+                    if (!$('#title').val()) {
+                        const fileName = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
+                        $('#title').val(fileName);
+                    }
+
+                    // Show file preview
+                    showFilePreview(file);
+                }
+            });
+
+            // Form validation
+            $('#uploadForm').submit(function(e) {
+                const file = $('#file')[0].files[0];
+                if (!file) {
+                    e.preventDefault();
+                    alert('Please select a file to upload.');
+                    return false;
+                }
+
+                if (file.size > 10 * 1024 * 1024) { // 10MB
+                    e.preventDefault();
+                    alert('File size must be less than 10MB.');
+                    return false;
+                }
+
+                // Show loading state
+                $('#submitBtn').prop('disabled', true).html(
+                    '<i class="fas fa-spinner fa-spin"></i> Uploading...');
+            });
+        });
+
+        function showFilePreview(file) {
+            const fileSize = (file.size / 1024 / 1024).toFixed(2);
+            const extension = file.name.split('.').pop().toLowerCase();
+
+            let icon = 'fas fa-file';
+            let color = 'text-dark';
+
+            switch (extension) {
+                case 'pdf':
+                    icon = 'fas fa-file-pdf';
+                    color = 'text-danger';
+                    break;
+                case 'doc':
+                case 'docx':
+                    icon = 'fas fa-file-word';
+                    color = 'text-primary';
+                    break;
+                case 'xls':
+                case 'xlsx':
+                    icon = 'fas fa-file-excel';
+                    color = 'text-success';
+                    break;
+                case 'ppt':
+                case 'pptx':
+                    icon = 'fas fa-file-powerpoint';
+                    color = 'text-warning';
+                    break;
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'gif':
+                    icon = 'fas fa-file-image';
+                    color = 'text-info';
+                    break;
+                case 'txt':
+                    icon = 'fas fa-file-alt';
+                    color = 'text-muted';
+                    break;
             }
-            
-            // Show file preview
-            showFilePreview(file);
-        }
-    });
 
-    // Form validation
-    $('#uploadForm').submit(function(e) {
-        const file = $('#file')[0].files[0];
-        if (!file) {
-            e.preventDefault();
-            alert('Please select a file to upload.');
-            return false;
-        }
-        
-        if (file.size > 10 * 1024 * 1024) { // 10MB
-            e.preventDefault();
-            alert('File size must be less than 10MB.');
-            return false;
-        }
-        
-        // Show loading state
-        $('#submitBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Uploading...');
-    });
-});
-
-function showFilePreview(file) {
-    const fileSize = (file.size / 1024 / 1024).toFixed(2);
-    const extension = file.name.split('.').pop().toLowerCase();
-    
-    let icon = 'fas fa-file';
-    let color = 'text-dark';
-    
-    switch(extension) {
-        case 'pdf':
-            icon = 'fas fa-file-pdf';
-            color = 'text-danger';
-            break;
-        case 'doc':
-        case 'docx':
-            icon = 'fas fa-file-word';
-            color = 'text-primary';
-            break;
-        case 'xls':
-        case 'xlsx':
-            icon = 'fas fa-file-excel';
-            color = 'text-success';
-            break;
-        case 'ppt':
-        case 'pptx':
-            icon = 'fas fa-file-powerpoint';
-            color = 'text-warning';
-            break;
-        case 'jpg':
-        case 'jpeg':
-        case 'png':
-        case 'gif':
-            icon = 'fas fa-file-image';
-            color = 'text-info';
-            break;
-        case 'txt':
-            icon = 'fas fa-file-alt';
-            color = 'text-muted';
-            break;
-    }
-    
-    $('#previewIcon').html(`<i class="${icon} ${color} fa-4x mb-2"></i>`);
-    $('#previewInfo').html(`
+            $('#previewIcon').html(`<i class="${icon} ${color} fa-4x mb-2"></i>`);
+            $('#previewInfo').html(`
         <h6>${file.name}</h6>
         <p class="text-muted">
             ${fileSize} MB<br>
             ${extension.toUpperCase()} File
         </p>
     `);
-    
-    $('#noPreview').hide();
-    $('#filePreview').show();
-}
 
-function saveDraft() {
-    $('#status').val('draft');
-    $('#uploadForm').submit();
-}
+            $('#noPreview').hide();
+            $('#filePreview').show();
+        }
 
-function setQuickSettings(type) {
-    switch(type) {
-        case 'document':
-            $('#status').val('published');
-            $('#is_public').prop('checked', false);
-            break;
-        case 'report':
-            $('#status').val('published');
-            $('#is_public').prop('checked', true);
-            break;
-        case 'presentation':
+        function saveDraft() {
             $('#status').val('draft');
-            $('#is_public').prop('checked', false);
-            break;
-        case 'manual':
-            $('#status').val('published');
-            $('#is_public').prop('checked', true);
-            break;
-    }
-}
-</script>
+            $('#uploadForm').submit();
+        }
+
+        function setQuickSettings(type) {
+            switch (type) {
+                case 'document':
+                    $('#status').val('published');
+                    $('#is_public').prop('checked', false);
+                    break;
+                case 'report':
+                    $('#status').val('published');
+                    $('#is_public').prop('checked', true);
+                    break;
+                case 'presentation':
+                    $('#status').val('draft');
+                    $('#is_public').prop('checked', false);
+                    break;
+                case 'manual':
+                    $('#status').val('published');
+                    $('#is_public').prop('checked', true);
+                    break;
+            }
+        }
+    </script>
 @endpush
+
+@else
+       <!-- User warning card with animation -->
+  <!-- User warning card with animation -->
+<div class="text-center mt-6 max-w-md mx-auto">
+    <!-- 404-style image (smaller) -->
+    <img src="{{ asset('vendor/adminlte/dist/img/404GIF.gif') }}"
+     alt="Access Denied"
+     class="mx-auto mb-6 animate__animated animate__zoomIn"
+     style="max-width: 240px;">
+
+    <!-- Warning Text -->
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded shadow-sm animate__animated animate__fadeInUp">
+        <strong class="font-bold">Oops!</strong>
+        <span class="block text-sm">Admins only — you don’t have access to this page.</span>
+    </div>
+
+    <!-- Optional link back -->
+    <a href="{{ route('home') }}"
+       class="inline-block mt-3 text-sm text-blue-600 underline hover:text-blue-800">
+        Go back to Home
+    </a>
+</div>
+
+@endif
+@stop

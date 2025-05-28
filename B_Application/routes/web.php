@@ -6,17 +6,37 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ValidationController;
+use App\Http\Controllers\HomeController; 
+use App\Http\Controllers\UserController;
 
 Auth::routes();
+
+Route::get('/home', function () {
+    return view('home');
+})->name('home');
 
 Route::middleware(['auth'])->group(function () {
 
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');;
 
     // Categories
-    Route::resource('categories', CategorieController::class);
+    // Route::resource('categories', CategorieController::class);
+    // Main category routes
+    Route::get('categories', [CategorieController::class, 'index'])->name('categories.index');
+    Route::get('categories/create', [CategorieController::class, 'create'])->name('categories.create');
+    Route::post('categories', [CategorieController::class, 'store'])->name('categories.store');
+    Route::get('categories/{category}', [CategorieController::class, 'show'])->name('categories.show');
+    Route::get('categories/{category}/edit', [CategorieController::class, 'edit'])->name('categories.edit');
+    Route::put('categories/{category}', [CategorieController::class, 'update'])->name('categories.update');
+    Route::delete('categories/{category}', [CategorieController::class, 'destroy'])->name('categories.destroy');
+
+    // Additional category routes
+    Route::post('categories/bulk-action', [CategorieController::class, 'bulkAction'])->name('categories.bulk-action');
+    Route::get('categories-api/search', [CategorieController::class, 'getCategories'])->name('categories.api.search');
+    Route::get('categories-api/stats', [CategorieController::class, 'getStats'])->name('categories.api.stats');
+    Route::get('categories/export/csv', [CategorieController::class, 'export'])->name('categories.export');
 
     // Documents
     Route::resource('documents', DocumentController::class);
@@ -48,4 +68,18 @@ Route::middleware(['auth'])->group(function () {
             'validation_id' => $validation?->id,
         ]);
     });
+    // users 
+      // Resource routes for users (generates all CRUD routes automatically)
+    Route::resource('users', UserController::class);
+    
+    // Additional user management routes
+    Route::post('users/bulk-action', [UserController::class, 'bulkAction'])->name('users.bulk-action');
+    Route::get('users/export/csv', [UserController::class, 'export'])->name('users.export');
+    
+    // Profile routes (for current user)
+    Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
+    Route::put('profile', [UserController::class, 'updateProfile'])->name('users.profile.update');
+    
 });
+// Add these routes to your existing web.php file
+ 
