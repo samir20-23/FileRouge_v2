@@ -76,10 +76,10 @@ class Document extends Model
 
     public function scopeSearch($query, $search)
     {
-        return $query->where(function($q) use ($search) {
+        return $query->where(function ($q) use ($search) {
             $q->where('title', 'like', "%{$search}%")
-              ->orWhere('description', 'like', "%{$search}%")
-              ->orWhere('original_name', 'like', "%{$search}%");
+                ->orWhere('description', 'like', "%{$search}%")
+                ->orWhere('original_name', 'like', "%{$search}%");
         });
     }
 
@@ -91,23 +91,24 @@ class Document extends Model
 
     public function getFormattedFileSize()
     {
-        if (!$this->file_size) return 'Unknown';
-        
+        if (!$this->file_size)
+            return 'Unknown';
+
         $bytes = $this->file_size;
         $units = ['B', 'KB', 'MB', 'GB'];
-        
+
         for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
             $bytes /= 1024;
         }
-        
+
         return round($bytes, 2) . ' ' . $units[$i];
     }
 
     public function getFileIcon()
     {
         $extension = strtolower($this->getFileExtension());
-        
-        return match($extension) {
+
+        return match ($extension) {
             'pdf' => 'fas fa-file-pdf text-danger',
             'doc', 'docx' => 'fas fa-file-word text-primary',
             'xls', 'xlsx' => 'fas fa-file-excel text-success',
@@ -123,7 +124,7 @@ class Document extends Model
 
     public function getStatusBadgeClass()
     {
-        return match($this->status) {
+        return match ($this->status) {
             'published' => 'badge-success',
             'draft' => 'badge-warning',
             'archived' => 'badge-secondary',
@@ -133,7 +134,7 @@ class Document extends Model
 
     public function getStatusIcon()
     {
-        return match($this->status) {
+        return match ($this->status) {
             'published' => 'fas fa-check-circle',
             'draft' => 'fas fa-edit',
             'archived' => 'fas fa-archive',
@@ -203,9 +204,20 @@ class Document extends Model
             if ($document->fileExists()) {
                 Storage::delete($document->chemin_fichier);
             }
-            
+
             // Delete related validations
             $document->validations()->delete();
         });
+    }
+
+    public function scopeNeedsValidation($query)
+    {
+        return $query
+            // no validation record at all
+            ->whereDoesntHave('validation')
+            // or validations with status = Pending
+            ->orWhereHas('validation', function ($q) {
+                $q->where('status', 'Pending');
+            });
     }
 }

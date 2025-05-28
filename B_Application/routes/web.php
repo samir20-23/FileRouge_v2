@@ -51,7 +51,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('validations/{validation}/approve', [ValidationController::class, 'approve'])->name('validations.approve');
     Route::post('validations/{validation}/reject', [ValidationController::class, 'reject'])->name('validations.reject');
     Route::post('validations/bulk-action', [ValidationController::class, 'bulkAction'])->name('validations.bulk-action');
-
+ 
     // Validation & Document relationship
     Route::get('validations/document/{document}/download', [ValidationController::class, 'downloadDocument'])->name('validations.download-document');
     Route::get('validations/document/{document}/view', [ValidationController::class, 'viewDocument'])->name('validations.view-document');
