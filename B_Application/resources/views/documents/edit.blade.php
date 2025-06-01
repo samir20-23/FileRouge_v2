@@ -63,7 +63,7 @@
                             <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            Leave empty to keep current file. Maximum size: 10MB
+                            Leave empty to keep current file. Maximum size: 30MB
                         </small>
                     </div>
 
@@ -348,9 +348,9 @@ $(document).ready(function() {
     // Form validation
     $('#editForm').submit(function(e) {
         const file = $('#file')[0].files[0];
-        if (file && file.size > 10 * 1024 * 1024) { // 10MB
+        if (file && file.size > 30* 1024 * 1024) { // 30MB
             e.preventDefault();
-            alert('File size must be less than 10MB.');
+            alert('File size must be less than 30MB.');
             return false;
         }
         
