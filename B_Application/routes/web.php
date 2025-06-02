@@ -18,21 +18,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
 
-    // Redirect authenticated users trying to access login or register
-    Route::get('/login', function () {
-        if (Auth::check()) {
-            return Auth::user()->isAdmin() ? redirect()->route('dashboard') : redirect()->route('home');
-        }
-        return view('auth.login');
-    })->name('login');
-
-    Route::get('/register', function () {
-        if (Auth::check()) {
-            return Auth::user()->isAdmin() ? redirect()->route('dashboard') : redirect()->route('home');
-        }
-        return view('auth.login');
-    });
-
+  
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -72,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
     | Validation Routes
     |--------------------------------------------------------------------------
     */
+    
     Route::resource('validations', ValidationController::class);
     Route::get('validations-pending', [ValidationController::class, 'pending'])->name('validations.pending');
     Route::post('validations/{validation}/approve', [ValidationController::class, 'approve'])->name('validations.approve');
@@ -108,3 +95,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
     Route::put('profile', [UserController::class, 'updateProfile'])->name('users.profile.update');
 });
+

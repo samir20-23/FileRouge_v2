@@ -1,3 +1,5 @@
+@extends('adminlte::page')
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -274,16 +276,17 @@
 
             0%,
             100% {
-                transform: scale(1) rotate(2deg); 
+                transform: scale(1) rotate(2deg);
             }
 
             50% {
-                transform: scale(1.05) rotate(-2deg); 
+                transform: scale(1.05) rotate(-2deg);
                 ;
             }
         }
 
-        .img-logo {box-shadow: none;
+        .img-logo {
+            box-shadow: none;
             animation: logoPulse 4s ease-in-out infinite;
         }
     </style>
@@ -376,7 +379,7 @@
 
     <!-- Main Content Area -->
     <div class="main-container">
-        
+
         <!-- Success Messages -->
         @if (session('success'))
             <div class="alert alert-custom alert-success-custom" role="alert">
