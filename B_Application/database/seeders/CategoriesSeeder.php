@@ -3,39 +3,45 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Categorie;
 
 class CategoriesSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        // Insert categories data
-        DB::table('categories')->insert([
+        $categories = [
             [
-                'name' => 'Technology',
-                'description' => 'Articles and resources related to technology.',
+                'name'        => 'Mathematics',
+                'description' => 'Cours et exercices de mathématiques (algèbre, géométrie, etc.).',
             ],
             [
-                'name' => 'Health',
-                'description' => 'Resources on health and wellness.',
+                'name'        => 'Physics',
+                'description' => 'Ressources liées à la physique (mécanique, optique, etc.).',
             ],
             [
-                'name' => 'Education',
-                'description' => 'Educational articles and guides.',
+                'name'        => 'Chemistry',
+                'description' => 'Documents sur la chimie (organique, inorganique, etc.).',
             ],
             [
-                'name' => 'Lifestyle',
-                'description' => 'Articles and resources related to lifestyle.',
+                'name'        => 'Computer Science',
+                'description' => 'Tutoriels et supports en informatique (programmation, réseaux, etc.).',
             ],
             [
-                'name' => 'Business',
-                'description' => 'Business-related articles and case studies.',
+                'name'        => 'Biology',
+                'description' => 'Fiches et cours de biologie (cellulaire, anatomie, etc.).',
             ],
-        ]);
+            [
+                'name'        => 'History',
+                'description' => 'Documents historiques et chronologies.',
+            ],
+            [
+                'name'        => 'Languages',
+                'description' => 'Cours de langues (anglais, français, espagnol, etc.).',
+            ],
+        ];
+
+        foreach ($categories as $cat) {
+            Categorie::create($cat);
+        }
     }
 }

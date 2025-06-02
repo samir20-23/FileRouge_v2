@@ -3,58 +3,46 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Document;
+use App\Models\User;
+use App\Models\Categorie;
+use Faker\Factory as Faker;
+
 class DocumentsSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    
-
-    public function run()
+    public function run(): void
     {
+        $faker = Faker::create('fr_FR');
 
+        // Récupérer tous les IDs de catégories et d'utilisateurs pour la relation
+        $allCategoryIds = Categorie::pluck('id')->toArray();
+        $allUserIds     = User::pluck('id')->toArray();
 
-        // Insert documents data
-        DB::table('documents')->insert([
-            [
-                'title' => 'Tech Article 1',
-                'type' => 'PDF',
-                'chemin_fichier' => Storage::url('documents/tech_article_1.pdf'),
-                'categorie_id' => 1, // Assuming 'Technology' category ID is 1
-                'user_id' => 1, // Assuming a user with ID 1 exists
-            ],
-            [
-                'title' => 'Health Guide',
-                'type' => 'Word',
-                'chemin_fichier' => Storage::url('documents/health_guide.docx'),
-                'categorie_id' => 2, // Assuming 'Health' category ID is 2
-                'user_id' => 2, // Assuming a user with ID 2 exists
-            ],
-            [
-                'title' => 'Business Strategy',
-                'type' => 'Excel',
-                'chemin_fichier' => Storage::url('documents/business_strategy.xlsx'),
-                'categorie_id' => 5, // Assuming 'Business' category ID is 5
-                'user_id' => 1, // Assuming a user with ID 1 exists
-            ],
-            [
-                'title' => 'Educational Material',
-                'type' => 'PDF',
-                'chemin_fichier' => Storage::url('documents/educational_material.pdf'),
-                'categorie_id' => 3, // Assuming 'Education' category ID is 3
-                'user_id' => 3, // Assuming a user with ID 3 exists
-            ],
-            [
-                'title' => 'Lifestyle Tips',
-                'type' => 'Text',
-                'chemin_fichier' => Storage::url('documents/lifestyle_tips.txt'),
-                'categorie_id' => 4, // Assuming 'Lifestyle' category ID is 4
-                'user_id' => 2, // Assuming a user with ID 2 exists
-            ],
-        ]);
+        // Générer 25 documents variés
+        for ($i = 1; $i <= 25; $i++) {
+            $title       = ucfirst($faker->words(3, true));
+            $ext         = $faker->fileExtension; // ex: pdf, docx
+            $randomPath  = 'uploads/documents/' . $faker->uuid . '.' . $ext;
+            $origName    = $title . '.' . $ext;
+            $sizeInBytes = $faker->numberBetween(50_000, 5_000_000);
+            $mime        = $faker->mimeType;
+
+            Document::create([
+                'title'          => $title,
+                'type'           => $ext,
+                'chemin_fichier' => $randomPath,
+                'original_name'  => $origName,
+                'file_size'      => $sizeInBytes,
+                'mime_type'      => $mime,
+                'description'    => $faker->paragraph(2),
+                'status'         => $faker->randomElement(['draft', 'published', 'archived']),
+                'is_public'      => $faker->boolean(70), // 70% public, 30% private
+                'download_count' => $faker->numberBetween(0, 150),
+                'categorie_id'   => $faker->randomElement($allCategoryIds),
+                'user_id'        => $faker->randomElement($allUserIds),
+                'created_at'     => $faker->dateTimeBetween('-3 months', 'now'),
+                'updated_at'     => $faker->dateTimeBetween('-2 months', 'now'),
+            ]);
+        }
     }
 }

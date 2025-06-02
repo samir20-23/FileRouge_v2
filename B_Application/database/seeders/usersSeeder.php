@@ -3,41 +3,75 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class UsersSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        DB::table('users')->insert([
+        // --- Formateurs ---
+        $formateurs = [
             [
-                'name' => 'admin',
-                'email' => 'admin@gmail.com',
-                'role' => 'admin',
+                'name'     => 'admin',
+                'email'    => 'admin@gmail.com',
+                'role'     => 'admin',
                 'password' => Hash::make('admin'),
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
-                'name' => 'samir',
-                'email' => 'samir@example.com',
-                'role' => 'User',
-                'password' => Hash::make('samir'),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'name'     => 'formateur',
+                'email'    => 'formateur@gmail.com',
+                'role'     => 'Formateur',
+                'password' => Hash::make('formateur'),
             ],
             [
-                'name' => 'Alex Johnson',
-                'email' => 'alex@example.com',
-                'role' => 'User',
-                'password' => Hash::make('password789'),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'name'     => 'Sofia Rachid',
+                'email'    => 'sofia.rachid@example.com',
+                'role'     => 'Formateur',
+                'password' => Hash::make('password123'),
             ],
-        ]);
+        ];
+
+        foreach ($formateurs as $f) {
+            User::create($f);
+        }
+
+        // --- Apprenants / Utilisateurs ---
+        $apprenants = [
+            [
+                'name'     => 'Youssef Abdellaoui',
+                'email'    => 'youssef.abdellaoui@example.com',
+                'role'     => 'User',
+                'password' => Hash::make('secret123'),
+            ],
+            [
+                'name'     => 'Leila Mansour',
+                'email'    => 'leila.mansour@example.com',
+                'role'     => 'User',
+                'password' => Hash::make('secret123'),
+            ],
+            [
+                'name'     => 'Omar El Fassi',
+                'email'    => 'omar.elfassi@example.com',
+                'role'     => 'User',
+                'password' => Hash::make('secret123'),
+            ],
+            [
+                'name'     => 'Salma Nouri',
+                'email'    => 'salma.nouri@example.com',
+                'role'     => 'User',
+                'password' => Hash::make('secret123'),
+            ],
+            [
+                'name'     => 'Karima El Idrissi',
+                'email'    => 'karima.elidrissi@example.com',
+                'role'     => 'User',
+                'password' => Hash::make('secret123'),
+            ],
+        ];
+
+        foreach ($apprenants as $u) {
+            User::create($u);
+        }
     }
 }
