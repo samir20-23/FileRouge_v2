@@ -6,17 +6,16 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        // Call individual seeders
+        // L’ordre importe : 
+        // 1) Création des catégories
+        // 2) Création des utilisateurs
+        // 3) Création des documents (qui ont besoin des users & categories)
+        // 4) Création des validations (qui ont besoin des documents & formateurs)
         $this->call([
-            UsersSeeder::class,
             CategoriesSeeder::class,
+            UsersSeeder::class,
             DocumentsSeeder::class,
             ValidationSeeder::class,
         ]);

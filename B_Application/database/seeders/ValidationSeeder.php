@@ -1,35 +1,36 @@
 <?php
-// database/seeders/ValidationSeeder.php
 
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Validation;
-use Illuminate\Support\Carbon;
+use App\Models\Document;
+use App\Models\User;
+use Faker\Factory as Faker;
 
 class ValidationSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        Validation::insert([
-            [
-                'document_id'  => 1,
-                'validated_by' => 1,
-                'status'       => 'Approved',
-                'commentaire'  => 'Looks good.',
-                'validated_at' => Carbon::now()->subDays(2),
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ],
-            [
-                'document_id'  => 2,
-                'validated_by' => 2,
-                'status'       => 'Rejected',
-                'commentaire'  => 'Please update section 3.',
-                'validated_at' => Carbon::now()->subDay(),
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ],
-        ]);
+        $faker = Faker::create('fr_FR');
+
+        // Récupérer tous les IDs de documents et d'utilisateurs (formateurs)
+        $allDocIds      = Document::pluck('id')->toArray();
+        $formateurIds   = User::where('role', 'Formateur')->pluck('id')->toArray();
+
+        // Pour chaque document, créer une validation (ou plusieurs si vous voulez)
+        foreach ($allDocIds as $docId) {
+            Validation::create([
+                'document_id'   => $docId,
+                'validated_by'  => $faker->randomElement($formateurIds),
+                'status'        => $faker->randomElement(['Pending', 'Approved', 'Rejected']),
+                'commentaire'   => $faker->boolean(60)
+                                    ? $faker->sentence(6)
+                                    : null,
+                'validated_at'  => $faker->dateTimeBetween('-1 month', 'now'),
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
+        }
     }
 }

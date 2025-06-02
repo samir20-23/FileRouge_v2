@@ -1,3 +1,4 @@
+
 @extends('adminlte::page')
 
 @section('title', 'Documents')
