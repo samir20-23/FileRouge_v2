@@ -6,20 +6,41 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ValidationController;
-use App\Http\Controllers\HomeController; 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 
 Auth::routes();
 
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth'])->group(function () {
+    // login 
+    Route::get('/login' or '/register', function () {
+        if (Auth::check()) {
+            if (Auth::user()->isAdmin()) {
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('home');
+            }
+        }
 
+        return view('auth.login');
+    })->name('login');
+    // register
+    Route::get('/register', function () {
+        if (Auth::check()) {
+            if (Auth::user()->isAdmin()) {
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('home');
+            }
+        }
+        return view('auth.login');
+    })->name('login');
+    
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');;
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Categories
     // Route::resource('categories', CategorieController::class);
@@ -51,7 +72,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('validations/{validation}/approve', [ValidationController::class, 'approve'])->name('validations.approve');
     Route::post('validations/{validation}/reject', [ValidationController::class, 'reject'])->name('validations.reject');
     Route::post('validations/bulk-action', [ValidationController::class, 'bulkAction'])->name('validations.bulk-action');
- 
+
     // Validation & Document relationship
     Route::get('validations/document/{document}/download', [ValidationController::class, 'downloadDocument'])->name('validations.download-document');
     Route::get('validations/document/{document}/view', [ValidationController::class, 'viewDocument'])->name('validations.view-document');
@@ -69,17 +90,16 @@ Route::middleware(['auth'])->group(function () {
         ]);
     });
     // users 
-      // Resource routes for users (generates all CRUD routes automatically)
+    // Resource routes for users (generates all CRUD routes automatically)
     Route::resource('users', UserController::class);
-    
+
     // Additional user management routes
     Route::post('users/bulk-action', [UserController::class, 'bulkAction'])->name('users.bulk-action');
     Route::get('users/export/csv', [UserController::class, 'export'])->name('users.export');
-    
+
     // Profile routes (for current user)
     Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
     Route::put('profile', [UserController::class, 'updateProfile'])->name('users.profile.update');
-    
+
 });
 // Add these routes to your existing web.php file
- 
