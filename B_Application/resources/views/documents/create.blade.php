@@ -50,7 +50,7 @@
                             <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
                         <small class="form-text text-muted">
-                            Supported formats: PDF, Word, Excel, PowerPoint, Text, Images. Maximum size: 10MB
+                            Supported formats: PDF, Word, Excel, PowerPoint, Text, Images. Maximum size: 30MB
                         </small>
                     </div>
 
@@ -190,7 +190,7 @@
 
                 <h6><i class="fas fa-exclamation-triangle text-warning"></i> Important Notes:</h6>
                 <ul>
-                    <li>Maximum file size: <strong>10MB</strong></li>
+                    <li>Maximum file size: <strong>30MB</strong></li>
                     <li>Use descriptive titles</li>
                     <li>Select appropriate category</li>
                     <li>Add meaningful descriptions</li>
@@ -268,9 +268,9 @@
                     return false;
                 }
 
-                if (file.size > 10 * 1024 * 1024) { // 10MB
+                if (file.size > 30 * 1024 * 1024) { // 30MB
                     e.preventDefault();
-                    alert('File size must be less than 10MB.');
+                    alert('File size must be less than 30MB.');
                     return false;
                 }
 
