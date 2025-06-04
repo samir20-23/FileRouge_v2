@@ -15,15 +15,7 @@
 @section('content')
     @if (auth()->check() && auth()->user()->isAdmin())
         {{-- Dashboard cards row --}}
-             <script>
-            // Check if Font Awesome is loaded, if not, load it
-            if (!document.querySelector('link[href*="font-awesome"]')) {
-                const fontAwesome = document.createElement('link');
-                fontAwesome.rel = 'stylesheet';
-                fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
-                document.head.appendChild(fontAwesome);
-            }
-        </script>
+        
         <div class="row g-4 mb-5 dashboard-cards">
             <div class="col-lg-3 col-md-6">
                 <div class="dashboard-card dashboard-card-primary" data-aos="fade-up" data-aos-delay="100">
@@ -627,13 +619,6 @@
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>   
  <script src="{{ asset('js/app.js') }}"></script>
- <!-- Bootstrap -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Initialize AOS animations
@@ -1528,7 +1513,6 @@
         charts.forEach(({ chart, id, title }) => {
             document.getElementById(`${id}Fullscreen`).addEventListener('click', function() {
                 document.getElementById('chartModalLabel').textContent = title;
-                console.log(title + '/'+ id + '/' );
                 
                 // Destroy previous modal chart if exists
                 if (currentModalChart) {
@@ -1536,17 +1520,8 @@
                 }
                 
                 // Clone the chart configuration
-              const modalConfig = {
-    type: chart.config.type,
-    data: chart.config.data,
-    options: {
-        ...chart.config.options,
-        maintainAspectRatio: false,
-        responsive: true,
-    },
-    plugins: chart.config.plugins
-};
-
+                const modalConfig = JSON.parse(JSON.stringify(chart.config));
+                
                 // Create new chart in modal
                 currentModalChart = new Chart(modalChart, {
                     type: modalConfig.type,
@@ -1612,7 +1587,5 @@
         });
     });
 });
- 
-
 </script>
 @endpush
