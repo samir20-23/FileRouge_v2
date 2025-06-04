@@ -1,4 +1,5 @@
-@extends('adminlte::page')
+@extends('layouts.stylepages')
+
 
 @section('title', 'Create Validation')
 

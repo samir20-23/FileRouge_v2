@@ -1,456 +1,1043 @@
+@extends('layouts.stylepages')
 
+@section('title', 'Document Library - ' . config('app.name'))
 
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Custom Styles -->
-    <style>
-        :root {
-            --primary-color: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary-color: #f8fafc;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --success-color: #10b981;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        /* Enhanced Navbar */
-        .navbar-custom {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--primary-color) !important;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .navbar-brand:hover {
-            color: var(--primary-dark) !important;
-            transform: translateY(-1px);
-            transition: all 0.2s ease;
-        }
-
-        .lockscreen-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-left: 2rem;
-        }
-
-        .lockscreen-logo img {
-            border-radius: 8px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .lockscreen-logo a {
-            text-decoration: none;
-            color: var(--text-primary);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Navigation Links */
-        .navbar-nav .nav-link {
-            color: var(--text-secondary) !important;
-            font-weight: 500;
-            padding: 0.5rem 1rem !important;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: var(--primary-color) !important;
-            background-color: rgba(99, 102, 241, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .navbar-nav .nav-link::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: var(--primary-color);
-            transition: all 0.2s ease;
-            transform: translateX(-50%);
-        }
-
-        .navbar-nav .nav-link:hover::before {
-            width: 80%;
-        }
-
-        /* Dropdown Menu */
-        .dropdown-menu {
-            border: none;
-            box-shadow: var(--shadow-lg);
-            border-radius: 12px;
-            padding: 0.5rem;
-            margin-top: 0.5rem;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-        }
-
-        .dropdown-item {
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            transition: all 0.2s ease;
-        }
-
-        .dropdown-item:hover {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateX(4px);
-        }
-
-        .dropdown-toggle::after {
-            margin-left: 0.5rem;
-            transition: transform 0.2s ease;
-        }
-
-        .dropdown-toggle[aria-expanded="true"]::after {
-            transform: rotate(180deg);
-        }
-
-        /* User Avatar */
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 0.875rem;
-            margin-right: 0.5rem;
-        }
-
-        /* Main Container */
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        /* Alert Enhancements */
-        .alert-custom {
-            border: none;
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .alert-success-custom {
-            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-            color: #065f46;
-            border-left: 4px solid var(--success-color);
-        }
-
-        .alert-icon {
-            font-size: 1.25rem;
-            opacity: 0.8;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .lockscreen-logo {
-                display: none;
-            }
-
-            .navbar-brand {
-                font-size: 1.25rem;
-            }
-
-            .main-container {
-                padding: 1rem;
-            }
-        }
-
-        /* Loading Animation */
-        .navbar-toggler {
-            border: none;
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .navbar-toggler:hover {
-            background-color: rgba(99, 102, 241, 0.1);
-        }
-
-        .navbar-toggler:focus {
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-        }
-
-        /* Content Area */
-        .content-wrapper {
-            background: white;
-            border-radius: 16px;
-            box-shadow: var(--shadow-sm);
-            padding: 2rem;
-            margin-top: 1rem;
-            border: 1px solid var(--border-color);
-        }
-
-        /* Utility Classes */
-        .text-gradient {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .btn-primary-custom {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            border: none;
-            border-radius: 8px;
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .btn-primary-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-
-        @keyframes logoPulse {
-
-            0%,
-            100% {
-                transform: scale(1) rotate(2deg);
-            }
-
-            50% {
-                transform: scale(1.05) rotate(-2deg);
-                ;
-            }
-        }
-
-        .img-logo {
-            box-shadow: none;
-            animation: logoPulse 4s ease-in-out infinite;
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Enhanced Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-custom">
-        <div class="container">
-            <!-- Brand -->
-
-
-            <!-- Logo Section -->
-            <div class="lockscreen-logo d-none d-md-flex">
-                <a href="{{ route('dashboard') }}">
-                    <i class="bi bi-lightning-charge-fill"></i>
-                    @if (config('adminlte.logo_img'))
-                        <img src="{{ asset(config('adminlte.logo_img')) }}" height="40" alt="Logo"
-                            class="img-logo">
-                    @endif
-                    <span class="text-gradient">{!! config('adminlte.logo', '<b>Admin</b>Panel') !!}</span>
-                </a>
-            </div>
-
-            <!-- Mobile Toggle -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <i class="bi bi-list"></i>
-            </button>
-
-            <!-- Navigation Menu -->
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    @guest
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">
-                                <i class="bi bi-box-arrow-in-right me-1"></i>
-                                Login
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">
-                                <i class="bi bi-person-plus me-1"></i>
-                                Register
-                            </a>
-                        </li>
-                    @else
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href="#"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="user-avatar">
-                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                                </div>
-                                <span>{{ Auth::user()->name }}</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bi bi-person me-2"></i>
-                                        Profile
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bi bi-gear me-2"></i>
-                                        Settings
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                        <i class="bi bi-box-arrow-right me-2"></i>
-                                        Logout
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    @endguest
-                </ul>
+@section('content')
+<div class="home-container">
+    {{-- Hero Section --}}
+    <div class="hero-section" data-aos="fade-up">
+        <div class="hero-content">
+            <h1 class="hero-title">Welcome to Document Library</h1>
+            <p class="hero-subtitle">Discover, download, and share educational resources and documents</p>
+            
+            {{-- Search Bar --}}
+            <div class="hero-search">
+                <form action="{{ route('home') }}" method="GET" class="search-form">
+                    <div class="search-input-group">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" name="search" value="{{ $search }}" 
+                               placeholder="Search documents, categories, or file types..." 
+                               class="search-input">
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-    </nav>
-
-    <!-- Main Content Area -->
-    <div class="main-container">
-
-        <!-- Success Messages -->
-        @if (session('success'))
-            <div class="alert alert-custom alert-success-custom" role="alert">
-                <i class="bi bi-check-circle-fill alert-icon"></i>
-                <div>
-                    <strong>Success!</strong> {{ session('success') }}
+        
+        {{-- Stats Cards --}}
+        <div class="stats-grid">
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number">{{ number_format($stats['total_documents']) }}</h3>
+                    <p class="stat-label">Total Documents</p>
                 </div>
             </div>
-        @endif
-
-        <!-- Error Messages -->
-        @if (session('error'))
-            <div class="alert alert-custom"
-                style="background: linear-gradient(135deg, #fef2f2, #fecaca); color: #991b1b; border-left: 4px solid #ef4444;"
-                role="alert">
-                <i class="bi bi-exclamation-triangle-fill alert-icon"></i>
-                <div>
-                    <strong>Error!</strong> {{ session('error') }}
+            
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-icon">
+                    <i class="fas fa-folder"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number">{{ number_format($stats['total_categories']) }}</h3>
+                    <p class="stat-label">Categories</p>
                 </div>
             </div>
-        @endif
-
-        <!-- Content Wrapper -->
-        <div class="content-wrapper">
-            @yield('content')
+            
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="stat-icon">
+                    <i class="fas fa-upload"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number">{{ number_format($stats['user_uploads']) }}</h3>
+                    <p class="stat-label">Your Uploads</p>
+                </div>
+            </div>
+            
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number">{{ number_format($stats['recent_uploads']) }}</h3>
+                    <p class="stat-label">This Week</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="text-center py-4 mt-5">
-        <div class="container">
-            <p class="text-muted mb-0">
-                &copy; {{ date('Y') }} {{ config('app.name', 'Laravel') }}.
-                <span class="text-gradient">Built with ❤️</span>
-            </p>
+    {{-- Main Content --}}
+    <div class="main-content">
+        <div class="content-grid">
+            {{-- Sidebar --}}
+            <aside class="sidebar" data-aos="fade-right">
+                {{-- Categories --}}
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-folder me-2"></i>Popular Categories
+                    </h3>
+                    <div class="category-list">
+                        @foreach($popularCategories as $category)
+                        <a href="{{ route('category.show', $category) }}" class="category-item">
+                            <span class="category-name">{{ $category->name }}</span>
+                            <span class="category-count">{{ $category->documents_count }}</span>
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Recent Documents --}}
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-clock me-2"></i>Recent Documents
+                    </h3>
+                    <div class="recent-list">
+                        @foreach($recentDocuments as $doc)
+                        <a href="{{ route('document.show', $doc) }}" class="recent-item">
+                            <div class="recent-icon">
+                                <i class="fas fa-file-{{ $doc->type === 'pdf' ? 'pdf' : 'alt' }}"></i>
+                            </div>
+                            <div class="recent-content">
+                                <p class="recent-title">{{ Str::limit($doc->title, 30) }}</p>
+                                <small class="recent-date">{{ $doc->created_at->diffForHumans() }}</small>
+                            </div>
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Quick Upload --}}
+                <div class="sidebar-section">
+                    <div class="quick-upload-card">
+                        <h4 class="quick-upload-title">Share a Document</h4>
+                        <p class="quick-upload-text">Upload and share your educational resources</p>
+                        <a href="{{ route('documents.create') }}" class="quick-upload-btn">
+                            <i class="fas fa-plus me-2"></i>Upload Document
+                        </a>
+                    </div>
+                </div>
+            </aside>
+
+            {{-- Main Documents Area --}}
+            <main class="documents-area">
+                {{-- Filters --}}
+                <div class="filters-section" data-aos="fade-up">
+                    <div class="filters-header">
+                        <h2 class="filters-title">Browse Documents</h2>
+                        <div class="filters-actions">
+                            <div class="view-toggle">
+                                <button class="view-btn active" data-view="grid">
+                                    <i class="fas fa-th"></i>
+                                </button>
+                                <button class="view-btn" data-view="list">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form action="{{ route('home') }}" method="GET" class="filters-form">
+                        <input type="hidden" name="search" value="{{ $search }}">
+                        
+                        <div class="filter-group">
+                            <select name="category" class="filter-select">
+                                <option value="">All Categories</option>
+                                @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ $categoryId == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <select name="type" class="filter-select">
+                                <option value="">All Types</option>
+                                @foreach($documentTypes as $docType)
+                                <option value="{{ $docType }}" {{ $type == $docType ? 'selected' : '' }}>
+                                    {{ ucfirst($docType) }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <select name="sort_by" class="filter-select">
+                                <option value="created_at" {{ $sortBy == 'created_at' ? 'selected' : '' }}>Date</option>
+                                <option value="title" {{ $sortBy == 'title' ? 'selected' : '' }}>Title</option>
+                                <option value="type" {{ $sortBy == 'type' ? 'selected' : '' }}>Type</option>
+                                <option value="download_count" {{ $sortBy == 'download_count' ? 'selected' : '' }}>Downloads</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <select name="sort_order" class="filter-select">
+                                <option value="desc" {{ $sortOrder == 'desc' ? 'selected' : '' }}>Newest First</option>
+                                <option value="asc" {{ $sortOrder == 'asc' ? 'selected' : '' }}>Oldest First</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="filter-apply-btn">
+                            <i class="fas fa-filter me-2"></i>Apply Filters
+                        </button>
+
+                        @if($search || $categoryId || $type)
+                        <a href="{{ route('home') }}" class="filter-clear-btn">
+                            <i class="fas fa-times me-2"></i>Clear
+                        </a>
+                        @endif
+                    </form>
+                </div>
+
+                {{-- Documents Grid --}}
+                <div class="documents-grid" id="documentsContainer" data-aos="fade-up" data-aos-delay="200">
+                    @forelse($documents as $document)
+                    <div class="document-card">
+                        <div class="document-header">
+                            <div class="document-type-badge">
+                                <i class="fas fa-file-{{ $document->type === 'pdf' ? 'pdf' : 'alt' }}"></i>
+                                {{ strtoupper($document->type) }}
+                            </div>
+                            <div class="document-actions">
+                                <button class="action-btn" onclick="toggleFavorite({{ $document->id }})">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                                <div class="dropdown">
+                                    <button class="action-btn dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ route('document.show', $document) }}">
+                                            <i class="fas fa-eye me-2"></i>View Details
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="{{ route('document.download', $document) }}">
+                                            <i class="fas fa-download me-2"></i>Download
+                                        </a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="document-content">
+                            <h3 class="document-title">
+                                <a href="{{ route('document.show', $document) }}">{{ $document->title }}</a>
+                            </h3>
+                            
+                            @if($document->description)
+                            <p class="document-description">{{ Str::limit($document->description, 100) }}</p>
+                            @endif
+                            
+                            <div class="document-meta">
+                                <span class="document-category">
+                                    <i class="fas fa-folder me-1"></i>
+                                    <a href="{{ route('category.show', $document->categorie) }}">
+                                        {{ $document->categorie->name }}
+                                    </a>
+                                </span>
+                                <span class="document-date">
+                                    <i class="fas fa-calendar me-1"></i>
+                                    {{ $document->created_at->format('M d, Y') }}
+                                </span>
+                                <span class="document-size">
+                                    <i class="fas fa-file me-1"></i>
+                                    {{ $document->formatted_file_size }}
+                                </span>
+                                <span class="document-downloads">
+                                    <i class="fas fa-download me-1"></i>
+                                    {{ number_format($document->download_count) }} downloads
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="document-footer">
+                            <a href="{{ route('document.show', $document) }}" class="btn-view">
+                                <i class="fas fa-eye me-2"></i>View
+                            </a>
+                            <a href="{{ route('document.download', $document) }}" class="btn-download">
+                                <i class="fas fa-download me-2"></i>Download
+                            </a>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="no-documents">
+                        <div class="no-documents-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3 class="no-documents-title">No documents found</h3>
+                        <p class="no-documents-text">Try adjusting your search criteria or browse different categories.</p>
+                        <a href="{{ route('home') }}" class="btn btn-primary">
+                            <i class="fas fa-refresh me-2"></i>Reset Filters
+                        </a>
+                    </div>
+                    @endforelse
+                </div>
+
+                {{-- Pagination --}}
+                @if($documents->hasPages())
+                <div class="pagination-wrapper" data-aos="fade-up">
+                    {{ $documents->links() }}
+                </div>
+                @endif
+            </main>
         </div>
-    </footer>
+    </div>
+</div>
+@endsection
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+@push('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+<style>
+    /* Home Container */
+    .home-container {
+        min-height: 100vh;
+        background: var(--gradient-bg);
+    }
 
-    <!-- Custom JavaScript -->
-    <script>
-        // Auto-hide alerts after 5 seconds
-        document.addEventListener('DOMContentLoaded', function() {
-            const alerts = document.querySelectorAll('.alert-custom');
-            alerts.forEach(function(alert) {
-                setTimeout(function() {
-                    alert.style.opacity = '0';
-                    alert.style.transform = 'translateY(-20px)';
-                    setTimeout(function() {
-                        alert.remove();
-                    }, 300);
-                }, 5000);
-            });
+    /* Hero Section */
+    .hero-section {
+        background: var(--gradient-card);
+        padding: 4rem 2rem;
+        border-radius: 0 0 2rem 2rem;
+        margin-bottom: 3rem;
+        border: 1px solid var(--border-color);
+    }
+
+    .hero-content {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 3rem;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+        font-weight: 500;
+    }
+
+    /* Search Bar */
+    .hero-search {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .search-form {
+        position: relative;
+    }
+
+    .search-input-group {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background: var(--bg-card);
+        border: 2px solid var(--border-color);
+        border-radius: 50px;
+        padding: 0.75rem 1.5rem;
+        box-shadow: var(--shadow-lg);
+        transition: all 0.3s ease;
+    }
+
+    .search-input-group:focus-within {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+
+    .search-icon {
+        color: var(--text-muted);
+        margin-right: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .search-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 1.1rem;
+        color: var(--text-primary);
+        font-weight: 500;
+    }
+
+    .search-input::placeholder {
+        color: var(--text-muted);
+    }
+
+    .search-btn {
+        background: var(--gradient-primary);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-left: 1rem;
+    }
+
+    .search-btn:hover {
+        transform: scale(1.1);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .stat-card {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--gradient-primary);
+        color: white;
+        font-size: 1.25rem;
+    }
+
+    .stat-number {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .stat-label {
+        color: var(--text-secondary);
+        font-weight: 600;
+        margin: 0;
+    }
+
+    /* Main Content */
+    .main-content {
+        padding: 0 2rem 3rem;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 3rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 2rem;
+        height: fit-content;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-md);
+        position: sticky;
+        top: 2rem;
+    }
+
+    .sidebar-section {
+        margin-bottom: 2rem;
+    }
+
+    .sidebar-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .sidebar-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Category List */
+    .category-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .category-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem;
+        border-radius: 8px;
+        text-decoration: none;
+        color: var(--text-secondary);
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+    .category-item:hover {
+        background: var(--bg-secondary);
+        color: var(--primary-color);
+        border-color: var(--border-color);
+    }
+
+    .category-name {
+        font-weight: 500;
+    }
+
+    .category-count {
+        background: var(--bg-secondary);
+        color: var(--text-muted);
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+
+    /* Recent List */
+    .recent-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .recent-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+    .recent-item:hover {
+        background: var(--bg-secondary);
+        border-color: var(--border-color);
+    }
+
+    .recent-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-secondary);
+        color: var(--primary-color);
+        flex-shrink: 0;
+    }
+
+    .recent-title {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0 0 0.25rem;
+        font-size: 0.875rem;
+    }
+
+    .recent-date {
+        color: var(--text-muted);
+        font-size: 0.75rem;
+    }
+
+    /* Quick Upload */
+    .quick-upload-card {
+        background: var(--gradient-primary);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        color: white;
+    }
+
+    .quick-upload-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .quick-upload-text {
+        font-size: 0.875rem;
+        opacity: 0.9;
+        margin-bottom: 1rem;
+    }
+
+    .quick-upload-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .quick-upload-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* Documents Area */
+    .documents-area {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 2rem;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* Filters Section */
+    .filters-section {
+        margin-bottom: 2rem;
+    }
+
+    .filters-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .filters-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .view-toggle {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .view-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .view-btn.active,
+    .view-btn:hover {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .filters-form {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .filter-group {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .filter-select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .filter-select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .filter-apply-btn,
+    .filter-clear-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .filter-apply-btn {
+        background: var(--gradient-primary);
+        color: white;
+    }
+
+    .filter-apply-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .filter-clear-btn {
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+    }
+
+    .filter-clear-btn:hover {
+        background: var(--danger-color);
+        color: white;
+        border-color: var(--danger-color);
+    }
+
+    /* Documents Grid */
+    .documents-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .document-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .document-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--primary-color);
+    }
+
+    .document-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-light);
+    }
+
+    .document-type-badge {
+        background: var(--gradient-primary);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .document-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .action-btn:hover {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .document-content {
+        padding: 1rem;
+    }
+
+    .document-title {
+        margin: 0 0 0.5rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+
+    .document-title a {
+        color: var(--text-primary);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .document-title a:hover {
+        color: var(--primary-color);
+    }
+
+    .document-description {
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+
+    .document-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .document-category,
+    .document-date,
+    .document-size,
+    .document-downloads {
+        display: flex;
+        align-items: center;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    .document-category a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .document-footer {
+        display: flex;
+        gap: 0.75rem;
+        padding: 1rem;
+        border-top: 1px solid var(--border-light);
+    }
+
+    .btn-view,
+    .btn-download {
+        flex: 1;
+        padding: 0.75rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        text-align: center;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-view {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+    }
+
+    .btn-view:hover {
+        background: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .btn-download {
+        background: var(--gradient-primary);
+        color: white;
+        border: 1px solid var(--primary-color);
+    }
+
+    .btn-download:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* No Documents */
+    .no-documents {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+
+    .no-documents-icon {
+        font-size: 4rem;
+        color: var(--text-muted);
+        margin-bottom: 1rem;
+    }
+
+    .no-documents-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .no-documents-text {
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+    }
+
+    /* Pagination */
+    .pagination-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .content-grid {
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            position: static;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 2rem 1rem;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .main-content {
+            padding: 0 1rem 2rem;
+        }
+
+        .documents-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .filters-form {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filter-group {
+            min-width: auto;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+@endpush
+
+@push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize AOS
+    AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true
+    });
+
+    // View toggle functionality
+    const viewBtns = document.querySelectorAll('.view-btn');
+    const documentsContainer = document.getElementById('documentsContainer');
+
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            viewBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            const view = this.dataset.view;
+            if (view === 'list') {
+                documentsContainer.classList.add('list-view');
+            } else {
+                documentsContainer.classList.remove('list-view');
+            }
         });
+    });
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
+    // Favorite toggle functionality
+    window.toggleFavorite = function(documentId) {
+        const btn = event.target.closest('.action-btn');
+        const icon = btn.querySelector('i');
+        
+        if (icon.classList.contains('far')) {
+            icon.classList.remove('far');
+            icon.classList.add('fas');
+            btn.style.color = '#ef4444';
+        } else {
+            icon.classList.remove('fas');
+            icon.classList.add('far');
+            btn.style.color = '';
+        }
+    };
+
+    // Auto-submit filters on change
+    const filterSelects = document.querySelectorAll('.filter-select');
+    filterSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            this.closest('form').submit();
         });
-    </script>
-</body>
-
-</html>
+    });
+});
+</script>
+@endpush

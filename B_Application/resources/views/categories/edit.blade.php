@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+@extends('layouts.stylepages')
 
 @section('title', 'Edit Category')
 

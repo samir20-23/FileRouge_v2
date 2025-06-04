@@ -18,7 +18,18 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
 
-  
+    //   add the home here 
+    // Home routes for all authenticated users
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/search', [HomeController::class, 'search'])->name('search');
+
+    // Public document viewing routes (for all authenticated users)
+    Route::get('/document/{document}', [HomeController::class, 'show'])->name('document.show');
+    Route::get('/document/{document}/download', [HomeController::class, 'download'])->name('document.download');
+
+    // Public category viewing routes (for all authenticated users)
+    Route::get('/category/{categorie}', [HomeController::class, 'category'])->name('category.show');
+
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -58,7 +69,7 @@ Route::middleware(['auth'])->group(function () {
     | Validation Routes
     |--------------------------------------------------------------------------
     */
-    
+
     Route::resource('validations', ValidationController::class);
     Route::get('validations-pending', [ValidationController::class, 'pending'])->name('validations.pending');
     Route::post('validations/{validation}/approve', [ValidationController::class, 'approve'])->name('validations.approve');
@@ -95,4 +106,3 @@ Route::middleware(['auth'])->group(function () {
     Route::get('profile', [UserController::class, 'profile'])->name('users.profile');
     Route::put('profile', [UserController::class, 'updateProfile'])->name('users.profile.update');
 });
-

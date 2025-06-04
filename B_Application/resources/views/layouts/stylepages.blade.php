@@ -23,17 +23,22 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-      integrity="sha512-dNmYX0fCrGZtUgIqlr4O/ZZSjf9SOVnlcTsgze7vh6eGZlXBv0xgTwKtoDCN/0r8cErraY+CnKXkkQtvv7MXQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    
-    {{-- Your other CSS files: --}}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-dNmYX0fCrGZtUgIqlr4O/ZZSjf9SOVnlcTsgze7vh6eGZlXBv0xgTwKtoDCN/0r8cErraY+CnKXkkQtvv7MXQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <!-- Make sure Font Awesome is properly loaded -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha512-dNmYX0fCrGZtUgIqlr4O/ZZSjf9SOVnlcTsgze7vh6eGZlXBv0xgTwKtoDCN/0r8cErraY+CnKXkkQtvv7MXQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    {{-- Your other CSS files: --}}
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}"> 
     <style>
         :root {
             /* Light Mode Colors */
@@ -45,18 +50,18 @@
             --warning-color: #f59e0b;
             --danger-color: #ef4444;
             --info-color: #3b82f6;
-            
+
             /* Text Colors */
             --text-primary: #1e293b;
             --text-secondary: #64748b;
             --text-muted: #94a3b8;
-            
+
             /* Background Colors */
             --bg-primary: #ffffff;
             --bg-secondary: #f8fafc;
             --bg-tertiary: #f1f5f9;
             --bg-card: #ffffff;
-            
+
             /* Border & Shadow */
             --border-color: #e2e8f0;
             --border-light: #f1f5f9;
@@ -64,7 +69,7 @@
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
             --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            
+
             /* Gradients */
             --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             --gradient-bg: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
@@ -81,18 +86,18 @@
             --warning-color: #fbbf24;
             --danger-color: #f87171;
             --info-color: #60a5fa;
-            
+
             /* Text Colors */
             --text-primary: #f1f5f9;
             --text-secondary: #cbd5e1;
             --text-muted: #94a3b8;
-            
+
             /* Background Colors */
             --bg-primary: #0f172a;
             --bg-secondary: #1e293b;
             --bg-tertiary: #334155;
             --bg-card: #1e293b;
-            
+
             /* Border & Shadow */
             --border-color: #334155;
             --border-light: #475569;
@@ -100,7 +105,7 @@
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
             --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
-            
+
             /* Gradients */
             --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             --gradient-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
@@ -425,8 +430,15 @@
 
         /* Animations */
         @keyframes logoPulse {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.05) rotate(2deg); }
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            50% {
+                transform: scale(1.05) rotate(2deg);
+            }
         }
 
         .img-logo {
@@ -438,6 +450,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -506,6 +519,12 @@
             outline: 2px solid var(--primary-color);
             outline-offset: 2px;
         }
+        /* darkmode
+        body.dark-mode .card {
+    background-color: #404040 !important;
+    border-color: #404040 !important;
+    color: #4d4f97 !important;
+} */
     </style>
     @stack('styles')
 </head>
@@ -528,14 +547,13 @@
                 @endif
                 <span class="text-gradient">{{ config('app.name', 'SoliLMS') }}</span>
             </a>
-
             {{-- Navbar Collapse --}}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <i class="bi bi-three-dots-vertical"></i>
             </button>
-            
+
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -562,8 +580,8 @@
                             </button>
                         </li>
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center"
-                                href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href="#"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <div class="user-avatar">
                                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                 </div>
@@ -580,13 +598,16 @@
                                         <i class="bi bi-gear"></i>Settings
                                     </a>
                                 </li>
-                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="bi bi-box-arrow-right"></i>Logout
                                     </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
                                         @csrf
                                     </form>
                                 </li>
@@ -599,12 +620,14 @@
     </nav>
 
     {{-- Sidebar Offcanvas --}}
-    <div class="offcanvas offcanvas-start sidebar-offcanvas" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+    <div class="offcanvas offcanvas-start sidebar-offcanvas" tabindex="-1" id="sidebar"
+        aria-labelledby="sidebarLabel">
         <div class="offcanvas-header">
             <a class="navbar-brand" href="{{ url('/') }}">
                 <i class="bi bi-lightning-charge-fill"></i>
                 @if (config('adminlte.logo_img'))
-                    <img src="{{ asset(config('adminlte.logo_img')) }}" height="40" alt="Logo" class="img-logo">
+                    <img src="{{ asset(config('adminlte.logo_img')) }}" height="40" alt="Logo"
+                        class="img-logo">
                 @endif
                 <span class="text-gradient">{{ config('app.name', 'SoliLMS') }}</span>
             </a>
@@ -627,7 +650,8 @@
             @endauth
 
             <nav class="nav flex-column sidebar-nav">
-                <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+                <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
+                    href="{{ route('dashboard') }}">
                     <i class="bi bi-speedometer2"></i>
                     Dashboard
                 </a>
@@ -661,6 +685,13 @@
     </div>
 
     {{-- Scripts --}}
+    <!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="{{ asset('vendor/adminlte/plugins/jquery/jquery.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
@@ -688,7 +719,7 @@
             function setTheme(theme) {
                 body.setAttribute('data-theme', theme);
                 localStorage.setItem('theme', theme);
-                
+
                 if (theme === 'dark') {
                     icon.className = 'bi bi-sun-fill';
                     if (text) text.textContent = 'Light';
@@ -698,11 +729,16 @@
                 }
 
                 // Dispatch custom event for charts
-                window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme } }));
+                window.dispatchEvent(new CustomEvent('themeChanged', {
+                    detail: {
+                        theme
+                    }
+                }));
             }
         });
     </script>
 
     @stack('scripts')
 </body>
+
 </html>
