@@ -1,1631 +1,1586 @@
-@extends('adminlte::page')
+{{-- resources/views/dashboard.blade.php --}}
+@extends('layouts.stylepages')
+
+{{-- Title section --}}
+@section('title', auth()->user()->isAdmin() ? 'Dashboard' : config('app.name'))
+
+{{-- Content header section --}}
 @section('content_header')
-
     @if (auth()->check() && auth()->user()->isAdmin())
-        @section('title', 'Dashboard')
-
-    @section('content_header')
         <h1 class="font-weight-bold text-dark">Dashboard</h1>
-    @stop
+    @endif
+@stop
 
-    @section('content')
-        <div class="row" style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 20px;">
-            <div class="col-md-4 mb-4">
-                <div class="small-box bg-info card-custom shadow-lg">
-                    <div class="inner p-3">
-                        <h3 class="display-4 text-white">{{ $totalDocuments }}</h3>
-                        <p class="lead text-white">Total Documents</p>
+{{-- Main content section --}}
+@section('content')
+    @if (auth()->check() && auth()->user()->isAdmin())
+        {{-- Dashboard cards row --}}
+        <div class="row g-4 mb-5 dashboard-cards">
+            <div class="col-lg-3 col-md-6">
+                <div class="dashboard-card dashboard-card-primary" data-aos="fade-up" data-aos-delay="100">
+                    <div class="dashboard-card-inner">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-file fa-2x"></i>
+                        </div>
+                        <div class="dashboard-card-content">
+                            <h3 class="dashboard-card-value">{{ number_format($totalDocuments) }}</h3>
+                            <p class="dashboard-card-label">Total Documents</p>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fas fa-file fa-3x"></i>
-                    </div>
-                    <a href="{{ route('documents.index') }}" class="small-box-footer bg-info text-white">
+                    <a href="{{ route('documents.index') }}" class="dashboard-card-link">
                         View Documents <i class="fas fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div>
 
-            <div class="col-md-4 mb-4">
-                <div class="small-box bg-success card-custom shadow-lg">
-                    <div class="inner p-3">
-                        <h3 class="display-4 text-white">{{ $totalCategories }}</h3>
-                        <p class="lead text-white">Total Categories</p>
+            <div class="col-lg-3 col-md-6">
+                <div class="dashboard-card dashboard-card-success" data-aos="fade-up" data-aos-delay="200">
+                    <div class="dashboard-card-inner">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-list fa-2x"></i>
+                        </div>
+                        <div class="dashboard-card-content">
+                            <h3 class="dashboard-card-value">{{ number_format($totalCategories) }}</h3>
+                            <p class="dashboard-card-label">Total Categories</p>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fas fa-list fa-3x"></i>
-                    </div>
-                    <a href="{{ route('categories.index') }}" class="small-box-footer bg-success text-white">
+                    <a href="{{ route('categories.index') }}" class="dashboard-card-link">
                         View Categories <i class="fas fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div>
 
-            <div class="col-md-4 mb-4">
-                <div class="small-box bg-warning card-custom shadow-lg">
-                    <div class="inner p-3">
-                        <h3 class="display-4 text-white">{{ $totalUsers }}</h3>
-                        <p class="lead text-white">Total Users</p>
+            <div class="col-lg-3 col-md-6">
+                <div class="dashboard-card dashboard-card-warning" data-aos="fade-up" data-aos-delay="300">
+                    <div class="dashboard-card-inner">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-users fa-2x"></i>
+                        </div>
+                        <div class="dashboard-card-content">
+                            <h3 class="dashboard-card-value">{{ number_format($totalUsers) }}</h3>
+                            <p class="dashboard-card-label">Total Users</p>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fas fa-users fa-3x"></i>
-                    </div>
-                    <a href="{{ route('users.index') }}" class="small-box-footer bg-warning text-white">
+                    <a href="{{ route('users.index') }}" class="dashboard-card-link">
                         View Users <i class="fas fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div>
 
-            <div class="col-md-4 mb-4">
-                <div class="small-box bg-primary shadow-lg">
-                    <div class="inner">
-                        <h3 class="text-white">{{ $totalValidations }}</h3>
-                        <p class="text-white">Total Validations</p>
+            <div class="col-lg-3 col-md-6">
+                <div class="dashboard-card dashboard-card-info" data-aos="fade-up" data-aos-delay="400">
+                    <div class="dashboard-card-inner">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+                        <div class="dashboard-card-content">
+                            <h3 class="dashboard-card-value">{{ number_format($totalValidations) }}</h3>
+                            <p class="dashboard-card-label">Total Validations</p>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fas fa-check-circle fa-3x"></i>
-                    </div>
-                    <a href="{{ route('validations.index') }}" class="small-box-footer bg-primary text-white">
+                    <a href="{{ route('validations.index') }}" class="dashboard-card-link">
                         View Validations <i class="fas fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div>
 
-            <div class="col-md-4 mb-4">
-                <div class="small-box bg-danger shadow-lg">
-                    <div class="inner">
-                        <h3 class="text-white">{{ $pendingValidations }}</h3>
-                        <p class="text-white">Pending Validations</p>
+            <div class="col-lg-3 col-md-6">
+                <div class="dashboard-card dashboard-card-danger" data-aos="fade-up" data-aos-delay="500">
+                    <div class="dashboard-card-inner">
+                        <div class="dashboard-card-icon">
+                            <i class="fas fa-hourglass-half fa-2x"></i>
+                        </div>
+                        <div class="dashboard-card-content">
+                            <h3 class="dashboard-card-value">{{ number_format($pendingValidations) }}</h3>
+                            <p class="dashboard-card-label">Pending Validations</p>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fas fa-hourglass-half fa-3x"></i>
-                    </div>
-                    <a href="{{ route('validations.index', ['filter' => 'pending']) }}"
-                        class="small-box-footer bg-danger text-white">
+                    <a href="{{ route('validations.index', ['filter' => 'pending']) }}" class="dashboard-card-link">
                         Manage Pending <i class="fas fa-arrow-circle-right"></i>
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- First Row of Charts -->
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <x-adminlte-card title="Documents and Categories Overview" theme="primary" collapsible>
-                    <canvas id="barChart" height="300"></canvas>
-                </x-adminlte-card>
+        {{-- First Row of Charts --}}
+        <div class="row g-4 mb-5">
+            <div class="col-lg-6">
+                <div class="chart-container" data-aos="fade-right" data-aos-delay="100">
+                    <div class="chart-header">
+                        <h4 class="chart-title">
+                            <i class="fas fa-chart-bar me-2"></i>Documents and Categories Overview
+                        </h4>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" id="barChartFullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" id="barChartDownload">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="barChart" height="300"></canvas>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-md-6 mb-4">
-                <x-adminlte-card title="Growth Over Time (Last 6 Months)" theme="secondary" collapsible>
-                    <canvas id="lineChart" height="300"></canvas>
-                </x-adminlte-card>
+            <div class="col-lg-6">
+                <div class="chart-container" data-aos="fade-left" data-aos-delay="200">
+                    <div class="chart-header">
+                        <h4 class="chart-title">
+                            <i class="fas fa-chart-line me-2"></i>Growth Over Time (Last 6 Months)
+                        </h4>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" id="lineChartFullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" id="lineChartDownload">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="lineChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Second Row of Charts --}}
+        <div class="row g-4 mb-5">
+            <div class="col-lg-6">
+                <div class="chart-container" data-aos="fade-right" data-aos-delay="300">
+                    <div class="chart-header">
+                        <h4 class="chart-title">
+                            <i class="fas fa-chart-pie me-2"></i>Document Type Distribution
+                        </h4>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" id="pieChartFullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" id="pieChartDownload">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="pieChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="chart-container" data-aos="fade-left" data-aos-delay="400">
+                    <div class="chart-header">
+                        <h4 class="chart-title">
+                            <i class="fas fa-chart-pie me-2"></i>Category Breakdown
+                        </h4>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" id="doughnutChartFullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" id="doughnutChartDownload">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="doughnutChart" height="300"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Second Row of Charts -->
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <x-adminlte-card title="Document Type Distribution" theme="info" collapsible>
-                    <canvas id="pieChart" height="300"></canvas>
-                </x-adminlte-card>
+        {{-- Third Row - Validation Charts --}}
+        <div class="row g-4 mb-5">
+            <div class="col-lg-6">
+                <div class="chart-container" data-aos="fade-right" data-aos-delay="500">
+                    <div class="chart-header">
+                        <h4 class="chart-title">
+                            <i class="fas fa-chart-pie me-2"></i>Validation Status Distribution
+                        </h4>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" id="validationStatusChartFullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" id="validationStatusChartDownload">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="validationStatusChart" height="300"></canvas>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-md-6 mb-4">
-                <x-adminlte-card title="Category Breakdown" theme="success" collapsible>
-                    <canvas id="doughnutChart" height="300"></canvas>
-                </x-adminlte-card>
+            <div class="col-lg-6">
+                <div class="chart-container" data-aos="fade-left" data-aos-delay="600">
+                    <div class="chart-header">
+                        <h4 class="chart-title">
+                            <i class="fas fa-chart-line me-2"></i>Validation Trends (Monthly)
+                        </h4>
+                        <div class="chart-actions">
+                            <button class="btn-chart-action" id="validationTrendChartFullscreen">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                            <button class="btn-chart-action" id="validationTrendChartDownload">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chart-body">
+                        <canvas id="validationTrendChart" height="300"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Third Row - Validation Charts -->
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <x-adminlte-card title="Validation Status Distribution" theme="purple" collapsible>
-                    <canvas id="validationStatusChart" height="300"></canvas>
-                </x-adminlte-card>
-            </div>
-
-            <div class="col-md-6 mb-4">
-                <x-adminlte-card title="Validation Trends (Monthly)" theme="dark" collapsible>
-                    <canvas id="validationTrendChart" height="300"></canvas>
-                </x-adminlte-card>
-            </div>
-        </div>
-
-        <!-- Controls Row -->
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <button class="btn btn-dark mr-2" id="darkModeToggle">
-                    <i class="fas fa-moon"></i> Toggle Dark Mode
-                </button>
-                <button class="btn btn-info mr-2" id="refreshCharts">
-                    <i class="fas fa-sync-alt"></i> Refresh Charts
-                </button>
-                <button class="btn btn-success" id="exportData">
-                    <i class="fas fa-download"></i> Export Data
-                </button>
+        {{-- Modal for fullscreen charts --}}
+        <div class="modal fade" id="chartModal" tabindex="-1" aria-labelledby="chartModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="chartModalLabel">Chart</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex align-items-center justify-content-center">
+                        <canvas id="modalChart" style="width: 100%; height: 80vh;"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
-    @stop
 
-    @push('css')
-        <style>
-            .card-custom {
-                border-radius: 15px;
-                transition: all 0.3s ease;
-            }
+    @else
+        {{-- Access Denied for non-admins --}}
+        <div class="text-center mt-6 max-w-md mx-auto">
+            <img src="{{ asset('vendor/adminlte/dist/img/404GIF.gif') }}" alt="Access Denied"
+                class="mx-auto mb-4 animate__animated animate__zoomIn" style="max-width: 150px;">
 
-            .card-custom:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
-            }
+            <div class="access-denied-message">
+                <strong class="access-denied-title">Oops!</strong>
+                <span class="access-denied-text">Admins only — you don't have access to this page.</span>
+            </div>
 
-            .small-box-footer {
-                transition: all 0.3s ease;
-            }
-
-            .small-box-footer:hover {
-                background-color: rgba(255, 255, 255, 0.1) !important;
-            }
-
-            .dark-mode {
-                background-color: #1a1a1a !important;
-                color: #ffffff !important;
-            }
-
-            .dark-mode .card {
-                background-color: #2d2d2d !important;
-                border-color: #404040 !important;
-            }
-
-            .dark-mode .card-header {
-                background-color: #404040 !important;
-                border-color: #404040 !important;
-                color: #ffffff !important;
-            }
-
-            .chart-container {
-                position: relative;
-                height: 300px;
-                margin: 10px 0;
-            }
-
-            .loading-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(255, 255, 255, 0.8);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 1000;
-            }
-        </style>
-    @endpush
-
-    @push('js')
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                // Get data from Laravel backend
-                var totalDocuments = @json($totalDocuments);
-                var totalCategories = @json($totalCategories);
-                var totalUsers = @json($totalUsers);
-                var totalValidations = @json($totalValidations);
-                var pendingValidations = @json($pendingValidations);
-
-                // Pass additional data from controller
-                var monthlyGrowth = @json($monthlyGrowth ?? []);
-                var documentTypes = @json($documentTypes ?? []);
-                var categoryBreakdown = @json($categoryBreakdown ?? []);
-                var validationStats = @json($validationStats ?? []);
-                var validationTrends = @json($validationTrends ?? []);
-
-                // Chart configurations
-                const chartOptions = {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                            labels: {
-                                usePointStyle: true,
-                                padding: 20
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(0,0,0,0.8)',
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
-                            borderColor: '#fff',
-                            borderWidth: 1,
-                            cornerRadius: 8,
-                            displayColors: true
-                        }
-                    },
-                    animation: {
-                        duration: 1500,
-                        easing: 'easeInOutCubic'
-                    }
-                };
-
-                // 1. Bar Chart - Documents, Categories, Users Overview
-                var ctxBar = document.getElementById('barChart').getContext('2d');
-                var barChart = new Chart(ctxBar, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Documents', 'Categories', 'Users', 'Validations'],
-                        datasets: [{
-                            label: 'Total Counts',
-                            data: [totalDocuments, totalCategories, totalUsers, totalValidations],
-                            backgroundColor: [
-                                'rgba(54, 162, 235, 0.8)',
-                                'rgba(75, 192, 192, 0.8)',
-                                'rgba(255, 206, 86, 0.8)',
-                                'rgba(153, 102, 255, 0.8)'
-                            ],
-                            borderColor: [
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(153, 102, 255, 1)'
-                            ],
-                            borderWidth: 2,
-                            borderRadius: 8,
-                            borderSkipped: false,
-                        }]
-                    },
-                    options: {
-                        ...chartOptions,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    color: 'rgba(0,0,0,0.1)'
-                                },
-                                ticks: {
-                                    callback: function(value) {
-                                        return value.toLocaleString();
-                                    }
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        },
-                        plugins: {
-                            ...chartOptions.plugins,
-                            datalabels: {
-                                anchor: 'end',
-                                align: 'top',
-                                formatter: function(value) {
-                                    return value.toLocaleString();
-                                },
-                                font: {
-                                    weight: 'bold'
-                                }
-                            }
-                        }
-                    },
-                    plugins: [ChartDataLabels]
-                });
-
-                // 2. Line Chart - Growth Over Time (using real monthly data)
-                var ctxLine = document.getElementById('lineChart').getContext('2d');
-
-                // Generate realistic monthly growth data if not provided
-                if (!monthlyGrowth.length) {
-                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-                    monthlyGrowth = months.map((month, index) => ({
-                        month: month,
-                        documents: Math.floor(totalDocuments * (0.6 + index * 0.08)),
-                        categories: Math.floor(totalCategories * (0.7 + index * 0.05)),
-                        users: Math.floor(totalUsers * (0.5 + index * 0.1)),
-                        validations: Math.floor(totalValidations * (0.4 + index * 0.12))
-                    }));
-                }
-
-                var lineChart = new Chart(ctxLine, {
-                    type: 'line',
-                    data: {
-                        labels: monthlyGrowth.map(item => item.month),
-                        datasets: [{
-                                label: 'Documents',
-                                data: monthlyGrowth.map(item => item.documents),
-                                borderColor: 'rgb(54, 162, 235)',
-                                backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                                fill: true,
-                                tension: 0.4,
-                                pointRadius: 6,
-                                pointHoverRadius: 8
-                            },
-                            {
-                                label: 'Categories',
-                                data: monthlyGrowth.map(item => item.categories),
-                                borderColor: 'rgb(75, 192, 192)',
-                                backgroundColor: 'rgba(75, 192, 192, 0.1)',
-                                fill: true,
-                                tension: 0.4,
-                                pointRadius: 6,
-                                pointHoverRadius: 8
-                            },
-                            {
-                                label: 'Users',
-                                data: monthlyGrowth.map(item => item.users),
-                                borderColor: 'rgb(255, 206, 86)',
-                                backgroundColor: 'rgba(255, 206, 86, 0.1)',
-                                fill: true,
-                                tension: 0.4,
-                                pointRadius: 6,
-                                pointHoverRadius: 8
-                            },
-                            {
-                                label: 'Validations',
-                                data: monthlyGrowth.map(item => item.validations),
-                                borderColor: 'rgb(153, 102, 255)',
-                                backgroundColor: 'rgba(153, 102, 255, 0.1)',
-                                fill: true,
-                                tension: 0.4,
-                                pointRadius: 6,
-                                pointHoverRadius: 8
-                            }
-                        ]
-                    },
-                    options: {
-                        ...chartOptions,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    color: 'rgba(0,0,0,0.1)'
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    color: 'rgba(0,0,0,0.05)'
-                                }
-                            }
-                        },
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        }
-                    }
-                });
-
-                // 3. Pie Chart - Document Types Distribution
-                var ctxPie = document.getElementById('pieChart').getContext('2d');
-
-                // Generate realistic document type data if not provided
-                if (!documentTypes.length) {
-                    const totalDocs = totalDocuments;
-                    documentTypes = [{
-                            type: 'PDF Documents',
-                            count: Math.floor(totalDocs * 0.45)
-                        },
-                        {
-                            type: 'Word Documents',
-                            count: Math.floor(totalDocs * 0.30)
-                        },
-                        {
-                            type: 'Excel Files',
-                            count: Math.floor(totalDocs * 0.15)
-                        },
-                        {
-                            type: 'PowerPoint',
-                            count: Math.floor(totalDocs * 0.10)
-                        }
-                    ];
-                }
-
-                var pieChart = new Chart(ctxPie, {
-                    type: 'pie',
-                    data: {
-                        labels: documentTypes.map(item => item.type),
-                        datasets: [{
-                            data: documentTypes.map(item => item.count),
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.8)',
-                                'rgba(54, 162, 235, 0.8)',
-                                'rgba(255, 205, 86, 0.8)',
-                                'rgba(75, 192, 192, 0.8)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 205, 86, 1)',
-                                'rgba(75, 192, 192, 1)'
-                            ],
-                            borderWidth: 2,
-                            hoverOffset: 10
-                        }]
-                    },
-                    options: {
-                        ...chartOptions,
-                        plugins: {
-                            ...chartOptions.plugins,
-                            datalabels: {
-                                formatter: function(value, context) {
-                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    const percentage = ((value / total) * 100).toFixed(1);
-                                    return percentage + '%';
-                                },
-                                color: '#fff',
-                                font: {
-                                    weight: 'bold',
-                                    size: 12
-                                }
-                            }
-                        }
-                    },
-                    plugins: [ChartDataLabels]
-                });
-
-                // 4. Doughnut Chart - Category Breakdown
-                var ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
-
-                // Generate realistic category data if not provided
-                if (!categoryBreakdown.length) {
-                    categoryBreakdown = [{
-                            category: 'Legal Documents',
-                            count: Math.floor(totalCategories * 0.25)
-                        },
-                        {
-                            category: 'Financial Records',
-                            count: Math.floor(totalCategories * 0.20)
-                        },
-                        {
-                            category: 'HR Documents',
-                            count: Math.floor(totalCategories * 0.18)
-                        },
-                        {
-                            category: 'Operations',
-                            count: Math.floor(totalCategories * 0.15)
-                        },
-                        {
-                            category: 'Marketing',
-                            count: Math.floor(totalCategories * 0.12)
-                        },
-                        {
-                            category: 'Others',
-                            count: Math.floor(totalCategories * 0.10)
-                        }
-                    ];
-                }
-
-                var doughnutChart = new Chart(ctxDoughnut, {
-                    type: 'doughnut',
-                    data: {
-                        labels: categoryBreakdown.map(item => item.category),
-                        datasets: [{
-                            data: categoryBreakdown.map(item => item.count),
-                            backgroundColor: [
-                                'rgba(255, 206, 86, 0.8)',
-                                'rgba(75, 192, 192, 0.8)',
-                                'rgba(54, 162, 235, 0.8)',
-                                'rgba(153, 102, 255, 0.8)',
-                                'rgba(255, 159, 64, 0.8)',
-                                'rgba(199, 199, 199, 0.8)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)',
-                                'rgba(199, 199, 199, 1)'
-                            ],
-                            borderWidth: 2,
-                            hoverOffset: 8
-                        }]
-                    },
-                    options: {
-                        ...chartOptions,
-                        cutout: '60%',
-                        plugins: {
-                            ...chartOptions.plugins,
-                            datalabels: {
-                                display: function(context) {
-                                    const value = context.dataset.data[context.dataIndex];
-                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    const percentage = (value / total) * 100;
-                                    return percentage > 5; // Only show labels for slices > 5%
-                                },
-                                formatter: function(value, context) {
-                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                    const percentage = ((value / total) * 100).toFixed(1);
-                                    return percentage + '%';
-                                },
-                                color: '#fff',
-                                font: {
-                                    weight: 'bold',
-                                    size: 11
-                                }
-                            }
-                        }
-                    },
-                    plugins: [ChartDataLabels]
-                });
-
-                // 5. Validation Status Chart (Polar Area)
-                var ctxValidationStatus = document.getElementById('validationStatusChart').getContext('2d');
-
-                // Generate realistic validation status data
-                if (!validationStats.length) {
-                    const approved = totalValidations - pendingValidations - Math.floor(totalValidations * 0.05);
-                    const rejected = Math.floor(totalValidations * 0.05);
-                    const underReview = Math.floor(pendingValidations * 0.6);
-                    const pending = pendingValidations - underReview;
-
-                    validationStats = [{
-                            status: 'Approved',
-                            count: approved
-                        },
-                        {
-                            status: 'Pending',
-                            count: pending
-                        },
-                        {
-                            status: 'Under Review',
-                            count: underReview
-                        },
-                        {
-                            status: 'Rejected',
-                            count: rejected
-                        }
-                    ];
-                }
-
-                var validationStatusChart = new Chart(ctxValidationStatus, {
-                    type: 'polarArea',
-                    data: {
-                        labels: validationStats.map(item => item.status),
-                        datasets: [{
-                            data: validationStats.map(item => item.count),
-                            backgroundColor: [
-                                'rgba(75, 192, 192, 0.7)',
-                                'rgba(255, 206, 86, 0.7)',
-                                'rgba(54, 162, 235, 0.7)',
-                                'rgba(255, 99, 132, 0.7)'
-                            ],
-                            borderColor: [
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 99, 132, 1)'
-                            ],
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        ...chartOptions,
-                        scales: {
-                            r: {
-                                beginAtZero: true,
-                                grid: {
-                                    color: 'rgba(0,0,0,0.1)'
-                                },
-                                pointLabels: {
-                                    font: {
-                                        size: 12,
-                                        weight: 'bold'
-                                    }
-                                }
-                            }
-                        },
-                        plugins: {
-                            ...chartOptions.plugins,
-                            datalabels: {
-                                formatter: function(value, context) {
-                                    return value.toLocaleString();
-                                },
-                                color: '#fff',
-                                font: {
-                                    weight: 'bold',
-                                    size: 12
-                                }
-                            }
-                        }
-                    },
-                    plugins: [ChartDataLabels]
-                });
-
-                // 6. Validation Trends Chart (Mixed Chart)
-                var ctxValidationTrend = document.getElementById('validationTrendChart').getContext('2d');
-
-                // Generate realistic validation trend data
-                if (!validationTrends.length) {
-                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-                    validationTrends = months.map((month, index) => ({
-                        month: month,
-                        approved: Math.floor(50 + index * 15 + Math.random() * 20),
-                        pending: Math.floor(10 + Math.random() * 15),
-                        rejected: Math.floor(2 + Math.random() * 8),
-                        total: 0
-                    }));
-
-                    // Calculate totals
-                    validationTrends.forEach(item => {
-                        item.total = item.approved + item.pending + item.rejected;
-                    });
-                }
-
-                var validationTrendChart = new Chart(ctxValidationTrend, {
-                    type: 'bar',
-                    data: {
-                        labels: validationTrends.map(item => item.month),
-                        datasets: [{
-                                type: 'line',
-                                label: 'Total Validations',
-                                data: validationTrends.map(item => item.total),
-                                borderColor: 'rgb(255, 99, 132)',
-                                backgroundColor: 'rgba(255, 99, 132, 0.1)',
-                                yAxisID: 'y1',
-                                tension: 0.4,
-                                pointRadius: 6,
-                                pointHoverRadius: 8,
-                                borderWidth: 3
-                            },
-                            {
-                                type: 'bar',
-                                label: 'Approved',
-                                data: validationTrends.map(item => item.approved),
-                                backgroundColor: 'rgba(75, 192, 192, 0.8)',
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1,
-                                yAxisID: 'y'
-                            },
-                            {
-                                type: 'bar',
-                                label: 'Pending',
-                                data: validationTrends.map(item => item.pending),
-                                backgroundColor: 'rgba(255, 206, 86, 0.8)',
-                                borderColor: 'rgba(255, 206, 86, 1)',
-                                borderWidth: 1,
-                                yAxisID: 'y'
-                            },
-                            {
-                                type: 'bar',
-                                label: 'Rejected',
-                                data: validationTrends.map(item => item.rejected),
-                                backgroundColor: 'rgba(255, 99, 132, 0.8)',
-                                borderColor: 'rgba(255, 99, 132, 1)',
-                                borderWidth: 1,
-                                yAxisID: 'y'
-                            }
-                        ]
-                    },
-                    options: {
-                        ...chartOptions,
-                        scales: {
-                            y: {
-                                type: 'linear',
-                                display: true,
-                                position: 'left',
-                                beginAtZero: true,
-                                grid: {
-                                    color: 'rgba(0,0,0,0.1)'
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Count by Status'
-                                }
-                            },
-                            y1: {
-                                type: 'linear',
-                                display: true,
-                                position: 'right',
-                                beginAtZero: true,
-                                grid: {
-                                    drawOnChartArea: false,
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Total Validations'
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        },
-                        interaction: {
-                            intersect: false,
-                            mode: 'index'
-                        }
-                    }
-                });
-
-                // Dark Mode Toggle
-                document.getElementById('darkModeToggle').addEventListener('click', function() {
-                    document.body.classList.toggle('dark-mode');
-                    const isDarkMode = document.body.classList.contains('dark-mode');
-                    localStorage.setItem('darkMode', isDarkMode);
-
-                    // Update chart colors for dark mode
-                    const textColor = isDarkMode ? '#ffffff' : '#666666';
-                    const gridColor = isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
-
-                    [barChart, lineChart, pieChart, doughnutChart, validationStatusChart, validationTrendChart]
-                    .forEach(chart => {
-                        if (chart.options.scales) {
-                            Object.keys(chart.options.scales).forEach(scaleKey => {
-                                if (chart.options.scales[scaleKey].ticks) {
-                                    chart.options.scales[scaleKey].ticks.color = textColor;
-                                }
-                                if (chart.options.scales[scaleKey].grid) {
-                                    chart.options.scales[scaleKey].grid.color = gridColor;
-                                }
-                            });
-                        }
-                        if (chart.options.plugins && chart.options.plugins.legend) {
-                            chart.options.plugins.legend.labels.color = textColor;
-                        }
-                        chart.update();
-                    });
-
-                    // Update button icon
-                    const icon = this.querySelector('i');
-                    if (isDarkMode) {
-                        icon.className = 'fas fa-sun';
-                    } else {
-                        icon.className = 'fas fa-moon';
-                    }
-                });
-
-                // Refresh Charts
-                document.getElementById('refreshCharts').addEventListener('click', function() {
-                    const button = this;
-                    const originalText = button.innerHTML;
-                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing...';
-                    button.disabled = true;
-
-                    // Simulate data refresh
-                    setTimeout(() => {
-                        [barChart, lineChart, pieChart, doughnutChart, validationStatusChart,
-                            validationTrendChart
-                        ].forEach(chart => {
-                            chart.update('active');
-                        });
-
-                        button.innerHTML = originalText;
-                        button.disabled = false;
-
-                        // Show success message
-                        const alert = document.createElement('div');
-                        alert.className = 'alert alert-success alert-dismissible fade show';
-                        alert.innerHTML = `
-                <strong>Success!</strong> Charts have been refreshed.
-                <button type="button" class="close" data-dismiss="alert">
-                    <span>&times;</span>
-                </button>
-            `;
-                        document.querySelector('.container-fluid').prepend(alert);
-
-                        setTimeout(() => {
-                            alert.remove();
-                        }, 3000);
-                    }, 1500);
-                });
-
-                // Export Data
-                document.getElementById('exportData').addEventListener('click', function() {
-                    const data = {
-                        summary: {
-                            totalDocuments,
-                            totalCategories,
-                            totalUsers,
-                            totalValidations,
-                            pendingValidations
-                        },
-                        monthlyGrowth,
-                        documentTypes,
-                        categoryBreakdown,
-                        validationStats,
-                        validationTrends,
-                        exportDate: new Date().toISOString()
-                    };
-
-                    const dataStr = JSON.stringify(data, null, 2);
-                    const dataBlob = new Blob([dataStr], {
-                        type: 'application/json'
-                    });
-                    const url = URL.createObjectURL(dataBlob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = `dashboard-data-${new Date().toISOString().split('T')[0]}.json`;
-                    link.click();
-                    URL.revokeObjectURL(url);
-                });
-
-                // Check dark mode state on load
-                if (localStorage.getItem('darkMode') === 'true') {
-                    document.body.classList.add('dark-mode');
-                    document.getElementById('darkModeToggle').querySelector('i').className = 'fas fa-sun';
-                }
-
-                // Add resize handler for responsive charts
-                window.addEventListener('resize', function() {
-                    [barChart, lineChart, pieChart, doughnutChart, validationStatusChart, validationTrendChart]
-                    .forEach(chart => {
-                        chart.resize();
-                    });
-                });
-            });
-        </script>
-    @endpush
-
-    {{-- xxxxxxxxxxxxxxxxxxxxxxxxx --}}
-@else
-    <!-- User warning card with animation -->
-    <!-- User warning card with animation -->
-    <div class="text-center mt-6 max-w-md mx-auto">
-        <!-- 404-style image (smaller) -->
-        <img src="{{ asset('vendor/adminlte/dist/img/404GIF.gif') }}" alt="Access Denied"
-            class="mx-auto mb-6 animate__animated animate__zoomIn" style="max-width: 240px;">
-
-        <!-- Warning Text -->
-        <div
-            class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded shadow-sm animate__animated animate__fadeInUp">
-            <strong class="font-bold">Oops!</strong>
-            <span class="block text-sm">Admins only — you don’t have access to this page.</span>
+            <a href="{{ route('home') }}" class="btn btn-primary mt-4">
+                <i class="fas fa-home me-2"></i>Go back to Home
+            </a>
         </div>
-
-        <!-- Optional link back -->
-        <a href="{{ route('home') }}" class="inline-block mt-3 text-sm text-blue-600 underline hover:text-blue-800">
-            Go back to Home
-        </a>
-    </div>
-@endif
-@stop
-{{-- dashboard 2 : --}}
-{{-- @extends('adminlte::page')
-
-@section('title', 'Dashboard')
-
-@section('content_header')
-    <h1 class="font-weight-bold text-dark">Dashboard Overview</h1>
+    @endif
 @stop
 
-@section('css')
-    <style>
-        .card-custom {
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            position: relative;
+@push('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-dNmYX0fCrGZtUgIqlr4O/ZZSjf9SOVnlcTsgze7vh6eGZlXBv0xgTwKtoDCN/0r8cErraY+CnKXkkQtvv7MXQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    
+    {{-- Your other CSS files: --}}
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+<style>
+    /* Dashboard Cards */
+    .dashboard-cards {
+        margin-bottom: 2rem;
+    }
+
+    .dashboard-card {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 100%;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-xl);
+    }
+
+    .dashboard-card-inner {
+        padding: 1.75rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .dashboard-card-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1.5rem;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+    }
+
+    .dashboard-card:hover .dashboard-card-icon {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .dashboard-card-primary .dashboard-card-icon {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(79, 70, 229, 0.2));
+        color: var(--primary-color);
+    }
+
+    .dashboard-card-success .dashboard-card-icon {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+        color: var(--accent-color);
+    }
+
+    .dashboard-card-warning .dashboard-card-icon {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+        color: var(--warning-color);
+    }
+
+    .dashboard-card-info .dashboard-card-icon {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2));
+        color: var(--info-color);
+    }
+
+    .dashboard-card-danger .dashboard-card-icon {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2));
+        color: var(--danger-color);
+    }
+
+    .dashboard-card-content {
+        flex-grow: 1;
+    }
+
+    .dashboard-card-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin: 0 0 0.25rem;
+        transition: all 0.3s ease;
+    }
+
+    .dashboard-card:hover .dashboard-card-value {
+        transform: scale(1.05);
+    }
+
+    .dashboard-card-label {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        margin: 0;
+        font-weight: 500;
+    }
+
+    .dashboard-card-link {
+        display: block;
+        padding: 0.75rem 1.5rem;
+        text-align: center;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .dashboard-card-primary .dashboard-card-link {
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--primary-color);
+    }
+
+    .dashboard-card-success .dashboard-card-link {
+        background: rgba(16, 185, 129, 0.1);
+        color: var(--accent-color);
+    }
+
+    .dashboard-card-warning .dashboard-card-link {
+        background: rgba(245, 158, 11, 0.1);
+        color: var(--warning-color);
+    }
+
+    .dashboard-card-info .dashboard-card-link {
+        background: rgba(59, 130, 246, 0.1);
+        color: var(--info-color);
+    }
+
+    .dashboard-card-danger .dashboard-card-link {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--danger-color);
+    }
+
+    .dashboard-card-link:hover {
+        background: var(--gradient-primary);
+        color: white !important;
+    }
+
+    .dashboard-card-link i {
+        margin-left: 0.5rem;
+        transition: transform 0.3s ease;
+    }
+
+    .dashboard-card-link:hover i {
+        transform: translateX(4px);
+    }
+
+    /* Chart Containers */
+    .chart-container {
+        background: var(--bg-card);
+        border-radius: 16px;
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 100%;
+        border: 1px solid var(--border-color);
+    }
+
+    .chart-container:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-5px);
+    }
+
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .chart-title {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+    }
+
+    .chart-title i {
+        margin-right: 0.5rem;
+        color: var(--primary-color);
+    }
+
+    .chart-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-chart-action {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-chart-action:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .chart-body {
+        padding: 1.5rem;
+        position: relative;
+    }
+
+    /* Access Denied */
+    .access-denied-message {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: var(--danger-color);
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        margin: 1rem auto;
+        max-width: 400px;
+    }
+
+    .access-denied-title {
+        display: block;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .access-denied-text {
+        display: block;
+    }
+
+    /* Modal */
+    .modal-content {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+    }
+
+    .modal-header {
+        border-bottom: 1px solid var(--border-color);
+        background: var(--bg-secondary);
+    }
+
+    .modal-title {
+        color: var(--text-primary);
+        font-weight: 700;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    .pulse-animation {
+        animation: pulse 2s infinite;
+    }
+
+    /* Loading Overlay */
+    .chart-loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+    }
+
+    [data-theme="dark"] .chart-loading {
+        background: rgba(15, 23, 42, 0.7);
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Tooltip Customization */
+    .chart-tooltip {
+        background: var(--bg-card) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 8px !important;
+        box-shadow: var(--shadow-lg) !important;
+        padding: 0.75rem !important;
+        color: var(--text-primary) !important;
+        font-family: 'Inter', sans-serif !important;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .dashboard-card-inner {
+            padding: 1.25rem;
         }
 
-        .card-custom:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
-        }
-
-        .small-box {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chart-overlay {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 100%;
-            height: 60px;
-            opacity: 0.3;
-            z-index: 1;
-        }
-
-        .inner {
-            position: relative;
-            z-index: 2;
-        }
-
-        .icon {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            z-index: 2;
-            opacity: 0.3;
-        }
-
-        .progress-ring {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+        .dashboard-card-icon {
             width: 50px;
             height: 50px;
+            margin-right: 1rem;
         }
 
-        .dark-mode {
-            background-color: #2c3e50;
-            color: #ecf0f1;
+        .dashboard-card-value {
+            font-size: 1.5rem;
         }
 
-        .dark-mode .card {
-            background-color: #34495e;
-            border-color: #34495e;
+        .chart-body {
+            padding: 1rem;
         }
+    }
 
-        .stats-trend {
-            font-size: 0.8rem;
-            margin-top: 5px;
+    @media (max-width: 768px) {
+        .chart-container {
+            margin-bottom: 1.5rem;
         }
+    }
+</style>
+@endpush
 
-        .trend-up {
-            color: #28a745;
-        }
+@push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>   
+ <script src="{{ asset('js/app.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize AOS animations
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
 
-        .trend-down {
-            color: #dc3545;
-        }
+        // Get data from Laravel backend
+        const totalDocuments = @json($totalDocuments);
+        const totalCategories = @json($totalCategories);
+        const totalUsers = @json($totalUsers);
+        const totalValidations = @json($totalValidations);
+        const pendingValidations = @json($pendingValidations);
 
-        .mini-chart-container {
-            height: 80px;
-            width: 100%;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            opacity: 0.2;
-        }
-    </style>
-@stop
+        // Pass additional data from controller
+        const monthlyGrowth = @json($monthlyGrowth ?? []);
+        const documentTypes = @json($documentTypes ?? []);
+        const categoryBreakdown = @json($categoryBreakdown ?? []);
+        const validationStats = @json($validationStats ?? []);
+        const validationTrends = @json($validationTrends ?? []);
 
-@section('content')
-    <!-- Statistics Cards Row -->
-    <div class="row mb-4">
-        <!-- Documents Card -->
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="small-box bg-info card-custom shadow-lg">
-                <div class="inner p-3">
-                    <h3 class="display-4 text-white">{{ $totalDocuments }}</h3>
-                    <p class="lead text-white">Total Documents</p>
-                    <div class="stats-trend text-white">
-                        <i class="fas fa-arrow-up trend-up"></i> +12% from last month
-                    </div>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-file fa-3x"></i>
-                </div>
-                <div class="mini-chart-container">
-                    <canvas id="docTrendChart"></canvas>
-                </div>
-                <a href="{{ route('documents.index') }}" class="small-box-footer bg-info text-white">
-                    View Documents <i class="fas fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- Categories Card -->
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="small-box bg-success card-custom shadow-lg">
-                <div class="inner p-3">
-                    <h3 class="display-4 text-white">{{ $totalCategories }}</h3>
-                    <p class="lead text-white">Total Categories</p>
-                    <div class="stats-trend text-white">
-                        <i class="fas fa-arrow-up trend-up"></i> +5% from last month
-                    </div>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-list fa-3x"></i>
-                </div>
-                <div class="mini-chart-container">
-                    <canvas id="catDistributionChart"></canvas>
-                </div>
-                <a href="{{ route('categories.index') }}" class="small-box-footer bg-success text-white">
-                    View Categories <i class="fas fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- Users Card -->
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="small-box bg-warning card-custom shadow-lg">
-                <div class="inner p-3">
-                    <h3 class="display-4 text-white">{{ $totalUsers }}</h3>
-                    <p class="lead text-white">Total Users</p>
-                    <div class="stats-trend text-white">
-                        <i class="fas fa-arrow-up trend-up"></i> +8% from last month
-                    </div>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-users fa-3x"></i>
-                </div>
-                <div class="mini-chart-container">
-                    <canvas id="userActivityChart"></canvas>
-                </div>
-                 <a href="{{ route('categories.index') }}" class="small-box-footer bg-warning text-white">
-                    View Users <i class="fas fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
-
-        <!-- Validations Card -->
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="small-box bg-primary card-custom shadow-lg">
-                <div class="inner p-3">
-                    <h3 class="display-4 text-white">{{ $totalValidations }}</h3>
-                    <p class="lead text-white">Total Validations</p>
-                    <div class="stats-trend text-white">
-                        <i class="fas fa-arrow-down trend-down"></i> -3% from last month
-                    </div>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-check-circle fa-3x"></i>
-                </div>
-                <div class="mini-chart-container">
-                    <canvas id="validationProgressChart"></canvas>
-                </div>
-                <a href="{{ route('validations.index') }}" class="small-box-footer bg-primary text-white">
-                    View Validations <i class="fas fa-arrow-circle-right"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pending Validations Alert Card -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="alert alert-warning shadow-lg" style="border-radius: 15px;">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <h4><i class="fas fa-exclamation-triangle"></i> Pending Validations</h4>
-                        <p class="mb-0">You have <strong>{{ $pendingValidations }}</strong> validations waiting for
-                            review.</p>
-                    </div>
-                    <div class="col-md-4 text-right">
-                        <canvas id="pendingChart" style="max-height: 80px;"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Charts Row -->
-    <div class="row mb-4">
-        <div class="col-lg-8 mb-4">
-            <x-adminlte-card title="System Growth Overview" theme="primary" collapsible>
-                <canvas id="mainGrowthChart" style="height: 400px;"></canvas>
-            </x-adminlte-card>
-        </div>
-
-        <div class="col-lg-4 mb-4">
-            <x-adminlte-card title="Document Status Distribution" theme="info" collapsible>
-                <canvas id="documentStatusChart" style="height: 400px;"></canvas>
-            </x-adminlte-card>
-        </div>
-    </div>
-
-    <!-- Secondary Charts Row -->
-    <div class="row mb-4">
-        <div class="col-lg-6 mb-4">
-            <x-adminlte-card title="Category Performance" theme="success" collapsible>
-                <canvas id="categoryPerformanceChart" style="height: 300px;"></canvas>
-            </x-adminlte-card>
-        </div>
-
-        <div class="col-lg-6 mb-4">
-            <x-adminlte-card title="User Activity Heatmap" theme="secondary" collapsible>
-                <canvas id="userHeatmapChart" style="height: 300px;"></canvas>
-            </x-adminlte-card>
-        </div>
-    </div>
-
-    <!-- Bottom Charts Row -->
-    <div class="row mb-4">
-        <div class="col-lg-4 mb-4">
-            <x-adminlte-card title="Validation Efficiency" theme="warning" collapsible>
-                <canvas id="validationEfficiencyChart" style="height: 250px;"></canvas>
-            </x-adminlte-card>
-        </div>
-
-        <div class="col-lg-8 mb-4">
-            <x-adminlte-card title="Monthly Trends Comparison" theme="dark" collapsible>
-                <canvas id="monthlyTrendsChart" style="height: 250px;"></canvas>
-            </x-adminlte-card>
-        </div>
-    </div>
-
-    <!-- Controls Row -->
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <button class="btn btn-dark btn-lg shadow" id="darkModeToggle">
-                <i class="fas fa-moon"></i> Toggle Dark Mode
-            </button>
-            <button class="btn btn-info btn-lg shadow ml-2" id="refreshCharts">
-                <i class="fas fa-sync-alt"></i> Refresh Charts
-            </button>
-        </div>
-    </div>
-@stop
-
-@push('js')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Server-side data
-            const totalDocuments = @json($totalDocuments);
-            const totalCategories = @json($totalCategories);
-            const totalUsers = @json($totalUsers);
-            const totalValidations = @json($totalValidations);
-            const pendingValidations = @json($pendingValidations);
-            const completedValidations = totalValidations - pendingValidations;
-
-            // Chart.js default configurations
-            Chart.defaults.responsive = true;
-            Chart.defaults.maintainAspectRatio = false;
-            Chart.defaults.animation.duration = 1000;
-
-            // 1. Document Trend Mini Chart (Line)
-            new Chart(document.getElementById('docTrendChart'), {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        data: [
-                            Math.floor(totalDocuments * 0.6),
-                            Math.floor(totalDocuments * 0.7),
-                            Math.floor(totalDocuments * 0.8),
-                            Math.floor(totalDocuments * 0.85),
-                            Math.floor(totalDocuments * 0.92),
-                            totalDocuments
-                        ],
-                        borderColor: 'rgba(255,255,255,0.8)',
-                        backgroundColor: 'rgba(255,255,255,0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4
-                    }]
+        // Chart color schemes based on theme
+        const getChartColors = () => {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            
+            return {
+                primary: {
+                    base: isDark ? '#818cf8' : '#6366f1',
+                    light: isDark ? 'rgba(129, 140, 248, 0.2)' : 'rgba(99, 102, 241, 0.2)',
+                    gradient: isDark ? 
+                        'linear-gradient(135deg, rgba(129, 140, 248, 0.8), rgba(99, 102, 241, 0.8))' : 
+                        'linear-gradient(135deg, rgba(99, 102, 241, 0.8), rgba(79, 70, 229, 0.8))'
                 },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        x: {
-                            display: false
-                        },
-                        y: {
-                            display: false
-                        }
-                    },
-                    elements: {
-                        point: {
-                            radius: 0
+                success: {
+                    base: isDark ? '#34d399' : '#10b981',
+                    light: isDark ? 'rgba(52, 211, 153, 0.2)' : 'rgba(16, 185, 129, 0.2)',
+                    gradient: isDark ? 
+                        'linear-gradient(135deg, rgba(52, 211, 153, 0.8), rgba(16, 185, 129, 0.8))' : 
+                        'linear-gradient(135deg, rgba(16, 185, 129, 0.8), rgba(5, 150, 105, 0.8))'
+                },
+                warning: {
+                    base: isDark ? '#fbbf24' : '#f59e0b',
+                    light: isDark ? 'rgba(251, 191, 36, 0.2)' : 'rgba(245, 158, 11, 0.2)',
+                    gradient: isDark ? 
+                        'linear-gradient(135deg, rgba(251, 191, 36, 0.8), rgba(245, 158, 11, 0.8))' : 
+                        'linear-gradient(135deg, rgba(245, 158, 11, 0.8), rgba(217, 119, 6, 0.8))'
+                },
+                info: {
+                    base: isDark ? '#60a5fa' : '#3b82f6',
+                    light: isDark ? 'rgba(96, 165, 250, 0.2)' : 'rgba(59, 130, 246, 0.2)',
+                    gradient: isDark ? 
+                        'linear-gradient(135deg, rgba(96, 165, 250, 0.8), rgba(59, 130, 246, 0.8))' : 
+                        'linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(37, 99, 235, 0.8))'
+                },
+                danger: {
+                    base: isDark ? '#f87171' : '#ef4444',
+                    light: isDark ? 'rgba(248, 113, 113, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                    gradient: isDark ? 
+                        'linear-gradient(135deg, rgba(248, 113, 113, 0.8), rgba(239, 68, 68, 0.8))' : 
+                        'linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(220, 38, 38, 0.8))'
+                },
+                purple: {
+                    base: isDark ? '#c4b5fd' : '#8b5cf6',
+                    light: isDark ? 'rgba(196, 181, 253, 0.2)' : 'rgba(139, 92, 246, 0.2)',
+                    gradient: isDark ? 
+                        'linear-gradient(135deg, rgba(196, 181, 253, 0.8), rgba(139, 92, 246, 0.8))' : 
+                        'linear-gradient(135deg, rgba(139, 92, 246, 0.8), rgba(124, 58, 237, 0.8))'
+                },
+                text: isDark ? '#f1f5f9' : '#1e293b',
+                grid: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                background: isDark ? '#1e293b' : '#ffffff'
+            };
+        };
+
+        // Get initial colors
+        let colors = getChartColors();
+
+        // Professional chart configuration
+        const chartConfig = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    align: 'end',
+                    labels: {
+                        boxWidth: 15,
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        padding: 20,
+                        color: colors.text,
+                        font: {
+                            family: "'Inter', sans-serif",
+                            weight: 600,
+                            size: 12
                         }
                     }
-                }
-            });
-
-            // 2. Category Distribution Mini Chart (Bar)
-            new Chart(document.getElementById('catDistributionChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-                    datasets: [{
-                        data: [
-                            Math.floor(totalCategories * 0.2),
-                            Math.floor(totalCategories * 0.3),
-                            Math.floor(totalCategories * 0.25),
-                            Math.floor(totalCategories * 0.25)
-                        ],
-                        backgroundColor: 'rgba(255,255,255,0.6)',
-                        borderColor: 'rgba(255,255,255,0.8)',
-                        borderWidth: 1
-                    }]
                 },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: false
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: colors.background,
+                    titleColor: colors.text,
+                    bodyColor: colors.text,
+                    borderColor: colors.primary.base,
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    padding: 12,
+                    boxPadding: 6,
+                    usePointStyle: true,
+                    callbacks: {
+                        labelPointStyle: function(context) {
+                            return {
+                                pointStyle: 'circle',
+                                rotation: 0
+                            };
                         }
                     },
-                    scales: {
-                        x: {
-                            display: false
-                        },
-                        y: {
-                            display: false
+                    titleFont: {
+                        family: "'Inter', sans-serif",
+                        weight: 700,
+                        size: 14
+                    },
+                    bodyFont: {
+                        family: "'Inter', sans-serif",
+                        weight: 500,
+                        size: 13
+                    },
+                    displayColors: true
+                },
+                datalabels: {
+                    color: '#fff',
+                    font: {
+                        family: "'Inter', sans-serif",
+                        weight: 700,
+                        size: 12
+                    },
+                    formatter: function(value, context) {
+                        if (context.chart.config.type === 'pie' || context.chart.config.type === 'doughnut' || context.chart.config.type === 'polarArea') {
+                            const dataset = context.chart.data.datasets[context.datasetIndex];
+                            const total = dataset.data.reduce((acc, data) => acc + data, 0);
+                            const percentage = ((value / total) * 100).toFixed(1) + '%';
+                            return percentage;
                         }
+                        return value.toLocaleString();
+                    },
+                    textAlign: 'center',
+                    offset: 8,
+                    display: function(context) {
+                        const value = context.dataset.data[context.dataIndex];
+                        return value > 0;
                     }
                 }
-            });
-
-            // 3. User Activity Mini Chart (Area)
-            new Chart(document.getElementById('userActivityChart'), {
-                type: 'line',
-                data: {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                    datasets: [{
-                        data: [
-                            Math.floor(totalUsers * 0.7),
-                            Math.floor(totalUsers * 0.85),
-                            Math.floor(totalUsers * 0.95),
-                            totalUsers
-                        ],
-                        borderColor: 'rgba(255,255,255,0.8)',
-                        backgroundColor: 'rgba(255,255,255,0.2)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        x: {
-                            display: false
-                        },
-                        y: {
-                            display: false
-                        }
-                    },
-                    elements: {
-                        point: {
-                            radius: 0
-                        }
-                    }
-                }
-            });
-
-            // 4. Validation Progress Mini Chart (Doughnut)
-            new Chart(document.getElementById('validationProgressChart'), {
-                type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [completedValidations, pendingValidations],
-                        backgroundColor: ['rgba(255,255,255,0.8)', 'rgba(255,255,255,0.3)'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    cutout: '70%'
-                }
-            });
-
-            // 5. Pending Validations Alert Chart
-            new Chart(document.getElementById('pendingChart'), {
-                type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [pendingValidations, completedValidations],
-                        backgroundColor: ['#dc3545', '#28a745'],
-                        borderWidth: 2,
-                        borderColor: '#fff'
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const label = context.dataIndex === 0 ? 'Pending' : 'Completed';
-                                    const value = context.raw;
-                                    const percentage = ((value / totalValidations) * 100).toFixed(1);
-                                    return `${label}: ${value} (${percentage}%)`;
-                                }
+            },
+            animation: {
+                duration: 2000,
+                easing: 'easeOutQuart',
+                onProgress: function(animation) {
+                    const chartInstance = animation.chart;
+                    if (chartInstance.config.type === 'bar' || chartInstance.config.type === 'line') {
+                        chartInstance.data.datasets.forEach(function(dataset, i) {
+                            const meta = chartInstance.getDatasetMeta(i);
+                            if (!meta.hidden) {
+                                meta.data.forEach(function(element, index) {
+                                    // Add animation to bars and points
+                                    if (element.options) {
+                                        if (chartInstance.config.type === 'bar') {
+                                            element.options.borderWidth = animation.currentStep / animation.numSteps * 2;
+                                        } else if (chartInstance.config.type === 'line') {
+                                            element.options.radius = animation.currentStep / animation.numSteps * 6;
+                                        }
+                                    }
+                                });
                             }
-                        }
-                    },
-                    cutout: '60%'
-                }
-            });
-
-            // 6. Main Growth Chart
-            new Chart(document.getElementById('mainGrowthChart'), {
-                type: 'line',
-                data: {
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-                    datasets: [{
-                            label: 'Documents',
-                            data: [
-                                Math.floor(totalDocuments * 0.5),
-                                Math.floor(totalDocuments * 0.6),
-                                Math.floor(totalDocuments * 0.75),
-                                Math.floor(totalDocuments * 0.85),
-                                Math.floor(totalDocuments * 0.92),
-                                totalDocuments
-                            ],
-                            borderColor: '#007bff',
-                            backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                            fill: true,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Users',
-                            data: [
-                                Math.floor(totalUsers * 0.4),
-                                Math.floor(totalUsers * 0.55),
-                                Math.floor(totalUsers * 0.7),
-                                Math.floor(totalUsers * 0.8),
-                                Math.floor(totalUsers * 0.9),
-                                totalUsers
-                            ],
-                            borderColor: '#28a745',
-                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
-                            fill: true,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Categories',
-                            data: [
-                                Math.floor(totalCategories * 0.6),
-                                Math.floor(totalCategories * 0.7),
-                                Math.floor(totalCategories * 0.8),
-                                Math.floor(totalCategories * 0.85),
-                                Math.floor(totalCategories * 0.9),
-                                totalCategories
-                            ],
-                            borderColor: '#ffc107',
-                            backgroundColor: 'rgba(255, 193, 7, 0.1)',
-                            fill: true,
-                            tension: 0.4
-                        }
-                    ]
-                },
-                options: {
-                    interaction: {
-                        intersect: false,
-                        mode: 'index'
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                display: true,
-                                color: 'rgba(0,0,0,0.1)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
+                        });
                     }
                 }
-            });
-
-            // 7. Document Status Distribution
-            new Chart(document.getElementById('documentStatusChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['Published', 'Draft', 'Under Review', 'Archived'],
-                    datasets: [{
-                        data: [
-                            Math.floor(totalDocuments * 0.6),
-                            Math.floor(totalDocuments * 0.2),
-                            Math.floor(totalDocuments * 0.15),
-                            Math.floor(totalDocuments * 0.05)
-                        ],
-                        backgroundColor: ['#28a745', '#6c757d', '#ffc107', '#dc3545'],
-                        borderWidth: 3,
-                        borderColor: '#fff'
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const value = context.raw;
-                                    const percentage = ((value / totalDocuments) * 100).toFixed(1);
-                                    return `${context.label}: ${value} (${percentage}%)`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            // 8. Category Performance (Horizontal Bar)
-            new Chart(document.getElementById('categoryPerformanceChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['Technology', 'Business', 'Health', 'Education', 'Finance'],
-                    datasets: [{
-                        label: 'Documents per Category',
-                        data: [
-                            Math.floor(totalDocuments * 0.3),
-                            Math.floor(totalDocuments * 0.25),
-                            Math.floor(totalDocuments * 0.2),
-                            Math.floor(totalDocuments * 0.15),
-                            Math.floor(totalDocuments * 0.1)
-                        ],
-                        backgroundColor: [
-                            'rgba(54, 162, 235, 0.8)',
-                            'rgba(255, 99, 132, 0.8)',
-                            'rgba(255, 205, 86, 0.8)',
-                            'rgba(75, 192, 192, 0.8)',
-                            'rgba(153, 102, 255, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(255, 205, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)'
-                        ],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        x: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            // 9. User Activity Heatmap (simulated with bar chart)
-            new Chart(document.getElementById('userHeatmapChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    datasets: [{
-                        label: 'Active Users',
-                        data: [
-                            Math.floor(totalUsers * 0.8),
-                            Math.floor(totalUsers * 0.9),
-                            Math.floor(totalUsers * 0.85),
-                            Math.floor(totalUsers * 0.95),
-                            Math.floor(totalUsers * 0.7),
-                            Math.floor(totalUsers * 0.4),
-                            Math.floor(totalUsers * 0.3)
-                        ],
-                        backgroundColor: function(context) {
-                            const value = context.raw;
-                            const max = Math.max(...context.dataset.data);
-                            const intensity = value / max;
-                            return `rgba(54, 162, 235, ${intensity})`;
-                        },
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            // 10. Validation Efficiency (Polar Area)
-            new Chart(document.getElementById('validationEfficiencyChart'), {
-                type: 'polarArea',
-                data: {
-                    labels: ['Fast', 'Medium', 'Slow', 'Pending'],
-                    datasets: [{
-                        data: [
-                            Math.floor(totalValidations * 0.4),
-                            Math.floor(totalValidations * 0.3),
-                            Math.floor(totalValidations * 0.2),
-                            pendingValidations
-                        ],
-                        backgroundColor: [
-                            'rgba(75, 192, 192, 0.8)',
-                            'rgba(255, 205, 86, 0.8)',
-                            'rgba(255, 99, 132, 0.8)',
-                            'rgba(201, 203, 207, 0.8)'
-                        ]
-                    }]
-                },
-                options: {
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-
-            // 11. Monthly Trends Comparison (Mixed Chart)
-            new Chart(document.getElementById('monthlyTrendsChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                            type: 'line',
-                            label: 'Validation Rate',
-                            data: [78, 82, 85, 88, 84, 90],
-                            borderColor: 'rgb(255, 99, 132)',
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            yAxisID: 'y1'
-                        },
-                        {
-                            type: 'bar',
-                            label: 'New Documents',
-                            data: [
-                                Math.floor(totalDocuments * 0.1),
-                                Math.floor(totalDocuments * 0.12),
-                                Math.floor(totalDocuments * 0.15),
-                                Math.floor(totalDocuments * 0.18),
-                                Math.floor(totalDocuments * 0.2),
-                                Math.floor(totalDocuments * 0.25)
-                            ],
-                            backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                            yAxisID: 'y'
-                        }
-                    ]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            beginAtZero: true
-                        },
-                        y1: {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            beginAtZero: true,
-                            max: 100,
-                            grid: {
-                                drawOnChartArea: false,
-                            },
-                        }
-                    }
-                }
-            });
-
-            // Dark Mode Toggle
-            document.getElementById('darkModeToggle').addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-            });
-
-            // Check dark mode state on load
-            if (localStorage.getItem('darkMode') === 'true') {
-                document.body.classList.add('dark-mode');
             }
+        };
 
-            // Refresh Charts
-            document.getElementById('refreshCharts').addEventListener('click', function() {
-                location.reload();
+        // 1. Bar Chart - Documents, Categories, Users Overview
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        const barChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['Documents', 'Categories', 'Users', 'Validations', 'Pending'],
+                datasets: [{
+                    label: 'Total Counts',
+                    data: [totalDocuments, totalCategories, totalUsers, totalValidations, pendingValidations],
+                    backgroundColor: [
+                        colors.primary.light,
+                        colors.success.light,
+                        colors.warning.light,
+                        colors.info.light,
+                        colors.danger.light
+                    ],
+                    borderColor: [
+                        colors.primary.base,
+                        colors.success.base,
+                        colors.warning.base,
+                        colors.info.base,
+                        colors.danger.base
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    hoverBackgroundColor: [
+                        colors.primary.base + '40',
+                        colors.success.base + '40',
+                        colors.warning.base + '40',
+                        colors.info.base + '40',
+                        colors.danger.base + '40'
+                    ]
+                }]
+            },
+            options: {
+                ...chartConfig,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: colors.grid,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: colors.text,
+                            font: {
+                                family: "'Inter', sans-serif",
+                                weight: 500
+                            },
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            },
+                            padding: 10
+                        },
+                        border: {
+                            dash: [6, 4]
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: colors.text,
+                            font: {
+                                family: "'Inter', sans-serif",
+                                weight: 600
+                            },
+                            padding: 10
+                        }
+                    }
+                },
+                plugins: {
+                    ...chartConfig.plugins,
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: function(value) {
+                            return value.toLocaleString();
+                        },
+                        color: function(context) {
+                            return context.dataset.borderColor[context.dataIndex];
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+
+        // 2. Line Chart - Growth Over Time
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        
+        // Use real monthly growth data if available, otherwise generate realistic data
+        const months = monthlyGrowth.length ? monthlyGrowth.map(item => item.month) : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        const documentsData = monthlyGrowth.length ? monthlyGrowth.map(item => item.documents) : 
+            months.map((_, index) => Math.floor(totalDocuments * (0.6 + index * 0.08)));
+        const categoriesData = monthlyGrowth.length ? monthlyGrowth.map(item => item.categories) : 
+            months.map((_, index) => Math.floor(totalCategories * (0.7 + index * 0.05)));
+        const usersData = monthlyGrowth.length ? monthlyGrowth.map(item => item.users) : 
+            months.map((_, index) => Math.floor(totalUsers * (0.5 + index * 0.1)));
+        const validationsData = monthlyGrowth.length ? monthlyGrowth.map(item => item.validations) : 
+            months.map((_, index) => Math.floor(totalValidations * (0.4 + index * 0.12)));
+
+        const lineChart = new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Documents',
+                    data: documentsData,
+                    borderColor: colors.primary.base,
+                    backgroundColor: colors.primary.light,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: colors.primary.base,
+                    pointBorderColor: colors.background,
+                    pointBorderWidth: 2,
+                    borderWidth: 3
+                }, {
+                    label: 'Categories',
+                    data: categoriesData,
+                    borderColor: colors.success.base,
+                    backgroundColor: colors.success.light,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: colors.success.base,
+                    pointBorderColor: colors.background,
+                    pointBorderWidth: 2,
+                    borderWidth: 3
+                }, {
+                    label: 'Users',
+                    data: usersData,
+                    borderColor: colors.warning.base,
+                    backgroundColor: colors.warning.light,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: colors.warning.base,
+                    pointBorderColor: colors.background,
+                    pointBorderWidth: 2,
+                    borderWidth: 3
+                }, {
+                    label: 'Validations',
+                    data: validationsData,
+                    borderColor: colors.info.base,
+                    backgroundColor: colors.info.light,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: colors.info.base,
+                    pointBorderColor: colors.background,
+                    pointBorderWidth: 2,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                ...chartConfig,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: colors.grid,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: colors.text,
+                            font: {
+                                family: "'Inter', sans-serif",
+                                weight: 500
+                            },
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            },
+                            padding: 10
+                        },
+                        border: {
+                            dash: [6, 4]
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: colors.grid + '40',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: colors.text,
+                            font: {
+                                family: "'Inter', sans-serif",
+                                weight: 600
+                            },
+                            padding: 10
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    ...chartConfig.plugins,
+                    datalabels: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // 3. Pie Chart - Document Types Distribution
+        const ctxPie = document.getElementById('pieChart').getContext('2d');
+        
+        // Use real document type data if available, otherwise generate realistic data
+        const docTypeLabels = documentTypes.length ? documentTypes.map(item => item.type) : 
+            ['PDF Documents', 'Word Documents', 'Excel Files', 'PowerPoint'];
+        const docTypeData = documentTypes.length ? documentTypes.map(item => item.count) : [
+            Math.floor(totalDocuments * 0.45),
+            Math.floor(totalDocuments * 0.30),
+            Math.floor(totalDocuments * 0.15),
+            Math.floor(totalDocuments * 0.10)
+        ];
+
+        const pieChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: docTypeLabels,
+                datasets: [{
+                    data: docTypeData,
+                    backgroundColor: [
+                        colors.primary.base + '80',
+                        colors.success.base + '80',
+                        colors.warning.base + '80',
+                        colors.info.base + '80'
+                    ],
+                    borderColor: [
+                        colors.primary.base,
+                        colors.success.base,
+                        colors.warning.base,
+                        colors.info.base
+                    ],
+                    borderWidth: 2,
+                    hoverOffset: 15,
+                    hoverBorderWidth: 3
+                }]
+            },
+            options: {
+                ...chartConfig,
+                cutout: '0%',
+                radius: '90%',
+                plugins: {
+                    ...chartConfig.plugins,
+                    datalabels: {
+                        formatter: function(value, context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return percentage + '%';
+                        },
+                        color: '#fff',
+                        font: {
+                            weight: 'bold',
+                            size: 12
+                        },
+                        textShadow: '0 1px 2px rgba(0,0,0,0.4)'
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+
+        // 4. Doughnut Chart - Category Breakdown
+        const ctxDoughnut = document.getElementById('doughnutChart').getContext('2d');
+        
+        // Use real category data if available, otherwise generate realistic data
+        const categoryLabels = categoryBreakdown.length ? categoryBreakdown.map(item => item.category) : 
+            ['Legal Documents', 'Financial Records', 'HR Documents', 'Operations', 'Marketing', 'Others'];
+        const categoryData = categoryBreakdown.length ? categoryBreakdown.map(item => item.count) : [
+            Math.floor(totalCategories * 0.25),
+            Math.floor(totalCategories * 0.20),
+            Math.floor(totalCategories * 0.18),
+            Math.floor(totalCategories * 0.15),
+            Math.floor(totalCategories * 0.12),
+            Math.floor(totalCategories * 0.10)
+        ];
+
+        const doughnutChart = new Chart(ctxDoughnut, {
+            type: 'doughnut',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    data: categoryData,
+                    backgroundColor: [
+                        colors.primary.base + '80',
+                        colors.success.base + '80',
+                        colors.warning.base + '80',
+                        colors.info.base + '80',
+                        colors.danger.base + '80',
+                        colors.purple.base + '80'
+                    ],
+                    borderColor: [
+                        colors.primary.base,
+                        colors.success.base,
+                        colors.warning.base,
+                        colors.info.base,
+                        colors.danger.base,
+                        colors.purple.base
+                    ],
+                    borderWidth: 2,
+                    hoverOffset: 15,
+                    hoverBorderWidth: 3
+                }]
+            },
+            options: {
+                ...chartConfig,
+                cutout: '60%',
+                radius: '90%',
+                plugins: {
+                    ...chartConfig.plugins,
+                    datalabels: {
+                        formatter: function(value, context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return percentage + '%';
+                        },
+                        color: '#fff',
+                        font: {
+                            weight: 'bold',
+                            size: 12
+                        },
+                        textShadow: '0 1px 2px rgba(0,0,0,0.4)'
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+
+        // 5. Validation Status Chart (Polar Area)
+        const ctxValidationStatus = document.getElementById('validationStatusChart').getContext('2d');
+        
+        // Use real validation status data if available, otherwise generate realistic data
+        const validationStatusLabels = validationStats.length ? validationStats.map(item => item.status) : 
+            ['Approved', 'Pending', 'Under Review', 'Rejected'];
+        
+        const validationStatusData = validationStats.length ? validationStats.map(item => item.count) : [
+            totalValidations - pendingValidations - Math.floor(totalValidations * 0.05),
+            Math.floor(pendingValidations * 0.4),
+            Math.floor(pendingValidations * 0.6),
+            Math.floor(totalValidations * 0.05)
+        ];
+
+        const validationStatusChart = new Chart(ctxValidationStatus, {
+            type: 'polarArea',
+            data: {
+                labels: validationStatusLabels,
+                datasets: [{
+                    data: validationStatusData,
+                    backgroundColor: [
+                        colors.success.base + '70',
+                        colors.warning.base + '70',
+                        colors.info.base + '70',
+                        colors.danger.base + '70'
+                    ],
+                    borderColor: [
+                        colors.success.base,
+                        colors.warning.base,
+                        colors.info.base,
+                        colors.danger.base
+                    ],
+                    borderWidth: 2,
+                    hoverBorderWidth: 3
+                }]
+            },
+            options: {
+                ...chartConfig,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        grid: {
+                            color: colors.grid
+                        },
+                        pointLabels: {
+                            font: {
+                                family: "'Inter', sans-serif",
+                                size: 12,
+                                weight: 'bold'
+                            },
+                            color: colors.text
+                        },
+                        ticks: {
+                            backdropColor: 'transparent',
+                            color: colors.text,
+                            z: 100
+                        }
+                    }
+                },
+                plugins: {
+                    ...chartConfig.plugins,
+                    datalabels: {
+                        formatter: function(value, context) {
+                            return value.toLocaleString();
+                        },
+                        color: '#fff',
+                        font: {
+                            weight: 'bold',
+                            size: 12
+                        },
+                        textShadow: '0 1px 2px rgba(0,0,0,0.4)'
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+
+        // 6. Validation Trends Chart (Mixed Chart)
+        const ctxValidationTrend = document.getElementById('validationTrendChart').getContext('2d');
+        
+        // Use real validation trend data if available, otherwise generate realistic data
+        const trendMonths = validationTrends.length ? validationTrends.map(item => item.month) : 
+            ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        
+        const approvedData = validationTrends.length ? validationTrends.map(item => item.approved) : 
+            trendMonths.map((_, index) => Math.floor(50 + index * 15 + Math.random() * 20));
+        
+        const pendingData = validationTrends.length ? validationTrends.map(item => item.pending) : 
+            trendMonths.map(() => Math.floor(10 + Math.random() * 15));
+        
+        const rejectedData = validationTrends.length ? validationTrends.map(item => item.rejected) : 
+            trendMonths.map(() => Math.floor(2 + Math.random() * 8));
+        
+        const totalData = validationTrends.length ? validationTrends.map(item => item.total || 
+            (item.approved + item.pending + item.rejected)) : 
+            trendMonths.map((_, index) => {
+                const approved = approvedData[index];
+                const pending = pendingData[index];
+                const rejected = rejectedData[index];
+                return approved + pending + rejected;
+            });
+
+        const validationTrendChart = new Chart(ctxValidationTrend, {
+            type: 'bar',
+            data: {
+                labels: trendMonths,
+                datasets: [{
+                    type: 'line',
+                    label: 'Total Validations',
+                    data: totalData,
+                    borderColor: colors.primary.base,
+                    backgroundColor: colors.primary.light,
+                    yAxisID: 'y1',
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: colors.primary.base,
+                    pointBorderColor: colors.background,
+                    pointBorderWidth: 2,
+                    borderWidth: 3,
+                    fill: true
+                }, {
+                    type: 'bar',
+                    label: 'Approved',
+                    data: approvedData,
+                    backgroundColor: colors.success.base + '80',
+                    borderColor: colors.success.base,
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    yAxisID: 'y'
+                }, {
+                    type: 'bar',
+                    label: 'Pending',
+                    data: pendingData,
+                    backgroundColor: colors.warning.base + '80',
+                    borderColor: colors.warning.base,
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    yAxisID: 'y'
+                }, {
+                    type: 'bar',
+                    label: 'Rejected',
+                    data: rejectedData,
+                    backgroundColor: colors.danger.base + '80',
+                    borderColor: colors.danger.base,
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    yAxisID: 'y'
+                }]
+            },
+            options: {
+                ...chartConfig,
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        beginAtZero: true,
+                        grid: {
+                            color: colors.grid,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: colors.text,
+                            font: {
+                                family: "'Inter', sans-serif",
+                                weight: 500
+                            },
+                            padding: 10
+                        },
+                        border: {
+                            dash: [6, 4]
+                        },
+                        title: {
+                            display: true,
+                            text: 'Count by Status',
+                            color: colors.text,
+                            font: {
+                                family: "'Inter', sans-serif",
+                                weight: 600,
+                                size: 12
+                            }
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        beginAtZero: true,
+                        grid: {
+                            drawOnChartArea: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: colors.primary.base,
+                            font: {
+                                family: "'Inter', sans-serif",
+                                weight: 600
+                            },
+                            padding: 10
+                        },
+                        title: {
+                            display: true,
+                            text: 'Total Validations',
+                            color: colors.primary.base,
+                            font: {
+                                family: "'Inter', sans-serif",
+                                weight: 600,
+                                size: 12
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: colors.text,
+                            font: {
+                                family: "'Inter', sans-serif",
+                                weight: 600
+                            },
+                            padding: 10
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    ...chartConfig.plugins,
+                    datalabels: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Store all charts in an array for easy reference
+        const charts = [
+            { chart: barChart, id: 'barChart', title: 'Documents and Categories Overview' },
+            { chart: lineChart, id: 'lineChart', title: 'Growth Over Time' },
+            { chart: pieChart, id: 'pieChart', title: 'Document Type Distribution' },
+            { chart: doughnutChart, id: 'doughnutChart', title: 'Category Breakdown' },
+            { chart: validationStatusChart, id: 'validationStatusChart', title: 'Validation Status Distribution' },
+            { chart: validationTrendChart, id: 'validationTrendChart', title: 'Validation Trends' }
+        ];
+
+        // Handle theme changes
+        window.addEventListener('themeChanged', function(e) {
+            colors = getChartColors();
+            updateChartsTheme();
+        });
+
+        // Update chart colors when theme changes
+        function updateChartsTheme() {
+            charts.forEach(({ chart }) => {
+                // Update datasets colors
+                if (chart.config.type === 'bar' || chart.config.type === 'line') {
+                    chart.data.datasets.forEach((dataset, i) => {
+                        if (chart.config.type === 'bar' && chart.id === 'barChart') {
+                            dataset.backgroundColor = [
+                                colors.primary.light,
+                                colors.success.light,
+                                colors.warning.light,
+                                colors.info.light,
+                                colors.danger.light
+                            ];
+                            dataset.borderColor = [
+                                colors.primary.base,
+                                colors.success.base,
+                                colors.warning.base,
+                                colors.info.base,
+                                colors.danger.base
+                            ];
+                            dataset.hoverBackgroundColor = [
+                                colors.primary.base + '40',
+                                colors.success.base + '40',
+                                colors.warning.base + '40',
+                                colors.info.base + '40',
+                                colors.danger.base + '40'
+                            ];
+                        } else if (chart.id === 'lineChart') {
+                            const colorKeys = ['primary', 'success', 'warning', 'info'];
+                            const colorKey = colorKeys[i] || 'primary';
+                            dataset.borderColor = colors[colorKey].base;
+                            dataset.backgroundColor = colors[colorKey].light;
+                            dataset.pointBackgroundColor = colors[colorKey].base;
+                            dataset.pointBorderColor = colors.background;
+                        } else if (chart.id === 'validationTrendChart') {
+                            if (i === 0) {
+                                dataset.borderColor = colors.primary.base;
+                                dataset.backgroundColor = colors.primary.light;
+                                dataset.pointBackgroundColor = colors.primary.base;
+                                dataset.pointBorderColor = colors.background;
+                            } else if (i === 1) {
+                                dataset.backgroundColor = colors.success.base + '80';
+                                dataset.borderColor = colors.success.base;
+                            } else if (i === 2) {
+                                dataset.backgroundColor = colors.warning.base + '80';
+                                dataset.borderColor = colors.warning.base;
+                            } else if (i === 3) {
+                                dataset.backgroundColor = colors.danger.base + '80';
+                                dataset.borderColor = colors.danger.base;
+                            }
+                        }
+                    });
+                } else if (chart.config.type === 'pie' || chart.config.type === 'doughnut') {
+                    const colorKeys = ['primary', 'success', 'warning', 'info', 'danger', 'purple'];
+                    chart.data.datasets[0].backgroundColor = colorKeys.map(key => colors[key].base + '80').slice(0, chart.data.labels.length);
+                    chart.data.datasets[0].borderColor = colorKeys.map(key => colors[key].base).slice(0, chart.data.labels.length);
+                } else if (chart.config.type === 'polarArea') {
+                    chart.data.datasets[0].backgroundColor = [
+                        colors.success.base + '70',
+                        colors.warning.base + '70',
+                        colors.info.base + '70',
+                        colors.danger.base + '70'
+                    ];
+                    chart.data.datasets[0].borderColor = [
+                        colors.success.base,
+                        colors.warning.base,
+                        colors.info.base,
+                        colors.danger.base
+                    ];
+                }
+
+                // Update legend colors
+                if (chart.options.plugins && chart.options.plugins.legend) {
+                    chart.options.plugins.legend.labels.color = colors.text;
+                }
+
+                // Update tooltip colors
+                if (chart.options.plugins && chart.options.plugins.tooltip) {
+                    chart.options.plugins.tooltip.backgroundColor = colors.background;
+                    chart.options.plugins.tooltip.titleColor = colors.text;
+                    chart.options.plugins.tooltip.bodyColor = colors.text;
+                    chart.options.plugins.tooltip.borderColor = colors.primary.base;
+                }
+
+                // Update scales colors
+                if (chart.options.scales) {
+                    Object.keys(chart.options.scales).forEach(scaleKey => {
+                        const scale = chart.options.scales[scaleKey];
+                        if (scale.ticks) {
+                            scale.ticks.color = scaleKey === 'y1' ? colors.primary.base : colors.text;
+                        }
+                        if (scale.grid) {
+                            scale.grid.color = scaleKey === 'x' ? colors.grid + '40' : colors.grid;
+                        }
+                        if (scale.pointLabels) {
+                            scale.pointLabels.color = colors.text;
+                        }
+                        if (scale.title) {
+                            scale.title.color = scaleKey === 'y1' ? colors.primary.base : colors.text;
+                        }
+                    });
+                }
+
+                chart.update('none');
+            });
+        }
+
+        // Handle fullscreen chart view
+        const chartModal = new bootstrap.Modal(document.getElementById('chartModal'));
+        const modalChart = document.getElementById('modalChart');
+        let currentModalChart = null;
+
+        charts.forEach(({ chart, id, title }) => {
+            document.getElementById(`${id}Fullscreen`).addEventListener('click', function() {
+                document.getElementById('chartModalLabel').textContent = title;
+                
+                // Destroy previous modal chart if exists
+                if (currentModalChart) {
+                    currentModalChart.destroy();
+                }
+                
+                // Clone the chart configuration
+                const modalConfig = JSON.parse(JSON.stringify(chart.config));
+                
+                // Create new chart in modal
+                currentModalChart = new Chart(modalChart, {
+                    type: modalConfig.type,
+                    data: modalConfig.data,
+                    options: {
+                        ...modalConfig.options,
+                        maintainAspectRatio: false,
+                        responsive: true
+                    },
+                    plugins: modalConfig.plugins
+                });
+                
+                chartModal.show();
+            });
+            
+            // Handle chart download
+            document.getElementById(`${id}Download`).addEventListener('click', function() {
+                const canvas = document.getElementById(id);
+                const link = document.createElement('a');
+                link.download = `${title.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
             });
         });
-    </script>
-@endpush --}}
+
+        // Handle modal close - destroy chart
+        document.getElementById('chartModal').addEventListener('hidden.bs.modal', function() {
+            if (currentModalChart) {
+                currentModalChart.destroy();
+                currentModalChart = null;
+            }
+        });
+
+       
+    // Export functionality
+    document.getElementById('exportData').addEventListener('click', function() {
+        const data = {
+            summary: {
+                totalDocuments,
+                totalCategories,
+                totalUsers,
+                totalValidations,
+                pendingValidations
+            },
+            exportDate: new Date().toISOString(),
+            exportedBy: '{{ Auth::user()->name }}'
+        };
+
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `dashboard-data-${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        URL.revokeObjectURL(url);
+    });
+
+    // Add resize handler for responsive charts
+    window.addEventListener('resize', function() {
+        [overviewChart, documentTypesChart, growthChart, validationChart].forEach(chart => {
+            chart.resize();
+        });
+    });
+});
+</script>
+@endpush

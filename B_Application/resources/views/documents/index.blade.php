@@ -1,5 +1,6 @@
+{{-- resources/views/dashboard.blade.php --}}
+@extends('layouts.stylepages')
 
-@extends('adminlte::page')
 
 @section('title', 'Documents')
 
