@@ -204,15 +204,7 @@
                                                 onclick="quickApprove({{ $validation->id }})" title="Quick Approve">
                                                 <i class="fas fa-check"></i>
                                             </button>
-                                            <button type="button" class="btn btn-danger"
-                                                onclick="quickReject({{ $validation->id }})" title="Quick Reject">
-                                                <i class="fas fa-times"></i>
-                                            </button>
                                         @endif
-                                        <a href="{{ route('validations.download-document', $validation->document) }}"
-                                            class="btn btn-secondary" title="Download Document">
-                                            <i class="fas fa-download"></i>
-                                        </a>
                                     </div>
                                 </td>
                             </tr>
@@ -287,10 +279,8 @@
             </div>
         </div>
     </div>
-@stop
-
-@push('js')
     <script>
+        // 1) DOM‐ready block for checkboxes & quick‐reject form binding
         $(document).ready(function() {
             // Select all checkbox functionality
             $('#selectAll').change(function() {
@@ -301,7 +291,7 @@
             $('.validation-checkbox').change(function() {
                 updateSelectedCount();
 
-                // Update select all checkbox
+                // Update select‐all checkbox
                 const totalCheckboxes = $('.validation-checkbox').length;
                 const checkedCheckboxes = $('.validation-checkbox:checked').length;
                 $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
@@ -311,10 +301,35 @@
                 const count = $('.validation-checkbox:checked').length;
                 $('#selectedCount').text(count + ' selected');
             }
+
+            // Bind quick‐reject form submission
+            $('#quickRejectForm').submit(function(e) {
+                e.preventDefault();
+                const comment = $('#rejectComment').val();
+
+                $.ajax({
+                    url: `/validations/${currentValidationId}/reject`,
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        commentaire: comment
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#quickRejectModal').modal('hide');
+                            location.reload();
+                        }
+                    },
+                    error: function() {
+                        alert('Error occurred while rejecting the document.');
+                    }
+                });
+            });
         });
 
-        // Quick approve function
+        // 2) Quick‐approve function (global)
         function quickApprove(validationId) {
+
             if (confirm('Are you sure you want to approve this document?')) {
                 $.ajax({
                     url: `/validations/${validationId}/approve`,
@@ -334,40 +349,12 @@
             }
         }
 
-        // Quick reject function
+        // 3) Quick‐reject variables & function (global)
         let currentValidationId = null;
 
-        function quickReject(validationId) {
-            currentValidationId = validationId;
-            $('#quickRejectModal').modal('show');
-        }
-
-        $('#quickRejectForm').submit(function(e) {
-            e.preventDefault();
-
-            const comment = $('#rejectComment').val();
-
-            $.ajax({
-                url: `/validations/${currentValidationId}/reject`,
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    commentaire: comment
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#quickRejectModal').modal('hide');
-                        location.reload();
-                    }
-                },
-                error: function() {
-                    alert('Error occurred while rejecting the document.');
-                }
-            });
-        });
-
-        // Bulk actions
+        // 4) Bulk‐action functions (global)
         function bulkAction(action) {
+
             const selectedIds = $('.validation-checkbox:checked').map(function() {
                 return this.value;
             }).get();
@@ -383,12 +370,9 @@
             }
 
             const actionText = action === 'approve' ? 'approve' : 'set as pending';
-
             if (confirm(`Are you sure you want to ${actionText} ${selectedIds.length} document(s)?`)) {
-                // Add hidden inputs to form
                 $('#bulkActionForm').find('input[name="action"]').remove();
                 $('#bulkActionForm').append(`<input type="hidden" name="action" value="${action}">`);
-
                 $('#bulkActionForm').submit();
             }
         }
@@ -400,7 +384,6 @@
                 return;
             }
 
-            // Add hidden inputs to form
             $('#bulkActionForm').find('input[name="action"]').remove();
             $('#bulkActionForm').find('input[name="commentaire"]').remove();
             $('#bulkActionForm').append(`<input type="hidden" name="action" value="reject">`);
@@ -410,4 +393,6 @@
             $('#bulkActionForm').submit();
         }
     </script>
-@endpush
+
+
+@stop

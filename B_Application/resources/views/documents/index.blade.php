@@ -1,4 +1,3 @@
-{{-- resources/views/dashboard.blade.php --}}
 @extends('layouts.stylepages')
 
 
@@ -21,8 +20,7 @@
     </div>
 @stop
 
-@section('content')
-    <!-- Statistics Cards -->
+@section('content') 
     <div class="row mb-4">
         <div class="col-md-3">
             <div class="small-box bg-info">
@@ -273,7 +271,9 @@
         <div class="d-flex justify-content-center">
             {{ $documents->appends(request()->query())->links() }}
         </div>
+        
     </x-adminlte-card>
+
 @stop
 
 @push('css')

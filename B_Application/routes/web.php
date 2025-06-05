@@ -82,6 +82,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('documents/{document}/validations/create', [ValidationController::class, 'create'])->name('validations.create');
     Route::post('documents/{document}/validations', [ValidationController::class, 'store'])->name('validations.store');
 
+    // 2) Quick Approve (ajax POST)
+    Route::post('/validations/{validation}/approve', [ValidationController::class, 'approve'])
+        ->name('validations.approve');
+
+    // 3) Quick Reject (ajax POST)
+    Route::post('/validations/{validation}/reject', [ValidationController::class, 'reject'])
+        ->name('validations.reject');
+
+    // 4) Bulk Actions (approve / reject / pending)
+    Route::post('/validations/bulk-action', [ValidationController::class, 'bulkAction'])
+        ->name('validations.bulk-action');
+
+
+    // 6) (Optional) If you need a “viewDocument” route for inline viewing:
+    Route::get('/validations/document/{document}/view', [ValidationController::class, 'viewDocument'])
+        ->name('validations.view-document');
     // AJAX: Check if document has validation
     Route::get('documents/{document}/validation-exists', function ($document) {
         $doc = \App\Models\Document::findOrFail($document);

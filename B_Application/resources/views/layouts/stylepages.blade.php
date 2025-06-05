@@ -38,7 +38,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     {{-- Your other CSS files: --}}
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}"> 
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    @stack('css')
     <style>
         :root {
             /* Light Mode Colors */
@@ -366,28 +367,87 @@
         }
 
         /* Dark Mode Toggle */
+        /* Base Dark Mode Button */
         #darkModeToggle {
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
-            color: var(--text-primary);
-            border-radius: 12px;
-            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #2b2b2b, #3d3d3d);
+            border: none;
+            color: #f0f0f0;
+            border-radius: 999px;
+            padding: 0.6rem 1.2rem;
             font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+
+
+        }
+ 
+        .dropdown-menu{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        /* Hover Animation */
+        #darkModeToggle::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -75%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
+            transform: skewX(-20deg);
+            transition: 0.5s;
+            z-index: 0;
+        }
+
+        #darkModeToggle:hover::before {
+            left: 100%;
         }
 
         #darkModeToggle:hover {
-            background: var(--gradient-primary);
-            color: white;
-            border-color: var(--primary-color);
+            background: linear-gradient(135deg, #1e1e1e, #292929);
+            color: #ffffff;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
         }
 
-        /* Main Content */
+        /* Inner content stays on top */
+        #darkModeToggle i,
+        #darkModeToggle span {
+            z-index: 1;
+        }
+
+        #mdropdownmenu {
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            text-align: center;
+
+        }
+
+        #navitemdropdownmenu {
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            text-align: center;
+            padding: 0;
+            width: 100%;
+    
+
+        }
+
+        /*
+navitemdropdownmenu
+*/
         .content-main {
             background: var(--bg-card);
             border-radius: 24px;
@@ -519,12 +579,136 @@
             outline: 2px solid var(--primary-color);
             outline-offset: 2px;
         }
-        /* darkmode
+
+        /* darkmode */
         body.dark-mode .card {
-    background-color: #404040 !important;
-    border-color: #404040 !important;
-    color: #4d4f97 !important;
-} */
+            background-color: #404040 !important;
+            border-color: #404040 !important;
+            color: #4d4f97 !important;
+        }
+
+        /* dark mode css style  */
+
+        body[data-theme="dark"] .offcanvas-body {
+            background-color: #343a40 !important;
+            /* same as Bootstrap’s bg-dark */
+        }
+
+        body[data-theme='dark'] .dropdown-menu {
+            text-shadow: 0 0 1px rgba(236, 29, 255, 0.289);
+        }
+
+        body[data-theme='dark'] .card-primary {
+            background-color: var(--bg-card);
+            color: white;
+        }
+
+        body[data-theme='dark'] .d-flex,
+        body[data-theme='dark'] .d-flex * {
+            color: white !important;
+        }
+
+        body[data-theme='dark'] .pagination,
+        body[data-theme='dark'] .pagination * {
+            color: rgba(87, 18, 152, 0.921) !important;
+        }
+
+
+        .form-check-input[type=checkbox] {
+            border-radius: .25em;
+            position: relative;
+            left: 27px;
+            top: 9px;
+            box-shadow: 0 0 2px -1px black;
+        }
+
+        /* cards stye */
+        /* General Form Input Styling */
+        form .form-control {
+            border-radius: 0.5rem;
+            border: 1px solid #ced4da;
+            padding: 0.55rem 1rem;
+            transition: all 0.3s ease;
+            box-shadow: none;
+            font-size: 0.95rem;
+        }
+
+        form .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+            outline: none;
+        }
+
+        /* Stylish Select Dropdown */
+        select.form-control {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23666' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+
+        /* Hover effect for select */
+        select.form-control:hover {
+            border-color: #80bdff;
+        }
+
+        /* Animate option hover (limited, as native select is system-controlled) */
+        select.form-control option {
+            background-color: #fff;
+            color: #333;
+        }
+
+        /* Option hover effect (may vary by browser) */
+        select.form-control option:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* Animate Search Button */
+        form .btn-primary {
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border-radius: 0.5rem;
+        }
+
+        form .btn-primary:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Smooth Table Hover */
+        .table-hover tbody tr:hover {
+            background-color: #eef7ff;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Checkbox Scale on Hover */
+        input[type="checkbox"].form-check-input:hover {
+            transform: scale(1.3);
+            transition: transform 0.2s ease;
+        }
+
+        /* Bulk Action Buttons */
+        #bulkActionForm .btn-group .btn {
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        #bulkActionForm .btn-group .btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Badge Styling */
+        .badge {
+            transition: transform 0.2s ease;
+        }
+
+        .badge:hover {
+            transform: scale(1.1);
+        }
     </style>
     @stack('styles')
 </head>
@@ -573,12 +757,6 @@
                             </a>
                         </li>
                     @else
-                        <li class="nav-item">
-                            <button id="darkModeToggle" class="btn me-3">
-                                <i class="bi bi-moon-fill"></i>
-                                <span class="d-none d-md-inline">Dark</span>
-                            </button>
-                        </li>
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href="#"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -587,7 +765,7 @@
                                 </div>
                                 <span>{{ Auth::user()->name }}</span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
+                            <ul class="dropdown-menu dropdown-menu-end" id="dropdownmenu">
                                 <li>
                                     <a class="dropdown-item" href="#">
                                         <i class="bi bi-person"></i>Profile
@@ -597,6 +775,13 @@
                                     <a class="dropdown-item" href="#">
                                         <i class="bi bi-gear"></i>Settings
                                     </a>
+                                </li>
+
+                                <li>
+                                    <button id="darkModeToggle" class="btn me-3" title="Toggle Dark Mode">
+                                        <i class="bi bi-moon-fill"></i>
+                                        <span class="d-none d-md-inline">Dark</span>
+                                    </button>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider">
@@ -634,7 +819,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
 
-        <div class="offcanvas-body p-0">
+        <div class="offcanvas-body p-0" id="offcanvasBody">
             @auth
                 <div class="sidebar-user">
                     <div class="d-flex align-items-center">
@@ -667,10 +852,12 @@
                     <i class="bi bi-bar-chart-line"></i>
                     Reports
                 </a>
-                <a class="nav-link" id="exportData">
-                    <i class="bi bi-download"></i>
-                    Export Data
-                </a>
+                @if (request()->routeIs('dashboard'))
+                    <a class="nav-link" id="exportData" href="#">
+                        <i class="bi bi-download"></i>
+                        Export Data
+                    </a>
+                @endif
                 <a class="nav-link {{ request()->routeIs('help') ? 'active' : '' }}">
                     <i class="bi bi-question-circle"></i>
                     Help
@@ -681,16 +868,17 @@
 
     {{-- Main Content --}}
     <div class="content-main animate-fade-in-up">
+        @yield('content_header')
         @yield('content')
     </div>
 
     {{-- Scripts --}}
     <!-- Bootstrap -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script src="{{ asset('vendor/adminlte/plugins/jquery/jquery.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -712,7 +900,14 @@
 
             darkModeToggle.addEventListener('click', function() {
                 const currentTheme = body.getAttribute('data-theme');
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                let newTheme;
+
+                if (currentTheme === 'light') {
+                    newTheme = 'dark';
+                } else {
+                    newTheme = 'light';
+                }
+
                 setTheme(newTheme);
             });
 
@@ -735,10 +930,18 @@
                     }
                 }));
             }
+
+
+
         });
     </script>
+    <!-- somewhere near the bottom of the <body> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
 
     @stack('scripts')
+    @stack('js')
 </body>
 
 </html>

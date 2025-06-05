@@ -26,7 +26,7 @@ class ValidationController extends Controller
         $search = $request->get('search');
 
         $query = Validation::with(['document.categorie', 'document.user', 'validator'])
-                          ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'desc');
 
         // Apply filters
         switch ($filter) {
@@ -43,7 +43,7 @@ class ValidationController extends Controller
 
         // Apply search
         if ($search) {
-            $query->whereHas('document', function($q) use ($search) {
+            $query->whereHas('document', function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%");
             });
         }
@@ -67,9 +67,9 @@ class ValidationController extends Controller
     public function pending()
     {
         $documents = Document::with(['categorie', 'user', 'validation'])
-                            ->needsValidation()
-                            ->orderBy('created_at', 'desc')
-                            ->paginate(15);
+            ->needsValidation()
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
 
         return view('validations.pending', compact('documents'));
     }
@@ -82,7 +82,7 @@ class ValidationController extends Controller
         // Check if document already has a validation
         if ($document->validation) {
             return redirect()->route('validations.show', $document->validation)
-                           ->with('info', 'This document already has a validation record.');
+                ->with('info', 'This document already has a validation record.');
         }
 
         return view('validations.create', compact('document'));
@@ -101,7 +101,7 @@ class ValidationController extends Controller
         // Check if validation already exists
         if ($document->validation) {
             return redirect()->route('validations.show', $document->validation)
-                           ->with('error', 'This document already has a validation record.');
+                ->with('error', 'This document already has a validation record.');
         }
 
         $validation = Validation::create([
@@ -112,14 +112,14 @@ class ValidationController extends Controller
             'validated_at' => $request->status !== 'Pending' ? now() : null,
         ]);
 
-        $message = match($request->status) {
+        $message = match ($request->status) {
             'Approved' => 'Document has been approved successfully!',
             'Rejected' => 'Document has been rejected.',
             'Pending' => 'Document validation is now pending.',
         };
 
         return redirect()->route('validations.show', $validation)
-                        ->with('success', $message);
+            ->with('success', $message);
     }
 
     /**
@@ -128,7 +128,7 @@ class ValidationController extends Controller
     public function show(Validation $validation)
     {
         $validation->load(['document.categorie', 'document.user', 'validator']);
-        
+
         return view('validations.show', compact('validation'));
     }
 
@@ -138,7 +138,7 @@ class ValidationController extends Controller
     public function edit(Validation $validation)
     {
         $validation->load(['document.categorie', 'document.user']);
-        
+
         return view('validations.edit', compact('validation'));
     }
 
@@ -153,7 +153,7 @@ class ValidationController extends Controller
         ]);
 
         $oldStatus = $validation->status;
-        
+
         $validation->update([
             'status' => $request->status,
             'commentaire' => $request->commentaire,
@@ -161,14 +161,14 @@ class ValidationController extends Controller
             'validated_at' => $request->status !== 'Pending' ? now() : null,
         ]);
 
-        $message = match($request->status) {
+        $message = match ($request->status) {
             'Approved' => 'Document has been approved successfully!',
             'Rejected' => 'Document has been rejected.',
             'Pending' => 'Document validation is now pending.',
         };
 
         return redirect()->route('validations.show', $validation)
-                        ->with('success', $message);
+            ->with('success', $message);
     }
 
     /**
@@ -222,8 +222,8 @@ class ValidationController extends Controller
         ]);
 
         $validations = Validation::whereIn('id', $request->validation_ids)->get();
-        
-        $status = match($request->action) {
+
+        $status = match ($request->action) {
             'approve' => 'Approved',
             'reject' => 'Rejected',
             'pending' => 'Pending',
@@ -247,12 +247,13 @@ class ValidationController extends Controller
     /**
      * Download document for validation
      */
+
+    // In ValidationController.php
     public function downloadDocument(Document $document)
     {
         if (!Storage::exists($document->chemin_fichier)) {
             return redirect()->back()->with('error', 'File not found.');
         }
-
         return Storage::download($document->chemin_fichier, $document->title);
     }
 
@@ -282,6 +283,6 @@ class ValidationController extends Controller
         $validation->delete();
 
         return redirect()->route('validations.index')
-                        ->with('success', 'Validation record deleted successfully.');
+            ->with('success', 'Validation record deleted successfully.');
     }
 }
