@@ -15,3 +15,37 @@ button nav about dark and many is dont work in any page
 box of the delete  validation the close buton dont work http://127.0.0.1:8000/validations/4/edit and color white
 dete the card if example me in validation dont select card validaton 
 error View [users.profile] not found. if me click edit in users  
+// commits
+fix(url): gracefully handle invalid URLs without default 404
+
+fix(ui): ensure top-right select menu navigates correctly
+
+fix(user): handle missing role on user creation without error
+
+style(form): add shadow to checkboxes during validation
+
+feat(theme): center text in dark mode button
+
+refactor(theme): rename white mode to proper light (white-black) theme
+
+fix(export): prevent ‘#’ from being appended to URL on export
+
+feat(upload): save uploaded documents in public/src and store URLs in database
+
+feat(upload): add page for normal users to upload documents
+
+fix(ui): adjust “Validated By: admin” text color for better visibility
+
+fix(ui): update document title color on pending page for readability
+
+fix(ui): update user name color on /users page for visibility
+
+fix(upload): correct file size display to avoid “File not found” message
+
+fix(ui): ensure dark mode and nav buttons work globally across pages
+
+fix(ui): repair delete confirmation close button functionality and styling on validation edit page
+
+feat(validation): prevent deletion when no validation card is selected
+
+fix(view): ensure users.profile view exists to resolve Edit user error
