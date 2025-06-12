@@ -1636,7 +1636,7 @@
                 }
             });
 
-//  ccccccccccc 
+            //  ccccccccccc 
             // Export functionality
             document.getElementById('exportData').addEventListener('click', function() {
                 const data = {
@@ -1662,7 +1662,7 @@
                 link.click();
                 URL.revokeObjectURL(url);
             });
- 
+
 
             // Add resize handler for responsive charts
             window.addEventListener('resize', function() {

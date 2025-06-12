@@ -387,8 +387,8 @@
 
 
         }
- 
-        .dropdown-menu{
+
+        .dropdown-menu {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -441,13 +441,13 @@
             text-align: center;
             padding: 0;
             width: 100%;
-    
+
 
         }
 
         /*
-navitemdropdownmenu
-*/
+         navitemdropdownmenu
+        */
         .content-main {
             background: var(--bg-card);
             border-radius: 24px;
@@ -758,7 +758,7 @@ navitemdropdownmenu
                         </li>
                     @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href="#"
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href=""
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <div class="user-avatar">
                                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
@@ -886,6 +886,9 @@ navitemdropdownmenu
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="{{ asset('js/app.js') }}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Dark Mode Toggle
         document.addEventListener('DOMContentLoaded', function() {
