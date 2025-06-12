@@ -31,9 +31,8 @@
                             <i class="fas fa-user"></i>
                             Full Name <span class="text-danger">*</span>
                         </label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" 
-                               id="name" name="name" value="{{ old('name') }}" required 
-                               placeholder="Enter full name...">
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                            name="name" value="{{ old('name') }}" required placeholder="Enter full name...">
                         @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -45,9 +44,8 @@
                             <i class="fas fa-envelope"></i>
                             Email Address <span class="text-danger">*</span>
                         </label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                               id="email" name="email" value="{{ old('email') }}" required 
-                               placeholder="Enter email address...">
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                            name="email" value="{{ old('email') }}" required placeholder="Enter email address...">
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -62,11 +60,14 @@
                             <i class="fas fa-user-tag"></i>
                             User Role <span class="text-danger">*</span>
                         </label>
-                        <select class="form-control @error('role') is-invalid @enderror" 
-                                id="role" name="role" required>
+                        <select class="form-control @error('role') is-invalid @enderror" id="role" name="role"
+                            required>
                             <option value="">Select Role</option>
                             <option value="User" {{ old('role') === 'User' ? 'selected' : '' }}>
                                 <i class="fas fa-user"></i> Regular User
+                            </option>
+                            <option value="Formateur" {{ old('role') === 'Formateur' ? 'selected' : '' }}>
+                                <i class="fas fa-user-shield"></i>Formateur
                             </option>
                             <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>
                                 <i class="fas fa-user-shield"></i> Administrator
@@ -87,11 +88,11 @@
                             Password <span class="text-danger">*</span>
                         </label>
                         <div class="input-group">
-                            <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                                   id="password" name="password" required 
-                                   placeholder="Enter password...">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                id="password" name="password" required placeholder="Enter password...">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('password')">
+                                <button type="button" class="btn btn-outline-secondary"
+                                    onclick="togglePassword('password')">
                                     <i class="fas fa-eye" id="passwordIcon"></i>
                                 </button>
                             </div>
@@ -111,11 +112,11 @@
                             Confirm Password <span class="text-danger">*</span>
                         </label>
                         <div class="input-group">
-                            <input type="password" class="form-control" 
-                                   id="password_confirmation" name="password_confirmation" required 
-                                   placeholder="Confirm password...">
+                            <input type="password" class="form-control" id="password_confirmation"
+                                name="password_confirmation" required placeholder="Confirm password...">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('password_confirmation')">
+                                <button type="button" class="btn btn-outline-secondary"
+                                    onclick="togglePassword('password_confirmation')">
                                     <i class="fas fa-eye" id="passwordConfirmationIcon"></i>
                                 </button>
                             </div>
@@ -130,7 +131,8 @@
                         <div class="progress" style="height: 5px;">
                             <div class="progress-bar" id="passwordStrength" role="progressbar" style="width: 0%"></div>
                         </div>
-                        <small id="passwordStrengthText" class="form-text text-muted">Password strength will appear here</small>
+                        <small id="passwordStrengthText" class="form-text text-muted">Password strength will appear
+                            here</small>
                     </div>
 
                     <!-- Submit Buttons -->
@@ -161,7 +163,7 @@
                     <i class="fas fa-info-circle"></i>
                     <strong>Role Permissions:</strong>
                 </div>
-                
+
                 <h6><i class="fas fa-user text-primary"></i> Regular User:</h6>
                 <ul>
                     <li>Upload and manage own documents</li>
@@ -209,7 +211,7 @@
                     <h5 id="previewName">User Name</h5>
                     <p id="previewEmail" class="text-muted">user@example.com</p>
                     <span id="previewRole" class="badge badge-primary">Role</span>
-                    
+
                     <div class="alert alert-success mt-3">
                         <small>
                             <i class="fas fa-info-circle"></i>
@@ -223,136 +225,149 @@
 @stop
 
 @push('css')
-<style>
-.avatar-circle {
-    border-radius: 50%;
-    background: #007bff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
+    <style>
+        .avatar-circle {
+            border-radius: 50%;
+            background: #007bff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
 
-.password-strength-weak { background-color: #dc3545; }
-.password-strength-medium { background-color: #ffc107; }
-.password-strength-strong { background-color: #28a745; }
-</style>
+        .password-strength-weak {
+            background-color: #dc3545;
+        }
+
+        .password-strength-medium {
+            background-color: #ffc107;
+        }
+
+        .password-strength-strong {
+            background-color: #28a745;
+        }
+    </style>
 @endpush
 
 @push('js')
-<script>
-$(document).ready(function() {
-    // Live preview
-    $('#name').on('input', function() {
-        const name = $(this).val() || 'User Name';
-        $('#previewName').text(name);
-    });
+    <script>
+        $(document).ready(function() {
+            // Live preview
+            $('#name').on('input', function() {
+                const name = $(this).val() || 'User Name';
+                $('#previewName').text(name);
+            });
 
-    $('#email').on('input', function() {
-        const email = $(this).val() || 'user@example.com';
-        $('#previewEmail').text(email);
-    });
+            $('#email').on('input', function() {
+                const email = $(this).val() || 'user@example.com';
+                $('#previewEmail').text(email);
+            });
 
-    $('#role').on('change', function() {
-        const role = $(this).val();
-        const roleText = $(this).find('option:selected').text().trim();
-        
-        if (role === 'admin') {
-            $('#previewRole').removeClass('badge-primary').addClass('badge-danger').text('Administrator');
-            $('#roleDescription').text('Administrators have full access to all system features.');
-        } else if (role === 'User') {
-            $('#previewRole').removeClass('badge-danger').addClass('badge-primary').text('Regular User');
-            $('#roleDescription').text('Regular users can manage their own documents and access public content.');
-        } else {
-            $('#previewRole').removeClass('badge-danger badge-primary').addClass('badge-secondary').text('Role');
-            $('#roleDescription').text('Select the appropriate role for this user.');
+            $('#role').on('change', function() {
+                const role = $(this).val();
+                const roleText = $(this).find('option:selected').text().trim();
+
+                if (role === 'admin') {
+                    $('#previewRole').removeClass('badge-primary').addClass('badge-danger').text(
+                        'Administrator');
+                    $('#roleDescription').text('Administrators have full access to all system features.');
+                } else if (role === 'User') {
+                    $('#previewRole').removeClass('badge-danger').addClass('badge-primary').text(
+                        'Regular User');
+                    $('#roleDescription').text(
+                        'Regular users can manage their own documents and access public content.');
+                } else {
+                    $('#previewRole').removeClass('badge-danger badge-primary').addClass('badge-secondary')
+                        .text('Role');
+                    $('#roleDescription').text('Select the appropriate role for this user.');
+                }
+            });
+
+            // Password strength checker
+            $('#password').on('input', function() {
+                checkPasswordStrength($(this).val());
+            });
+
+            // Form validation
+            $('#createForm').submit(function(e) {
+                const password = $('#password').val();
+                const confirmPassword = $('#password_confirmation').val();
+
+                if (password !== confirmPassword) {
+                    e.preventDefault();
+                    alert('Passwords do not match.');
+                    return false;
+                }
+
+                $('#submitBtn').prop('disabled', true).html(
+                    '<i class="fas fa-spinner fa-spin"></i> Creating...');
+            });
+        });
+
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = document.getElementById(fieldId + 'Icon');
+
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
         }
-    });
 
-    // Password strength checker
-    $('#password').on('input', function() {
-        checkPasswordStrength($(this).val());
-    });
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            let strengthText = '';
+            let strengthClass = '';
 
-    // Form validation
-    $('#createForm').submit(function(e) {
-        const password = $('#password').val();
-        const confirmPassword = $('#password_confirmation').val();
-        
-        if (password !== confirmPassword) {
-            e.preventDefault();
-            alert('Passwords do not match.');
-            return false;
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/)) strength++;
+            if (password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+            const percentage = (strength / 5) * 100;
+
+            if (strength < 3) {
+                strengthText = 'Weak password';
+                strengthClass = 'password-strength-weak';
+            } else if (strength < 5) {
+                strengthText = 'Medium strength password';
+                strengthClass = 'password-strength-medium';
+            } else {
+                strengthText = 'Strong password';
+                strengthClass = 'password-strength-strong';
+            }
+
+            $('#passwordStrength').css('width', percentage + '%').removeClass().addClass('progress-bar ' + strengthClass);
+            $('#passwordStrengthText').text(strengthText);
         }
-        
-        $('#submitBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Creating...');
-    });
-});
 
-function togglePassword(fieldId) {
-    const field = document.getElementById(fieldId);
-    const icon = document.getElementById(fieldId + 'Icon');
-    
-    if (field.type === 'password') {
-        field.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        field.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
-}
+        function generatePassword() {
+            const length = 12;
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+            let password = "";
 
-function checkPasswordStrength(password) {
-    let strength = 0;
-    let strengthText = '';
-    let strengthClass = '';
-    
-    if (password.length >= 8) strength++;
-    if (password.match(/[a-z]/)) strength++;
-    if (password.match(/[A-Z]/)) strength++;
-    if (password.match(/[0-9]/)) strength++;
-    if (password.match(/[^a-zA-Z0-9]/)) strength++;
-    
-    const percentage = (strength / 5) * 100;
-    
-    if (strength < 3) {
-        strengthText = 'Weak password';
-        strengthClass = 'password-strength-weak';
-    } else if (strength < 5) {
-        strengthText = 'Medium strength password';
-        strengthClass = 'password-strength-medium';
-    } else {
-        strengthText = 'Strong password';
-        strengthClass = 'password-strength-strong';
-    }
-    
-    $('#passwordStrength').css('width', percentage + '%').removeClass().addClass('progress-bar ' + strengthClass);
-    $('#passwordStrengthText').text(strengthText);
-}
+            for (let i = 0; i < length; i++) {
+                password += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
 
-function generatePassword() {
-    const length = 12;
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-    let password = "";
-    
-    for (let i = 0; i < length; i++) {
-        password += charset.charAt(Math.floor(Math.random() * charset.length));
-    }
-    
-    $('#password').val(password);
-    $('#password_confirmation').val(password);
-    checkPasswordStrength(password);
-    
-    // Show generated password temporarily
-    $('#password').attr('type', 'text');
-    $('#password_confirmation').attr('type', 'text');
-    
-    setTimeout(function() {
-        $('#password').attr('type', 'password');
-        $('#password_confirmation').attr('type', 'password');
-    }, 3000);
-}
-</script>
+            $('#password').val(password);
+            $('#password_confirmation').val(password);
+            checkPasswordStrength(password);
+
+            // Show generated password temporarily
+            $('#password').attr('type', 'text');
+            $('#password_confirmation').attr('type', 'text');
+
+            setTimeout(function() {
+                $('#password').attr('type', 'password');
+                $('#password_confirmation').attr('type', 'password');
+            }, 3000);
+        }
+    </script>
 @endpush

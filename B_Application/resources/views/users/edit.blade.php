@@ -35,11 +35,19 @@
                             <div class="col-md-6">
                                 <strong>Name:</strong> {{ $user->name }}<br>
                                 <strong>Email:</strong> {{ $user->email }}<br>
-                                <strong>Role:</strong> 
-                                @if($user->isAdmin())
-                                    <span class="badge badge-danger">Administrator</span>
+                                <strong>Role:</strong>
+                                @if ($user->isAdmin())
+                                    <span class="badge badge-danger">
+                                        <i class="fas fa-user-shield"></i> Admin
+                                    </span>
+                                @elseif ($user->isFormateur())
+                                    <span class="badge" style="background-color: #5354e9; color: white;">
+                                        <i class="fas fa-user-shield"></i> Formateur
+                                    </span>
                                 @else
-                                    <span class="badge badge-primary">Regular User</span>
+                                    <span class="badge badge-secondary">
+                                        <i class="fas fa-user"></i> User
+                                    </span>
                                 @endif
                             </div>
                             <div class="col-md-6">
@@ -56,9 +64,8 @@
                             <i class="fas fa-user"></i>
                             Full Name <span class="text-danger">*</span>
                         </label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" 
-                               id="name" name="name" value="{{ old('name', $user->name) }}" required 
-                               placeholder="Enter full name...">
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                            name="name" value="{{ old('name', $user->name) }}" required placeholder="Enter full name...">
                         @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -70,9 +77,9 @@
                             <i class="fas fa-envelope"></i>
                             Email Address <span class="text-danger">*</span>
                         </label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                               id="email" name="email" value="{{ old('email', $user->email) }}" required 
-                               placeholder="Enter email address...">
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                            name="email" value="{{ old('email', $user->email) }}" required
+                            placeholder="Enter email address...">
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -84,10 +91,13 @@
                             <i class="fas fa-user-tag"></i>
                             User Role <span class="text-danger">*</span>
                         </label>
-                        <select class="form-control @error('role') is-invalid @enderror" 
-                                id="role" name="role" required>
+                        <select class="form-control @error('role') is-invalid @enderror" id="role" name="role"
+                            required>
                             <option value="User" {{ old('role', $user->role) === 'User' ? 'selected' : '' }}>
                                 Regular User
+                            </option>
+                            <option value="Formateur" {{ old('role', $user->role) === 'Formateur' ? 'selected' : '' }}>
+                                Formateur
                             </option>
                             <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>
                                 Administrator
@@ -96,7 +106,7 @@
                         @error('role')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                        @if($user->id === Auth::id())
+                        @if ($user->id === Auth::id())
                             <small class="form-text text-warning">
                                 <i class="fas fa-exclamation-triangle"></i>
                                 You are editing your own account. Be careful when changing your role.
@@ -116,11 +126,11 @@
                             New Password
                         </label>
                         <div class="input-group">
-                            <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                                   id="password" name="password" 
-                                   placeholder="Enter new password...">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                id="password" name="password" placeholder="Enter new password...">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('password')">
+                                <button type="button" class="btn btn-outline-secondary"
+                                    onclick="togglePassword('password')">
                                     <i class="fas fa-eye" id="passwordIcon"></i>
                                 </button>
                             </div>
@@ -140,11 +150,11 @@
                             Confirm New Password
                         </label>
                         <div class="input-group">
-                            <input type="password" class="form-control" 
-                                   id="password_confirmation" name="password_confirmation" 
-                                   placeholder="Confirm new password...">
+                            <input type="password" class="form-control" id="password_confirmation"
+                                name="password_confirmation" placeholder="Confirm new password...">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('password_confirmation')">
+                                <button type="button" class="btn btn-outline-secondary"
+                                    onclick="togglePassword('password_confirmation')">
                                     <i class="fas fa-eye" id="passwordConfirmationIcon"></i>
                                 </button>
                             </div>
@@ -171,12 +181,13 @@
                             </a>
                         </div>
                         <div>
-                            @if($user->id !== Auth::id() && $user->documents_count == 0)
+                            @if ($user->id !== Auth::id() && $user->documents_count == 0)
                                 <button type="button" class="btn btn-outline-danger" onclick="deleteUser()">
                                     <i class="fas fa-trash"></i> Delete User
                                 </button>
                             @elseif($user->documents_count > 0)
-                                <button type="button" class="btn btn-outline-secondary" disabled title="Cannot delete - user has documents">
+                                <button type="button" class="btn btn-outline-secondary" disabled
+                                    title="Cannot delete - user has documents">
                                     <i class="fas fa-lock"></i> Cannot Delete
                                 </button>
                             @endif
@@ -196,9 +207,19 @@
                     </div>
                     <h5 id="previewName">{{ $user->name }}</h5>
                     <p id="previewEmail" class="text-muted">{{ $user->email }}</p>
-                    <span id="previewRole" class="badge {{ $user->isAdmin() ? 'badge-danger' : 'badge-primary' }}">
-                        {{ $user->isAdmin() ? 'Administrator' : 'Regular User' }}
-                    </span>
+                    @if ($user->isAdmin())
+                        <span class="badge badge-danger">
+                            <i class="fas fa-user-shield"></i> Admin
+                        </span>
+                    @elseif ($user->isFormateur())
+                        <span class="badge" style="background-color: #5354e9; color: white;">
+                            <i class="fas fa-user-shield"></i> Formateur
+                        </span>
+                    @else
+                        <span class="badge badge-secondary">
+                            <i class="fas fa-user"></i> User
+                        </span>
+                    @endif
                 </div>
             </x-adminlte-card>
 
@@ -228,7 +249,7 @@
                     <tr>
                         <td><strong>Status:</strong></td>
                         <td>
-                            @if($user->email_verified_at)
+                            @if ($user->email_verified_at)
                                 <span class="badge badge-success">Verified</span>
                             @else
                                 <span class="badge badge-warning">Pending</span>
@@ -250,8 +271,9 @@
                     <a href="{{ route('documents.index', ['user' => $user->id]) }}" class="btn btn-outline-primary">
                         <i class="fas fa-file"></i> View User's Documents
                     </a>
-                    @if($user->isAdmin())
-                        <a href="{{ route('validations.index', ['validator' => $user->id]) }}" class="btn btn-outline-success">
+                    @if ($user->isAdmin())
+                        <a href="{{ route('validations.index', ['validator' => $user->id]) }}"
+                            class="btn btn-outline-success">
                             <i class="fas fa-check-circle"></i> View Validations
                         </a>
                     @endif
@@ -298,141 +320,152 @@
 @stop
 
 @push('css')
-<style>
-.avatar-circle {
-    border-radius: 50%;
-    background: #007bff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
+    <style>
+        .avatar-circle {
+            border-radius: 50%;
+            background: #007bff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
 
-.password-strength-weak { background-color: #dc3545; }
-.password-strength-medium { background-color: #ffc107; }
-.password-strength-strong { background-color: #28a745; }
-</style>
+        .password-strength-weak {
+            background-color: #dc3545;
+        }
+
+        .password-strength-medium {
+            background-color: #ffc107;
+        }
+
+        .password-strength-strong {
+            background-color: #28a745;
+        }
+    </style>
 @endpush
 
 @push('js')
-<script>
-$(document).ready(function() {
-    // Live preview
-    $('#name').on('input', function() {
-        const name = $(this).val() || '{{ $user->name }}';
-        $('#previewName').text(name);
-    });
+    <script>
+        $(document).ready(function() {
+            // Live preview
+            $('#name').on('input', function() {
+                const name = $(this).val() || '{{ $user->name }}';
+                $('#previewName').text(name);
+            });
 
-    $('#email').on('input', function() {
-        const email = $(this).val() || '{{ $user->email }}';
-        $('#previewEmail').text(email);
-    });
+            $('#email').on('input', function() {
+                const email = $(this).val() || '{{ $user->email }}';
+                $('#previewEmail').text(email);
+            });
 
-    $('#role').on('change', function() {
-        const role = $(this).val();
-        
-        if (role === 'admin') {
-            $('#previewRole').removeClass('badge-primary').addClass('badge-danger').text('Administrator');
-        } else {
-            $('#previewRole').removeClass('badge-danger').addClass('badge-primary').text('Regular User');
+            $('#role').on('change', function() {
+                const role = $(this).val();
+
+                if (role === 'admin') {
+                    $('#previewRole').removeClass('badge-primary').addClass('badge-danger').text(
+                        'Administrator');
+                } else {
+                    $('#previewRole').removeClass('badge-danger').addClass('badge-primary').text(
+                        'Regular User');
+                }
+            });
+
+            // Password strength checker
+            $('#password').on('input', function() {
+                const password = $(this).val();
+                if (password.length > 0) {
+                    $('#passwordStrengthContainer').show();
+                    checkPasswordStrength(password);
+                } else {
+                    $('#passwordStrengthContainer').hide();
+                }
+            });
+
+            // Form validation
+            $('#editForm').submit(function(e) {
+                const password = $('#password').val();
+                const confirmPassword = $('#password_confirmation').val();
+
+                if (password && password !== confirmPassword) {
+                    e.preventDefault();
+                    alert('Passwords do not match.');
+                    return false;
+                }
+
+                $('#updateBtn').prop('disabled', true).html(
+                    '<i class="fas fa-spinner fa-spin"></i> Updating...');
+            });
+        });
+
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = document.getElementById(fieldId + 'Icon');
+
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
         }
-    });
 
-    // Password strength checker
-    $('#password').on('input', function() {
-        const password = $(this).val();
-        if (password.length > 0) {
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            let strengthText = '';
+            let strengthClass = '';
+
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/)) strength++;
+            if (password.match(/[A-Z]/)) strength++;
+            if (password.match(/[0-9]/)) strength++;
+            if (password.match(/[^a-zA-Z0-9]/)) strength++;
+
+            const percentage = (strength / 5) * 100;
+
+            if (strength < 3) {
+                strengthText = 'Weak password';
+                strengthClass = 'password-strength-weak';
+            } else if (strength < 5) {
+                strengthText = 'Medium strength password';
+                strengthClass = 'password-strength-medium';
+            } else {
+                strengthText = 'Strong password';
+                strengthClass = 'password-strength-strong';
+            }
+
+            $('#passwordStrength').css('width', percentage + '%').removeClass().addClass('progress-bar ' + strengthClass);
+            $('#passwordStrengthText').text(strengthText);
+        }
+
+        function generatePassword() {
+            const length = 12;
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+            let password = "";
+
+            for (let i = 0; i < length; i++) {
+                password += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+
+            $('#password').val(password);
+            $('#password_confirmation').val(password);
             $('#passwordStrengthContainer').show();
             checkPasswordStrength(password);
-        } else {
-            $('#passwordStrengthContainer').hide();
+
+            // Show generated password temporarily
+            $('#password').attr('type', 'text');
+            $('#password_confirmation').attr('type', 'text');
+
+            setTimeout(function() {
+                $('#password').attr('type', 'password');
+                $('#password_confirmation').attr('type', 'password');
+            }, 3000);
         }
-    });
 
-    // Form validation
-    $('#editForm').submit(function(e) {
-        const password = $('#password').val();
-        const confirmPassword = $('#password_confirmation').val();
-        
-        if (password && password !== confirmPassword) {
-            e.preventDefault();
-            alert('Passwords do not match.');
-            return false;
+        function deleteUser() {
+            $('#deleteModal').modal('show');
         }
-        
-        $('#updateBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Updating...');
-    });
-});
-
-function togglePassword(fieldId) {
-    const field = document.getElementById(fieldId);
-    const icon = document.getElementById(fieldId + 'Icon');
-    
-    if (field.type === 'password') {
-        field.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        field.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
-}
-
-function checkPasswordStrength(password) {
-    let strength = 0;
-    let strengthText = '';
-    let strengthClass = '';
-    
-    if (password.length >= 8) strength++;
-    if (password.match(/[a-z]/)) strength++;
-    if (password.match(/[A-Z]/)) strength++;
-    if (password.match(/[0-9]/)) strength++;
-    if (password.match(/[^a-zA-Z0-9]/)) strength++;
-    
-    const percentage = (strength / 5) * 100;
-    
-    if (strength < 3) {
-        strengthText = 'Weak password';
-        strengthClass = 'password-strength-weak';
-    } else if (strength < 5) {
-        strengthText = 'Medium strength password';
-        strengthClass = 'password-strength-medium';
-    } else {
-        strengthText = 'Strong password';
-        strengthClass = 'password-strength-strong';
-    }
-    
-    $('#passwordStrength').css('width', percentage + '%').removeClass().addClass('progress-bar ' + strengthClass);
-    $('#passwordStrengthText').text(strengthText);
-}
-
-function generatePassword() {
-    const length = 12;
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-    let password = "";
-    
-    for (let i = 0; i < length; i++) {
-        password += charset.charAt(Math.floor(Math.random() * charset.length));
-    }
-    
-    $('#password').val(password);
-    $('#password_confirmation').val(password);
-    $('#passwordStrengthContainer').show();
-    checkPasswordStrength(password);
-    
-    // Show generated password temporarily
-    $('#password').attr('type', 'text');
-    $('#password_confirmation').attr('type', 'text');
-    
-    setTimeout(function() {
-        $('#password').attr('type', 'password');
-        $('#password_confirmation').attr('type', 'password');
-    }, 3000);
-}
-
-function deleteUser() {
-    $('#deleteModal').modal('show');
-}
-</script>
+    </script>
 @endpush

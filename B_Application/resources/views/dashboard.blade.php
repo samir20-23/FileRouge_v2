@@ -2,17 +2,16 @@
 @extends('layouts.stylepages')
 
 {{-- Title section --}}
-@section('title', auth()->user()->isAdmin() ? 'Dashboard' : config('app.name'))
+@section('title', auth()->user()->isAdmin() || auth()->user()->isFormateur() ? 'Dashboard' : config('app.name'))
 
 {{-- Content header section --}}
 @section('content_header')
-    @if (auth()->check() && auth()->user()->isAdmin())
+    @if (auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isFormateur()))
     @endif
 @stop
 
 {{-- Main content section --}}
-@section('content')
-    @if (auth()->check() && auth()->user()->isAdmin())
+@section('content') 
         {{-- Dashboard cards row --}}
 
         <div class="row g-4 mb-5 dashboard-cards">
@@ -49,24 +48,24 @@
                     </a>
                 </div>
             </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="dashboard-card dashboard-card-warning" data-aos="fade-up" data-aos-delay="300">
-                    <div class="dashboard-card-inner">
-                        <div class="dashboard-card-icon">
-                            <i class="fas fa-users fa-2x"></i>
+            @if (auth()->check() && auth()->user()->isAdmin())
+                <div class="col-lg-3 col-md-6">
+                    <div class="dashboard-card dashboard-card-warning" data-aos="fade-up" data-aos-delay="300">
+                        <div class="dashboard-card-inner">
+                            <div class="dashboard-card-icon">
+                                <i class="fas fa-users fa-2x"></i>
+                            </div>
+                            <div class="dashboard-card-content">
+                                <h3 class="dashboard-card-value">{{ number_format($totalUsers) }}</h3>
+                                <p class="dashboard-card-label">Total Users</p>
+                            </div>
                         </div>
-                        <div class="dashboard-card-content">
-                            <h3 class="dashboard-card-value">{{ number_format($totalUsers) }}</h3>
-                            <p class="dashboard-card-label">Total Users</p>
-                        </div>
+                        <a href="{{ route('users.index') }}" class="dashboard-card-link">
+                            View Users <i class="fas fa-arrow-circle-right"></i>
+                        </a>
                     </div>
-                    <a href="{{ route('users.index') }}" class="dashboard-card-link">
-                        View Users <i class="fas fa-arrow-circle-right"></i>
-                    </a>
                 </div>
-            </div>
-
+            @endif
             <div class="col-lg-3 col-md-6">
                 <div class="dashboard-card dashboard-card-info" data-aos="fade-up" data-aos-delay="400">
                     <div class="dashboard-card-inner">
@@ -250,23 +249,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-    @else
-        {{-- Access Denied for non-admins --}}
-        <div class="text-center mt-6 max-w-md mx-auto">
-            <img src="{{ asset('vendor/adminlte/dist/img/404GIF.gif') }}" alt="Access Denied"
-                class="mx-auto mb-4 animate__animated animate__zoomIn" style="max-width: 150px;">
-
-            <div class="access-denied-message">
-                <strong class="access-denied-title">Oops!</strong>
-                <span class="access-denied-text">Admins only — you don't have access to this page.</span>
-            </div>
-
-            <a href="{{ route('home') }}" class="btn btn-primary mt-4">
-                <i class="fas fa-home me-2"></i>Go back to Home
-            </a>
-        </div>
-    @endif
+        </div> 
 @stop
 
 @push('styles')
@@ -642,10 +625,6 @@
 @endpush
 
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {

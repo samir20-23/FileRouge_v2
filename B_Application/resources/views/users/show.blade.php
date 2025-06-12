@@ -8,12 +8,12 @@
         <h1 class="font-weight-bold text-dark">
             <i class="fas fa-user"></i>
             {{ $user->name }}
-            @if($user->id === Auth::id())
+            @if ($user->id === Auth::id())
                 <span class="badge badge-primary">You</span>
             @endif
         </h1>
         <div>
-            @if($user->id === Auth::id())
+            @if ($user->id === Auth::id())
                 <a href="{{ route('users.profile') }}" class="btn btn-info">
                     <i class="fas fa-edit"></i> Edit Profile
                 </a>
@@ -46,7 +46,7 @@
                                 <td><strong>Email:</strong></td>
                                 <td>
                                     {{ $user->email }}
-                                    @if($user->email_verified_at)
+                                    @if ($user->email_verified_at)
                                         <span class="badge badge-success badge-sm ml-2">
                                             <i class="fas fa-check-circle"></i> Verified
                                         </span>
@@ -60,13 +60,17 @@
                             <tr>
                                 <td><strong>Role:</strong></td>
                                 <td>
-                                    @if($user->isAdmin())
-                                        <span class="badge badge-danger badge-lg">
-                                            <i class="fas fa-user-shield"></i> Administrator
+                                    @if ($user->isAdmin())
+                                        <span class="badge badge-danger">
+                                            <i class="fas fa-user-shield"></i> Admin
+                                        </span>
+                                    @elseif ($user->isFormateur())
+                                        <span class="badge" style="background-color: #5354e9; color: white;">
+                                            <i class="fas fa-user-shield"></i> Formateur
                                         </span>
                                     @else
-                                        <span class="badge badge-secondary badge-lg">
-                                            <i class="fas fa-user"></i> Regular User
+                                        <span class="badge badge-secondary">
+                                            <i class="fas fa-user"></i> User
                                         </span>
                                     @endif
                                 </td>
@@ -112,12 +116,13 @@
                             <a href="{{ route('documents.index', ['user' => $user->id]) }}" class="btn btn-primary">
                                 <i class="fas fa-file"></i> View Documents ({{ $user->documents_count }})
                             </a>
-                            @if($user->isAdmin())
-                                <a href="{{ route('validations.index', ['validator' => $user->id]) }}" class="btn btn-success">
+                            @if ($user->isAdmin())
+                                <a href="{{ route('validations.index', ['validator' => $user->id]) }}"
+                                    class="btn btn-success">
                                     <i class="fas fa-check-circle"></i> View Validations ({{ $user->validations_count }})
                                 </a>
                             @endif
-                            @if($user->id === Auth::id())
+                            @if ($user->id === Auth::id())
                                 <a href="{{ route('users.profile') }}" class="btn btn-warning">
                                     <i class="fas fa-edit"></i> Edit Profile
                                 </a>
@@ -125,7 +130,7 @@
                                 <a href="{{ route('users.edit', $user) }}" class="btn btn-warning">
                                     <i class="fas fa-edit"></i> Edit User
                                 </a>
-                                @if($user->documents_count == 0)
+                                @if ($user->documents_count == 0)
                                     <button type="button" class="btn btn-danger" onclick="deleteUser()">
                                         <i class="fas fa-trash"></i> Delete User
                                     </button>
@@ -158,27 +163,31 @@
                 </div>
 
                 <!-- Documents by Status Chart -->
-                @if(!empty($userStats['documents_by_status']))
+                @if (!empty($userStats['documents_by_status']))
                     <hr>
                     <h6><i class="fas fa-chart-pie"></i> Documents by Status</h6>
                     <div class="row">
-                        @foreach($userStats['documents_by_status'] as $status => $count)
+                        @foreach ($userStats['documents_by_status'] as $status => $count)
                             <div class="col-md-4 text-center">
                                 <div class="progress-group">
                                     @php
-                                        $badgeClass = match($status) {
+                                        $badgeClass = match ($status) {
                                             'published' => 'success',
                                             'draft' => 'warning',
                                             'archived' => 'secondary',
-                                            default => 'primary'
+                                            default => 'primary',
                                         };
-                                        $percentage = $user->documents_count > 0 ? round(($count / $user->documents_count) * 100) : 0;
+                                        $percentage =
+                                            $user->documents_count > 0
+                                                ? round(($count / $user->documents_count) * 100)
+                                                : 0;
                                     @endphp
                                     <span class="badge badge-{{ $badgeClass }} badge-lg">
                                         {{ ucfirst($status) }}: {{ $count }}
                                     </span>
                                     <div class="progress progress-sm mt-2">
-                                        <div class="progress-bar bg-{{ $badgeClass }}" style="width: {{ $percentage }}%"></div>
+                                        <div class="progress-bar bg-{{ $badgeClass }}"
+                                            style="width: {{ $percentage }}%"></div>
                                     </div>
                                     <small class="text-muted">{{ $percentage }}%</small>
                                 </div>
@@ -188,28 +197,32 @@
                 @endif
 
                 <!-- Validations by Status Chart (for admins) -->
-                @if($user->isAdmin() && !empty($userStats['validations_by_status']))
+                @if ($user->isAdmin() && !empty($userStats['validations_by_status']))
                     <hr>
                     <h6><i class="fas fa-chart-bar"></i> Validations by Status</h6>
                     <div class="row">
-                        @foreach($userStats['validations_by_status'] as $status => $count)
+                        @foreach ($userStats['validations_by_status'] as $status => $count)
                             <div class="col-md-4 text-center">
                                 <div class="progress-group">
                                     @php
-                                        $badgeClass = match($status) {
+                                        $badgeClass = match ($status) {
                                             'approved' => 'success',
                                             'rejected' => 'danger',
                                             'pending' => 'warning',
                                             'blocked' => 'dark',
-                                            default => 'primary'
+                                            default => 'primary',
                                         };
-                                        $percentage = $user->validations_count > 0 ? round(($count / $user->validations_count) * 100) : 0;
+                                        $percentage =
+                                            $user->validations_count > 0
+                                                ? round(($count / $user->validations_count) * 100)
+                                                : 0;
                                     @endphp
                                     <span class="badge badge-{{ $badgeClass }} badge-lg">
                                         {{ ucfirst($status) }}: {{ $count }}
                                     </span>
                                     <div class="progress progress-sm mt-2">
-                                        <div class="progress-bar bg-{{ $badgeClass }}" style="width: {{ $percentage }}%"></div>
+                                        <div class="progress-bar bg-{{ $badgeClass }}"
+                                            style="width: {{ $percentage }}%"></div>
                                     </div>
                                     <small class="text-muted">{{ $percentage }}%</small>
                                 </div>
@@ -221,7 +234,7 @@
 
             <!-- Recent Documents -->
             <x-adminlte-card title="Recent Documents" theme="success" collapsible>
-                @if($recentDocuments->count() > 0)
+                @if ($recentDocuments->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-sm table-hover">
                             <thead>
@@ -235,14 +248,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($recentDocuments as $document)
+                                @foreach ($recentDocuments as $document)
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <i class="{{ $document->getFileIcon() }} mr-2"></i>
                                                 <div>
                                                     <h6 class="mb-0">{{ Str::limit($document->title, 30) }}</h6>
-                                                    <small class="text-muted">{{ $document->getFormattedFileSize() }}</small>
+                                                    <small
+                                                        class="text-muted">{{ $document->getFormattedFileSize() }}</small>
                                                 </div>
                                             </div>
                                         </td>
@@ -264,10 +278,12 @@
                                         </td>
                                         <td>
                                             <div class="btn-group btn-group-sm">
-                                                <a href="{{ route('documents.show', $document) }}" class="btn btn-info" title="View">
+                                                <a href="{{ route('documents.show', $document) }}" class="btn btn-info"
+                                                    title="View">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('documents.download', $document) }}" class="btn btn-success" title="Download">
+                                                <a href="{{ route('documents.download', $document) }}"
+                                                    class="btn btn-success" title="Download">
                                                     <i class="fas fa-download"></i>
                                                 </a>
                                             </div>
@@ -287,7 +303,7 @@
                         <i class="fas fa-file fa-4x text-muted mb-3"></i>
                         <h5 class="text-muted">No documents yet</h5>
                         <p class="text-muted">This user hasn't uploaded any documents.</p>
-                        @if($user->id === Auth::id())
+                        @if ($user->id === Auth::id())
                             <a href="{{ route('documents.create') }}" class="btn btn-primary">
                                 <i class="fas fa-plus"></i> Upload First Document
                             </a>
@@ -297,7 +313,7 @@
             </x-adminlte-card>
 
             <!-- Recent Validations (for admins) -->
-            @if($user->isAdmin() && $recentValidations->count() > 0)
+            @if ($user->isAdmin() && $recentValidations->count() > 0)
                 <x-adminlte-card title="Recent Validations" theme="warning" collapsible>
                     <div class="table-responsive">
                         <table class="table table-sm table-hover">
@@ -311,7 +327,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($recentValidations as $validation)
+                                @foreach ($recentValidations as $validation)
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
@@ -330,10 +346,12 @@
                                         </td>
                                         <td>
                                             <div class="btn-group btn-group-sm">
-                                                <a href="{{ route('validations.show', $validation) }}" class="btn btn-info" title="View">
+                                                <a href="{{ route('validations.show', $validation) }}"
+                                                    class="btn btn-info" title="View">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('documents.show', $validation->document) }}" class="btn btn-success" title="View Document">
+                                                <a href="{{ route('documents.show', $validation->document) }}"
+                                                    class="btn btn-success" title="View Document">
                                                     <i class="fas fa-file"></i>
                                                 </a>
                                             </div>
@@ -362,14 +380,18 @@
                     </div>
                     <h4>{{ $user->name }}</h4>
                     <p class="text-muted">{{ $user->email }}</p>
-                    
-                    @if($user->isAdmin())
-                        <span class="badge badge-danger badge-lg">
-                            <i class="fas fa-user-shield"></i> Administrator
+
+                    @if ($user->isAdmin())
+                        <span class="badge badge-danger">
+                            <i class="fas fa-user-shield"></i> Admin
+                        </span>
+                    @elseif ($user->isFormateur())
+                        <span class="badge" style="background-color: #5354e9; color: white;">
+                            <i class="fas fa-user-shield"></i> Formateur
                         </span>
                     @else
-                        <span class="badge badge-secondary badge-lg">
-                            <i class="fas fa-user"></i> Regular User
+                        <span class="badge badge-secondary">
+                            <i class="fas fa-user"></i> User
                         </span>
                     @endif
 
@@ -393,12 +415,13 @@
                     <a href="{{ route('documents.index', ['user' => $user->id]) }}" class="btn btn-outline-primary">
                         <i class="fas fa-file"></i> View User Documents
                     </a>
-                    @if($user->isAdmin())
-                        <a href="{{ route('validations.index', ['validator' => $user->id]) }}" class="btn btn-outline-success">
+                    @if ($user->isAdmin())
+                        <a href="{{ route('validations.index', ['validator' => $user->id]) }}"
+                            class="btn btn-outline-success">
                             <i class="fas fa-check-circle"></i> View Validations
                         </a>
                     @endif
-                    @if($user->id === Auth::id())
+                    @if ($user->id === Auth::id())
                         <a href="{{ route('users.profile') }}" class="btn btn-outline-warning">
                             <i class="fas fa-edit"></i> Edit My Profile
                         </a>
@@ -461,7 +484,7 @@
                     <tr>
                         <td><strong>Email Verified:</strong></td>
                         <td>
-                            @if($user->email_verified_at)
+                            @if ($user->email_verified_at)
                                 <span class="badge badge-success">Yes</span>
                             @else
                                 <span class="badge badge-warning">No</span>
@@ -476,7 +499,7 @@
                         <td><strong>Last Login:</strong></td>
                         <td>
                             <small class="text-muted">
-                                @if($user->id === Auth::id())
+                                @if ($user->id === Auth::id())
                                     Currently online
                                 @else
                                     Not tracked
@@ -490,7 +513,7 @@
     </div>
 
     <!-- Delete Confirmation Modal -->
-    @if($user->id !== Auth::id())
+    @if ($user->id !== Auth::id())
         <div class="modal fade" id="deleteModal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -508,17 +531,17 @@
                         <p>Are you sure you want to delete this user?</p>
                         <p><strong>User:</strong> {{ $user->name }}</p>
                         <p><strong>Email:</strong> {{ $user->email }}</p>
-                        @if($user->documents_count > 0)
+                        @if ($user->documents_count > 0)
                             <div class="alert alert-warning">
                                 <i class="fas fa-exclamation-triangle"></i>
-                                This user has {{ $user->documents_count }} document(s). 
+                                This user has {{ $user->documents_count }} document(s).
                                 You cannot delete this user until all documents are removed or reassigned.
                             </div>
                         @endif
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        @if($user->documents_count == 0)
+                        @if ($user->documents_count == 0)
                             <form action="{{ route('users.destroy', $user) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
@@ -535,33 +558,33 @@
 @stop
 
 @push('css')
-<style>
-.avatar-circle-large {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: linear-gradient(45deg, #007bff, #6c757d);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    margin: 0 auto;
-}
+    <style>
+        .avatar-circle-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #007bff, #6c757d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 0 auto;
+        }
 
-.progress-group {
-    margin-bottom: 1rem;
-}
+        .progress-group {
+            margin-bottom: 1rem;
+        }
 
-.timeline-sm .timeline-item {
-    margin-bottom: 10px;
-}
-</style>
+        .timeline-sm .timeline-item {
+            margin-bottom: 10px;
+        }
+    </style>
 @endpush
 
 @push('js')
-<script>
-function deleteUser() {
-    $('#deleteModal').modal('show');
-}
-</script>
+    <script>
+        function deleteUser() {
+            $('#deleteModal').modal('show');
+        }
+    </script>
 @endpush
