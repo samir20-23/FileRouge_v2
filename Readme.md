@@ -13,6 +13,9 @@ A simple Laravel-based application for uploading and managing documents (PDFs, v
   - Files are stored under `storage/app/public/documents`.  
   - Publicly accessible via `public/storage/documents` (after running `php artisan storage:link`).
 
+------
+
+
 - **Category Management**  
   - Admins can create, read, update, delete categories via a CRUD interface.
   - AJAX search and statistics endpoints for categories (`categories-api/search`, `categories-api/stats`).
