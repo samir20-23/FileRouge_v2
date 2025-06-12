@@ -5,6 +5,11 @@
 This microservices architecture decomposes your educational document platform into five core services, each with clear boundaries and responsibilities. The design emphasizes scalability, maintainability, and separation of concerns while supporting your validation workflow requirements.
 
 ---
+---
+---
+---
+---
+---
 
 ## Core Microservices
 

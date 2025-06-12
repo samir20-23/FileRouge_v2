@@ -56,5 +56,10 @@
    └─ database/
        └─ migrations, seeders, etc.
    ```
+---
+---
+---
+---
+---
 
 That’s it. When you upload, Laravel puts the file in `storage/app/public/documents`, you save `"documents/yourfile.ext"` to the DB, and access it at `public/storage/documents/yourfile.ext`.

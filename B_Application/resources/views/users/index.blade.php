@@ -75,13 +75,16 @@
         <form method="GET" action="{{ route('users.index') }}" class="mb-4">
             <div class="row">
                 <div class="col-md-4">
-                    <input type="text" name="search" class="form-control" placeholder="Search users..." value="{{ $search }}">
+                    <input type="text" name="search" class="form-control" placeholder="Search users..."
+                        value="{{ $search }}">
                 </div>
                 <div class="col-md-2">
                     <select name="role" class="form-control">
                         <option value="">All Roles</option>
                         <option value="admin" {{ $role === 'admin' ? 'selected' : '' }}>Admin</option>
                         <option value="user" {{ $role === 'user' ? 'selected' : '' }}>User</option>
+                        <option value="Formateur" {{ $role === 'Formateur' ? 'selected' : '' }}>Formateur</option>
+
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -89,7 +92,8 @@
                         <option value="name" {{ $sort === 'name' ? 'selected' : '' }}>Sort by Name</option>
                         <option value="email" {{ $sort === 'email' ? 'selected' : '' }}>Sort by Email</option>
                         <option value="role" {{ $sort === 'role' ? 'selected' : '' }}>Sort by Role</option>
-                        <option value="documents_count" {{ $sort === 'documents_count' ? 'selected' : '' }}>Sort by Documents</option>
+                        <option value="documents_count" {{ $sort === 'documents_count' ? 'selected' : '' }}>Sort by
+                            Documents</option>
                         <option value="created_at" {{ $sort === 'created_at' ? 'selected' : '' }}>Sort by Date</option>
                     </select>
                 </div>
@@ -116,12 +120,6 @@
                         <button type="button" class="btn btn-danger" onclick="bulkAction('delete')">
                             <i class="fas fa-trash"></i> Delete Selected
                         </button>
-                        <button type="button" class="btn btn-warning" onclick="bulkAction('make_admin')">
-                            <i class="fas fa-user-shield"></i> Make Admin
-                        </button>
-                        <button type="button" class="btn btn-info" onclick="bulkAction('make_user')">
-                            <i class="fas fa-user"></i> Make User
-                        </button>
                     </div>
                 </div>
                 <div class="col-md-4 text-right">
@@ -130,7 +128,7 @@
             </div>
 
             <!-- Users Table -->
-            @if($users->count() > 0)
+            @if ($users->count() > 0)
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
                         <thead>
@@ -146,18 +144,17 @@
                                 <th>Documents</th>
                                 <th>Validations</th>
                                 <th>Joined</th>
-                                <th>Status</th>
                                 <th width="150">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($users as $user)
+                            @foreach ($users as $user)
                                 <tr>
                                     <td>
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" name="user_ids[]" value="{{ $user->id }}" 
-                                                   class="custom-control-input user-checkbox" id="user{{ $user->id }}"
-                                                   {{ $user->id === Auth::id() ? 'disabled' : '' }}>
+                                            <input type="checkbox" name="user_ids[]" value="{{ $user->id }}"
+                                                class="custom-control-input user-checkbox" id="user{{ $user->id }}"
+                                                {{ $user->id === Auth::id() ? 'disabled' : '' }}>
                                             <label class="custom-control-label" for="user{{ $user->id }}"></label>
                                         </div>
                                     </td>
@@ -169,7 +166,7 @@
                                             <div>
                                                 <h6 class="mb-0">
                                                     {{ $user->name }}
-                                                    @if($user->id === Auth::id())
+                                                    @if ($user->id === Auth::id())
                                                         <span class="badge badge-primary badge-sm">You</span>
                                                     @endif
                                                 </h6>
@@ -178,9 +175,13 @@
                                         </div>
                                     </td>
                                     <td>
-                                        @if($user->isAdmin())
+                                        @if ($user->isAdmin())
                                             <span class="badge badge-danger">
                                                 <i class="fas fa-user-shield"></i> Admin
+                                            </span>
+                                        @elseif ($user->isFormateur())
+                                            <span class="badge" style="background-color: #5354e9; color: white;">
+                                                <i class="fas fa-user-shield"></i> Formateur
                                             </span>
                                         @else
                                             <span class="badge badge-secondary">
@@ -198,26 +199,19 @@
                                         <small>{{ $user->created_at->format('M d, Y') }}</small>
                                     </td>
                                     <td>
-                                        @if($user->email_verified_at)
-                                            <span class="badge badge-success">
-                                                <i class="fas fa-check-circle"></i> Verified
-                                            </span>
-                                        @else
-                                            <span class="badge badge-warning">
-                                                <i class="fas fa-clock"></i> Pending
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td>
                                         <div class="btn-group btn-group-sm">
-                                            <a href="{{ route('users.show', $user) }}" class="btn btn-info" title="View">
+                                            <a href="{{ route('users.show', $user) }}" class="btn btn-info"
+                                                title="View">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="{{ route('users.edit', $user) }}" class="btn btn-warning" title="Edit">
+                                            <a href="{{ route('users.edit', $user) }}" class="btn btn-warning"
+                                                title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            @if($user->id !== Auth::id())
-                                                <button type="button" class="btn btn-danger" onclick="deleteUser({{ $user->id }}, '{{ $user->name }}')" title="Delete">
+                                            @if ($user->id !== Auth::id())
+                                                <button type="button" class="btn btn-danger"
+                                                    onclick="deleteUser({{ $user->id }}, '{{ $user->name }}')"
+                                                    title="Delete">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             @endif
@@ -277,65 +271,66 @@
 @stop
 
 @push('css')
-<style>
-.avatar-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(45deg, #007bff, #6c757d);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
-</style>
+    <style>
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #007bff, #6c757d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+    </style>
 @endpush
 
 @push('js')
-<script>
-$(document).ready(function() {
-    $('#selectAll').change(function() {
-        $('.user-checkbox:not(:disabled)').prop('checked', this.checked);
-        updateSelectedCount();
-    });
+    <script>
+        $(document).ready(function() {
+            $('#selectAll').change(function() {
+                $('.user-checkbox:not(:disabled)').prop('checked', this.checked);
+                updateSelectedCount();
+            });
 
-    $('.user-checkbox').change(function() {
-        updateSelectedCount();
-    });
+            $('.user-checkbox').change(function() {
+                updateSelectedCount();
+            });
 
-    function updateSelectedCount() {
-        const count = $('.user-checkbox:checked').length;
-        $('#selectedCount').text(count + ' selected');
-    }
-});
+            function updateSelectedCount() {
+                const count = $('.user-checkbox:checked').length;
+                $('#selectedCount').text(count + ' selected');
+            }
+        });
 
-function deleteUser(userId, userName) {
-    $('#userInfo').html(`<strong>User:</strong> ${userName}`);
-    $('#deleteForm').attr('action', `/users/${userId}`);
-    $('#deleteModal').modal('show');
-}
+        function deleteUser(userId, userName) {
+            $('#userInfo').html(`<strong>User:</strong> ${userName}`);
+            $('#deleteForm').attr('action', `/users/${userId}`);
+            $('#deleteModal').modal('show');
+        }
 
-function bulkAction(action) {
-    const selectedIds = $('.user-checkbox:checked').map(function() {
-        return this.value;
-    }).get();
+        function bulkAction(action) {
+            const selectedIds = $('.user-checkbox:checked').map(function() {
+                return this.value;
+            }).get();
 
-    if (selectedIds.length === 0) {
-        alert('Please select at least one user.');
-        return;
-    }
+            if (selectedIds.length === 0) {
+                alert('Please select at least one user.');
+                return;
+            }
 
-    const actionNames = {
-        'delete': 'delete',
-        'make_admin': 'make admin',
-        'make_user': 'make regular user'
-    };
+            const actionNames = {
+                'delete': 'delete',
+                'make_admin': 'make admin',
+                'make_Formateur': 'make Formateur',
+                'make_user': 'make regular user'
+            };
 
-    if (confirm(`Are you sure you want to ${actionNames[action]} ${selectedIds.length} user(s)?`)) {
-        $('#bulkActionForm').find('input[name="action"]').remove();
-        $('#bulkActionForm').append(`<input type="hidden" name="action" value="${action}">`);
-        $('#bulkActionForm').submit();
-    }
-}
-</script>
+            if (confirm(`Are you sure you want to ${actionNames[action]} ${selectedIds.length} user(s)?`)) {
+                $('#bulkActionForm').find('input[name="action"]').remove();
+                $('#bulkActionForm').append(`<input type="hidden" name="action" value="${action}">`);
+                $('#bulkActionForm').submit();
+            }
+        }
+    </script>
 @endpush

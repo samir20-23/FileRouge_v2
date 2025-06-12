@@ -40,14 +40,14 @@ class UserController extends Controller
 
         // Apply search filter
         if ($search) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
         // Apply role filter
-        if ($role && in_array($role, ['admin', 'user'])) {
+        if ($role && in_array($role, ['admin', 'user','Formateur'])) {
             $query->where('role', $role);
         }
 
@@ -64,6 +64,7 @@ class UserController extends Controller
         $stats = [
             'total' => User::count(),
             'admins' => User::where('role', 'admin')->count(),
+            'Formateurs' => User::where('role', 'Formateur')->count(),
             'regular_users' => User::where('role', 'user')->count(),
             'total_documents' => Document::count(),
             'total_validations' => Validation::count(),
@@ -71,11 +72,11 @@ class UserController extends Controller
         ];
 
         return view('users.index', compact(
-            'users', 
-            'stats', 
-            'search', 
-            'role', 
-            'sort', 
+            'users',
+            'stats',
+            'search',
+            'role',
+            'sort',
             'direction'
         ));
     }
@@ -97,7 +98,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:admin,user',
+            'role' => 'required|in:admin,User,Formateur',
         ]);
 
         try {
@@ -110,11 +111,11 @@ class UserController extends Controller
             ]);
 
             return redirect()->route('users.index')
-                           ->with('success', 'User "' . $user->name . '" created successfully!');
+                ->with('success', 'User "' . $user->name . '" created successfully!');
         } catch (\Exception $e) {
             return redirect()->back()
-                           ->withInput()
-                           ->with('error', 'Failed to create user. Please try again.');
+                ->withInput()
+                ->with('error', 'Failed to create user. Please try again.');
         }
     }
 
@@ -125,42 +126,42 @@ class UserController extends Controller
     {
         // Load relationships with counts
         $user->loadCount(['documents', 'validations']);
-        
+
         // Get user's recent documents
         $recentDocuments = $user->documents()
-                               ->with(['categorie', 'validation'])
-                               ->latest()
-                               ->limit(10)
-                               ->get();
+            ->with(['categorie', 'validation'])
+            ->latest()
+            ->limit(10)
+            ->get();
 
         // Get user's recent validations (if admin)
         $recentValidations = collect();
-        if ($user->isAdmin()) {
+        if ($user->isAdmin() || $user->isFormateur()) {
             $recentValidations = $user->validations()
-                                     ->with(['document', 'document.user'])
-                                     ->latest()
-                                     ->limit(10)
-                                     ->get();
+                ->with(['document', 'document.user'])
+                ->latest()
+                ->limit(10)
+                ->get();
         }
 
         // Get user statistics
         $userStats = [
             'documents_by_status' => $user->documents()
-                                         ->select('status', DB::raw('count(*) as count'))
-                                         ->groupBy('status')
-                                         ->pluck('count', 'status')
-                                         ->toArray(),
+                ->select('status', DB::raw('count(*) as count'))
+                ->groupBy('status')
+                ->pluck('count', 'status')
+                ->toArray(),
             'validations_by_status' => $user->validations()
-                                           ->select('status', DB::raw('count(*) as count'))
-                                           ->groupBy('status')
-                                           ->pluck('count', 'status')
-                                           ->toArray(),
+                ->select('status', DB::raw('count(*) as count'))
+                ->groupBy('status')
+                ->pluck('count', 'status')
+                ->toArray(),
         ];
 
         return view('users.show', compact(
-            'user', 
-            'recentDocuments', 
-            'recentValidations', 
+            'user',
+            'recentDocuments',
+            'recentValidations',
             'userStats'
         ));
     }
@@ -183,7 +184,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'required|in:admin,user',
+            'role' => 'required|in:admin,User,Formateur',
         ]);
 
         try {
@@ -201,11 +202,11 @@ class UserController extends Controller
             $user->update($updateData);
 
             return redirect()->route('users.show', $user)
-                           ->with('success', 'User "' . $user->name . '" updated successfully!');
+                ->with('success', 'User "' . $user->name . '" updated successfully!');
         } catch (\Exception $e) {
             return redirect()->back()
-                           ->withInput()
-                           ->with('error', 'Failed to update user. Please try again.');
+                ->withInput()
+                ->with('error', 'Failed to update user. Please try again.');
         }
     }
 
@@ -217,13 +218,13 @@ class UserController extends Controller
         // Prevent deleting the current user
         if ($user->id === Auth::id()) {
             return redirect()->back()
-                           ->with('error', 'You cannot delete your own account.');
+                ->with('error', 'You cannot delete your own account.');
         }
 
         // Check if user has documents
         if ($user->documents()->count() > 0) {
             return redirect()->back()
-                           ->with('error', 'Cannot delete user "' . $user->name . '" because they have ' . $user->documents()->count() . ' document(s). Please reassign or delete the documents first.');
+                ->with('error', 'Cannot delete user "' . $user->name . '" because they have ' . $user->documents()->count() . ' document(s). Please reassign or delete the documents first.');
         }
 
         try {
@@ -231,10 +232,10 @@ class UserController extends Controller
             $user->delete();
 
             return redirect()->route('users.index')
-                           ->with('success', 'User "' . $userName . '" deleted successfully!');
+                ->with('success', 'User "' . $userName . '" deleted successfully!');
         } catch (\Exception $e) {
             return redirect()->back()
-                           ->with('error', 'Failed to delete user. Please try again.');
+                ->with('error', 'Failed to delete user. Please try again.');
         }
     }
 
@@ -244,13 +245,13 @@ class UserController extends Controller
     public function bulkAction(Request $request)
     {
         $request->validate([
-            'action' => 'required|in:delete,activate,deactivate,make_admin,make_user',
+            'action' => 'required|in:delete,activate,deactivate,make_admin,make_Formateur,make_user',
             'user_ids' => 'required|array|min:1',
             'user_ids.*' => 'exists:users,id',
         ]);
 
         // Remove current user from bulk actions
-        $userIds = array_filter($request->user_ids, function($id) {
+        $userIds = array_filter($request->user_ids, function ($id) {
             return $id != Auth::id();
         });
 
@@ -263,9 +264,9 @@ class UserController extends Controller
         $errors = [];
 
         DB::beginTransaction();
-        
+
         try {
-            foreach ($users as $user) {
+            foreach ($users as $user ) {
                 switch ($request->action) {
                     case 'delete':
                         if ($user->documents()->count() > 0) {
@@ -274,12 +275,14 @@ class UserController extends Controller
                         }
                         $user->delete();
                         break;
-                        
+
                     case 'make_admin':
                         $user->update(['role' => 'admin']);
                         break;
-                        
-                    case 'make_user':
+                    case 'make_Formateur':
+                        $user->update(['role' => 'Formateur']);
+                        break;
+                          case 'make_user':
                         $user->update(['role' => 'user']);
                         break;
                 }
@@ -290,13 +293,12 @@ class UserController extends Controller
 
             $actionName = str_replace('_', ' ', $request->action);
             $message = "Successfully performed '{$actionName}' on {$count} user(s).";
-            
+
             if (!empty($errors)) {
                 $message .= " However, some actions failed: " . implode(" ", $errors);
             }
 
             return redirect()->back()->with('success', $message);
-
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->with('error', 'An error occurred during bulk action. Please try again.');
@@ -310,13 +312,13 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $user->loadCount(['documents', 'validations']);
-        
+
         // Get user's recent documents
         $recentDocuments = $user->documents()
-                               ->with(['categorie', 'validation'])
-                               ->latest()
-                               ->limit(5)
-                               ->get();
+            ->with(['categorie', 'validation'])
+            ->latest()
+            ->limit(5)
+            ->get();
 
         return view('users.profile', compact('user', 'recentDocuments'));
     }
@@ -339,7 +341,7 @@ class UserController extends Controller
         if ($request->filled('password')) {
             if (!Hash::check($request->current_password, $user->password)) {
                 return redirect()->back()
-                               ->withErrors(['current_password' => 'Current password is incorrect.']);
+                    ->withErrors(['current_password' => 'Current password is incorrect.']);
             }
         }
 
@@ -356,11 +358,11 @@ class UserController extends Controller
             $user->update($updateData);
 
             return redirect()->route('users.profile')
-                           ->with('success', 'Profile updated successfully!');
+                ->with('success', 'Profile updated successfully!');
         } catch (\Exception $e) {
             return redirect()->back()
-                           ->withInput()
-                           ->with('error', 'Failed to update profile. Please try again.');
+                ->withInput()
+                ->with('error', 'Failed to update profile. Please try again.');
         }
     }
 
@@ -372,17 +374,17 @@ class UserController extends Controller
         $users = User::withCount(['documents', 'validations'])->get();
 
         $filename = 'users_' . date('Y-m-d_H-i-s') . '.csv';
-        
+
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ];
 
-        $callback = function() use ($users) {
+        $callback = function () use ($users) {
             $file = fopen('php://output', 'w');
-            
+
             fputcsv($file, ['ID', 'Name', 'Email', 'Role', 'Documents Count', 'Validations Count', 'Created At', 'Email Verified']);
-            
+
             foreach ($users as $user) {
                 fputcsv($file, [
                     $user->id,
@@ -395,7 +397,7 @@ class UserController extends Controller
                     $user->email_verified_at ? 'Yes' : 'No',
                 ]);
             }
-            
+
             fclose($file);
         };
 

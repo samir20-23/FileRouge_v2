@@ -61,6 +61,10 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+    public function isFormateur()
+    {
+        return $this->role === 'Formateur';
+    }
     public function isUser()
     {
         return $this->role === 'User';
