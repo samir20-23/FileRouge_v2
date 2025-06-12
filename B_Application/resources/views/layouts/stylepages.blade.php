@@ -384,8 +384,10 @@
             position: relative;
             overflow: hidden;
             width: 100%;
-
-
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;  
         }
 
         .dropdown-menu {
@@ -424,6 +426,7 @@
         #darkModeToggle i,
         #darkModeToggle span {
             z-index: 1;
+
         }
 
         #mdropdownmenu {
@@ -607,7 +610,26 @@
         body[data-theme='dark'] .d-flex * {
             color: white !important;
         }
+           body[data-theme='dark'] .mb-0 ,
+        body[data-theme='dark'] .mb-0  * {
+            color: rgb(63, 62, 62) !important;
+        }
+           body[data-theme='dark'] .text-muted ,
+        body[data-theme='dark'] .text-muted  * {
+            color: rgba(0, 0, 0, 0.674) !important;
+        }
+/*--bg-table
+table table-striped table-hover
+table-responsive
+mb-0  
+text-muted 
+*/
 
+        /* body[data-theme='dark'] .d-flex,
+        body[data-theme='dark'] .d-flex * {
+            color: rgb(255, 255, 255) !important;
+            text-emphasis:  0 0 2px rgba(0, 0, 0, 0.308);
+        } */
         body[data-theme='dark'] .pagination,
         body[data-theme='dark'] .pagination * {
             color: rgba(87, 18, 152, 0.921) !important;
@@ -765,7 +787,7 @@
                                 </div>
                                 <span>{{ Auth::user()->name }}</span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" id="dropdownmenu">
+                            <ul class="dropdown-menu dropdown-menu-end" id="dropdownmenu" style="text-align: center;">
                                 <li>
                                     <a class="dropdown-item" href="#">
                                         <i class="bi bi-person"></i>Profile
@@ -886,7 +908,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="{{ asset('js/app.js') }}"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>

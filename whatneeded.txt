@@ -1,12 +1,12 @@
 if the url false dont go th 404 . 
-
 the select top right if click in any path is work . 
 if create user dont select the error about role .
 add shadow to checkbox from the validation .
-buton dark mode center text 
+buton dark mode center text
 if the path / is home dont dashboard
 mode white change it to whteblack
-if click he expor button dont add # inurl
+if click he expor button dont add # inurl 
+
 save the documents in public or src and in database url
 add page for ormal user about upload documents 
 Validated By:	admin is color white . why
@@ -18,7 +18,7 @@ button nav about dark and many is dont work in any page
 box of the delete  validation the close buton dont work http://127.0.0.1:8000/validations/4/edit and color white
 dete the card if example me in validation dont select card validaton 
 error View [users.profile] not found. if me click edit in users  
-// commits
+// commits to github 
 fix(url): gracefully handle invalid URLs without default 404
 
 fix(ui): ensure top-right select menu navigates correctly
@@ -32,6 +32,7 @@ feat(theme): center text in dark mode button
 refactor(theme): rename white mode to proper light (white-black) theme
 
 fix(export): prevent ‘#’ from being appended to URL on export
+
 
 feat(upload): save uploaded documents in public/src and store URLs in database
 
