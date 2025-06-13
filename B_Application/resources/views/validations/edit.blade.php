@@ -119,7 +119,32 @@
         <div class="col-md-4">
             <x-adminlte-card title="Document Preview" theme="info" collapsible>
                 <div class="text-center mb-3">
-                    <i class="fas fa-file fa-4x text-primary mb-2"></i>
+                    @if ($validation->document->isImage())
+                        {{-- Show image thumbnail --}}
+
+                        @if ($validation->document->fileExists())
+                            <a href="{{ $validation->document->fileUrl() }}">
+                                <a href="{{ $validation->document->fileUrl() }}" target="_blank" rel="noopener noreferrer">
+
+                                    <i class="{{ $validation->document->getFileIcon() }} fa-3x mb-2"></i>
+                                    {{-- <img src="{{ $validation->document->fileUrl() }}" alt="{{ $validation->document->title }}"
+                                                        class="img-fluid mb-2" style="max-height:150px;"> --}}
+                                </a>
+                            @else
+                                <a href="{{ $validation->document->fileUrl() }}">
+                                    <a href="{{ $validation->document->fileUrl() }}" target="_blank"
+                                        rel="noopener noreferrer">
+
+                                        <i class="{{ $validation->document->getFileIcon() }} fa-3x mb-2"></i>
+                                    </a>
+                        @endif
+                    @else
+                        <a href="{{ $validation->document->fileUrl() }}">
+                            <a href="{{ $validation->document->fileUrl() }}" target="_blank" rel="noopener noreferrer">
+
+                                <i class="{{ $validation->document->getFileIcon() }} fa-3x mb-2"></i>
+                            </a>
+                    @endif
                     <h5>{{ $validation->document->title }}</h5>
                     <p class="text-muted">{{ $validation->document->type }}</p>
                 </div>
@@ -158,7 +183,7 @@
                 <hr>
 
                 <div class="btn-group btn-group-sm w-100 mb-3">
-                    <a href="{{ route('validations.download-document', $validation->document) }}" class="btn btn-primary">
+                    <a href="{{ $validation->document->getDownloadUrl() }}" class="btn btn-primary">
                         <i class="fas fa-download"></i> Download
                     </a>
                     <a href="{{ route('validations.view-document', $validation->document) }}" class="btn btn-info"

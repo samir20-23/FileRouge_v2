@@ -241,8 +241,7 @@
             background: white;
             border-radius: 16px;
             box-shadow: var(--shadow-sm);
-            padding: 2rem;
-            margin-top: 1rem;
+            padding: 1.5rem; 
             border: 1px solid var(--border-color);
         }
 

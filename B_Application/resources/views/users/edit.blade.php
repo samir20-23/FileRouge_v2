@@ -291,7 +291,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Delete User</h5>
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close" style="opacity: 0;"  data-dismiss="modal">
                         <span>&times;</span>
                     </button>
                 </div>
@@ -305,7 +305,7 @@
                     <p><strong>Email:</strong> {{ $user->email }}</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary"  style="opacity: 0;"  data-dismiss="modal">Cancel</button>
                     <form action="{{ route('users.destroy', $user) }}" method="POST" style="display: inline;">
                         @csrf
                         @method('DELETE')

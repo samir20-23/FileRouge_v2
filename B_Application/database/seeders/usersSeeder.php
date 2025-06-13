@@ -25,10 +25,10 @@ class UsersSeeder extends Seeder
                 'password' => Hash::make('formateur'),
             ],
             [
-                'name'     => 'Sofia Rachid',
-                'email'    => 'sofia.rachid@example.com',
-                'role'     => 'Formateur',
-                'password' => Hash::make('password123'),
+                'name'     => 'user',
+                'email'    => 'user@gmail.com',
+                'role'     => 'User',
+                'password' => Hash::make('user'),
             ],
         ];
 

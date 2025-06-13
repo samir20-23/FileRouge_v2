@@ -28,21 +28,23 @@
                     View All <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="small-box bg-warning">
-                <div class="inner">
-                    <h3>{{ $stats['pending'] }}</h3>
-                    <p>Pending</p>
-                </div>
-                <div class="icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <a href="{{ route('validations.index', ['filter' => 'pending']) }}" class="small-box-footer">
-                    View Pending <i class="fas fa-arrow-circle-right"></i>
-                </a>
+        </div>  
+    <div class="col-md-3">
+        <div class="small-box bg-warning p-2" style="min-height: 100px;">
+            <div class="inner" style="padding: 5px;">
+                <h5 class="mb-1">{{ $stats['pending'] }}</h5>
+                <p class="mb-1" style="font-size: 12px;">Pending</p>
             </div>
+            <div class="icon" style="top: 10px; right: 10px; font-size: 20px;">
+                <i class="fas fa-clock"></i>
+            </div>
+            <a href="{{ route('validations.index', ['filter' => 'pending']) }}" class="small-box-footer"
+                style="font-size: 12px; padding: 4px;">
+                View <i class="fas fa-arrow-circle-right"></i>
+            </a>
         </div>
+    </div>
+ 
         <div class="col-md-3">
             <div class="small-box bg-success">
                 <div class="inner">
@@ -114,9 +116,17 @@
                         </button>
                     </div>
                 </div>
+
                 <div class="col-md-4 text-right">
-                    <span id="selectedCount" class="badge badge-info">0 selected</span>
+                    <a href="{{ route('validations.index', ['filter' => 'pending']) }}"
+                        class="badge badge-warning p-2 text-white text-decoration-none">
+                        <i class="fas fa-clock mr-1"></i>
+                        View Pending <i class="fas fa-arrow-circle-right ml-1"></i>
+                    </a>
+
+                    <span id="selectedCount" class="badge badge-info ml-2">0 selected</span>
                 </div>
+
             </div>
 
             <!-- Validations Table -->
@@ -147,7 +157,8 @@
                                     <div class="d-flex align-items-center">
                                         <i class="fas fa-file mr-2 text-primary"></i>
                                         <div>
-                                            <strong style="text-shadow:0 0 2px white; color:rgb(0, 0, 0);">{{ $validation->document->title }}</strong>
+                                            <strong
+                                                style="text-shadow:0 0 2px white; color:rgb(0, 0, 0);">{{ $validation->document->title }}</strong>
                                             <br>
                                             <small class="text-muted">{{ $validation->document->type }}</small>
                                         </div>
@@ -233,7 +244,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Reject Document</h5>
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close" style="opacity: 0;" data-dismiss="modal">
                         <span>&times;</span>
                     </button>
                 </div>
@@ -261,7 +272,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Bulk Reject Documents</h5>
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close" style="opacity: 0;" data-dismiss="modal">
                         <span>&times;</span>
                     </button>
                 </div>

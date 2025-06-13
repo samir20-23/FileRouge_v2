@@ -202,7 +202,10 @@
             <!-- Current File Preview -->
             <x-adminlte-card title="Current File" theme="info" collapsible>
                 <div class="text-center">
-                    <i class="{{ $document->getFileIcon() }} fa-4x mb-3"></i>
+                    <a href="{{ $document->fileUrl() }}" target="_blank" rel="noopener noreferrer">
+
+                        <i class="{{ $document->getFileIcon() }} fa-3x mb-2"></i>
+                    </a>
                     <h6>{{ $document->original_name ?? $document->title }}</h6>
                     <p class="text-muted">{{ $document->getFormattedFileSize() }}</p>
 
