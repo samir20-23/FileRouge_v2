@@ -218,9 +218,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Delete Validation</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
+
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-danger">
@@ -232,6 +233,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+
+
                     <form action="{{ route('validations.destroy', $validation) }}" method="POST"
                         style="display: inline;">
                         @csrf
@@ -286,8 +289,11 @@
         }
 
         function deleteValidation() {
-            $('#deleteModal').modal('show');
+            const modalEl = document.getElementById('deleteModal');
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
         }
+
 
         // Form validation
         $('form').submit(function(e) {

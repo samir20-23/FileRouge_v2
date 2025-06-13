@@ -5,10 +5,8 @@ add shadow to checkbox from the validation .
 buton dark mode center text
 if the path / is home dont dashboard
 mode white change it to whteblack
-if click he expor button dont add # inurl 
-
+if click he expor button dont add # inurl  
 save the documents in public or src and in database url
-add page for ormal user about upload documents 
 Validated By:	admin is color white . why
 in pendng page the titles documents is white .
 in http://127.0.0.1:8000/users the names is white
@@ -17,7 +15,9 @@ and file Size:	File not found
 button nav about dark and many is dont work in any page 
 box of the delete  validation the close buton dont work http://127.0.0.1:8000/validations/4/edit and color white
 dete the card if example me in validation dont select card validaton 
-error View [users.profile] not found. if me click edit in users  
+error View [users.profile] not found. if me click edit in users   
+
+add page for normal user about upload documents 
 // commits to github 
 fix(url): gracefully handle invalid URLs without default 404
 
@@ -36,7 +36,7 @@ fix(export): prevent ‘#’ from being appended to URL on export
 
 feat(upload): save uploaded documents in public/src and store URLs in database
 
-feat(upload): add page for normal users to upload documents
+
 
 fix(ui): adjust “Validated By: admin” text color for better visibility
 
@@ -46,6 +46,7 @@ fix(ui): update user name color on /users page for visibility
 
 fix(upload): correct file size display to avoid “File not found” message
 
+
 fix(ui): ensure dark mode and nav buttons work globally across pages
 
 fix(ui): repair delete confirmation close button functionality and styling on validation edit page
@@ -53,3 +54,5 @@ fix(ui): repair delete confirmation close button functionality and styling on va
 feat(validation): prevent deletion when no validation card is selected
 
 fix(view): ensure users.profile view exists to resolve Edit user error
+
+feat(upload): add page for normal users to upload documents

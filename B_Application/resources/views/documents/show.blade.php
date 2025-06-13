@@ -157,9 +157,10 @@
                     <div class="col-12">
                         <h6><i class="fas fa-tools"></i> Actions</h6>
                         <div class="btn-group">
-                            <a href="{{ route('documents.download', $document) }}" class="btn btn-success">
-                                <i class="fas fa-download"></i> Download
+                            <a href="{{ $document->getDownloadUrl() }}" class="btn btn-success" title="Download">
+                                <i class="fas fa-download"></i>
                             </a>
+
                             @if (in_array($document->mime_type, ['application/pdf', 'image/jpeg', 'image/png', 'image/gif']))
                                 <a href="{{ route('documents.view', $document) }}" class="btn btn-info" target="_blank">
                                     <i class="fas fa-eye"></i> View in Browser
@@ -259,7 +260,25 @@
             <!-- File Preview -->
             <x-adminlte-card title="File Preview" theme="secondary" collapsible>
                 <div class="text-center">
-                    <i class="{{ $document->getFileIcon() }} fa-5x mb-3"></i>
+                    @if ($document->isImage())
+                        {{-- Show image thumbnail --}}
+
+                        @if ($document->fileExists())
+                            <a href="{{ $document->fileUrl() }}" target="_blank" rel="noopener noreferrer">
+                                <i class="{{ $document->getFileIcon() }} fa-3x mb-2"></i>
+                                {{-- <img src="{{ $document->fileUrl() }}" alt="{{ $document->title }}"
+                                                        class="img-fluid mb-2" style="max-height:150px;"> --}}
+                            </a>
+                        @else
+                            <a href="{{ $document->fileUrl() }}" target="_blank" rel="noopener noreferrer">
+                                <i class="{{ $document->getFileIcon() }} fa-3x mb-2"></i>
+                            </a>
+                        @endif
+                    @else
+                        <a href="{{ $document->fileUrl() }}" target="_blank" rel="noopener noreferrer">
+                            <i class="{{ $document->getFileIcon() }} fa-3x mb-2"></i>
+                        </a>
+                    @endif
                     <h5>{{ $document->original_name ?? $document->title }}</h5>
                     <p class="text-muted">{{ $document->getFormattedFileSize() }}</p>
 

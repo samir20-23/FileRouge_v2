@@ -9,6 +9,22 @@
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap CSS -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-Gtvk5mGil+e5POw3gksQXjHgdD8mx3YkzZ8J1DNK6/6rnT+FIWniwJj3BX1QJXOb"
+  crossorigin="anonymous"
+/>
+
+<!-- FontAwesome CSS -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-pVnYH+dS0pXk6QVxwrWXEpl+8VwoVp9rNf1vV5b2Br1xHhwpbNzHnCv+Oe5h5eZL5X5fY0nP+IvljRVGD2fYkg=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
 
     <!-- AdminLTE CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
@@ -387,7 +403,7 @@
             text-align: center;
             display: flex;
             align-items: center;
-            justify-content: center;  
+            justify-content: center;
         }
 
         .dropdown-menu {
@@ -606,23 +622,38 @@
             color: white;
         }
 
-        body[data-theme='dark'] .d-flex,
-        body[data-theme='dark'] .d-flex * {
+        body[data-theme='dark'] .d-flex {
             color: white !important;
         }
-           body[data-theme='dark'] .mb-0 ,
-        body[data-theme='dark'] .mb-0  * {
+
+        body[data-theme='dark'] .mb-0 {
             color: rgb(63, 62, 62) !important;
         }
-           body[data-theme='dark'] .text-muted ,
-        body[data-theme='dark'] .text-muted  * {
+
+        body[data-theme='dark'] .text-muted {
             color: rgba(0, 0, 0, 0.674) !important;
         }
-/*--bg-table
+
+        body[data-theme='dark'] .font-weight-bold {
+            color: rgb(255, 255, 255) !important;
+            text-shadow: 0 0 1px rgba(0, 0, 0, 0.45);
+        }
+
+        body[data-theme='dark'] #createForm,
+        .card-body {
+            background-color: white;
+            color: rgb(0, 0, 0) !important;
+        }
+
+        /* fas fa-users
+        createForm
+        font-weight-bold text-dark
+        font-weight-bold text-dark  */
+        /*--bg-table
 table table-striped table-hover
 table-responsive
-mb-0  
-text-muted 
+mb-0
+text-muted
 */
 
         /* body[data-theme='dark'] .d-flex,
@@ -780,8 +811,8 @@ text-muted
                         </li>
                     @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center" href=""
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle d-flex align-items-center"
+                                href="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <div class="user-avatar">
                                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                 </div>

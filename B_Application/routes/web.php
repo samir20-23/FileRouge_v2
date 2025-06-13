@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     // Public document viewing routes (for all authenticated users)
     Route::get('/document/{document}', [HomeController::class, 'show'])->name('document.show');
     Route::get('/document/{document}/download', [HomeController::class, 'download'])->name('document.download');
+    Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
 
     // Public category viewing routes (for all authenticated users)
     Route::get('/category/{categorie}', [HomeController::class, 'category'])->name('category.show');
