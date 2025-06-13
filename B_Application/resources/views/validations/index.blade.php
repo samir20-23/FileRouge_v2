@@ -14,7 +14,7 @@
 
 @section('content')
     <!-- Statistics Cards -->
-    <div class="row mb-4">
+    {{-- <div class="row mb-4">
         <div class="col-md-3">
             <div class="small-box bg-info">
                 <div class="inner">
@@ -71,7 +71,7 @@
                 </a>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Filters and Search -->
     <x-adminlte-card title="Validation Management" theme="primary" collapsible>
@@ -147,7 +147,7 @@
                                     <div class="d-flex align-items-center">
                                         <i class="fas fa-file mr-2 text-primary"></i>
                                         <div>
-                                            <strong>{{ $validation->document->title }}</strong>
+                                            <strong style="text-shadow:0 0 2px white; color:rgb(0, 0, 0);">{{ $validation->document->title }}</strong>
                                             <br>
                                             <small class="text-muted">{{ $validation->document->type }}</small>
                                         </div>

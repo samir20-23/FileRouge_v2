@@ -125,11 +125,24 @@
                         <div class="col-md-6 col-lg-4 mb-4">
                             <div class="card h-100 shadow-sm category-card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="category_ids[]" value="{{ $category->id }}"
-                                            class="custom-control-input category-checkbox" id="cat{{ $category->id }}">
-                                        <label class="custom-control-label" for="cat{{ $category->id }}"></label>
-                                    </div>
+
+                                    @if ($category->documents_count == 0)
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" name="category_ids[]" value="{{ $category->id }}"
+                                                class="custom-control-input category-checkbox" id="cat{{ $category->id }}">
+                                            <label class="custom-control-label" for="cat{{ $category->id }}"></label>
+                                        </div>
+                                    @else
+                                        <div class="custom-control custom-checkbox">
+
+                                            <button type="button" class="btn btn-secondary custom-control-input  "
+                                                style="display: flex; justify-content: center;    align-items: center;    text-align: center;"
+                                                disabled title="Cannot delete - has documents">
+                                                <i class="fas fa-lock"></i>
+                                            </button>
+
+                                        </div>
+                                    @endif
                                     <span class="badge badge-primary">
                                         {{ $category->documents_count }}
                                         {{ Str::plural('document', $category->documents_count) }}
@@ -164,25 +177,21 @@
                                             class="btn btn-success" title="View Documents">
                                             <i class="fas fa-file"></i>
                                         </a>
-                                        @can('update', $category)
-                                            <a href="{{ route('categories.edit', $category) }}" class="btn btn-warning"
-                                                title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                        @endcan
-                                        @can('delete', $category)
-                                            @if ($category->documents_count == 0)
-                                                <button type="button" class="btn btn-danger"
-                                                    onclick="deleteCategory({{ $category->id }})" title="Delete">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            @else
-                                                <button type="button" class="btn btn-secondary" disabled
-                                                    title="Cannot delete - has documents">
-                                                    <i class="fas fa-lock"></i>
-                                                </button>
-                                            @endif
-                                        @endcan
+                                        <a href="{{ route('categories.edit', $category) }}" class="btn btn-warning"
+                                            title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @if ($category->documents_count == 0)
+                                            <button type="button" class="btn btn-danger"
+                                                onclick="deleteCategory({{ $category->id }})" title="Delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        @else
+                                            <button type="button" class="btn btn-secondary" disabled
+                                                title="Cannot delete - has documents">
+                                                <i class="fas fa-lock"></i>
+                                            </button>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

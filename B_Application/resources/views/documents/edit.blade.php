@@ -20,12 +20,14 @@
     </div>
 @stop
 
+
 @section('content')
     <div class="row">
         <!-- Edit Form -->
         <div class="col-md-8">
             <x-adminlte-card title="Edit Document Information" theme="warning" collapsible>
-                <form action="{{ route('documents.update', $document) }}" method="POST" enctype="multipart/form-data" id="editForm">
+                <form action="{{ route('documents.update', $document) }}" method="POST" enctype="multipart/form-data"
+                    id="editForm">
                     @csrf
                     @method('PUT')
 
@@ -41,7 +43,7 @@
                             <div class="col-md-6">
                                 <strong>Uploaded:</strong> {{ $document->created_at->format('M d, Y') }}<br>
                                 <strong>Downloads:</strong> {{ $document->download_count }}<br>
-                                <strong>Status:</strong> 
+                                <strong>Status:</strong>
                                 <span class="badge {{ $document->getStatusBadgeClass() }}">
                                     {{ ucfirst($document->status) }}
                                 </span>
@@ -56,8 +58,9 @@
                             Replace File (Optional)
                         </label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input @error('file') is-invalid @enderror" 
-                                   id="file" name="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif">
+                            <input type="file" class="custom-file-input @error('file') is-invalid @enderror"
+                                id="file" name="file"
+                                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif">
                             <label class="custom-file-label" for="file">Choose new file...</label>
                         </div>
                         @error('file')
@@ -74,9 +77,9 @@
                             <i class="fas fa-heading"></i>
                             Document Title <span class="text-danger">*</span>
                         </label>
-                        <input type="text" class="form-control @error('title') is-invalid @enderror" 
-                               id="title" name="title" value="{{ old('title', $document->title) }}" required 
-                               placeholder="Enter document title...">
+                        <input type="text" class="form-control @error('title') is-invalid @enderror" id="title"
+                            name="title" value="{{ old('title', $document->title) }}" required
+                            placeholder="Enter document title...">
                         @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -88,9 +91,8 @@
                             <i class="fas fa-align-left"></i>
                             Description
                         </label>
-                        <textarea class="form-control @error('description') is-invalid @enderror" 
-                                  id="description" name="description" rows="4" 
-                                  placeholder="Enter document description...">{{ old('description', $document->description) }}</textarea>
+                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                            rows="4" placeholder="Enter document description...">{{ old('description', $document->description) }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -102,12 +104,12 @@
                             <i class="fas fa-folder"></i>
                             Category <span class="text-danger">*</span>
                         </label>
-                        <select class="form-control @error('categorie_id') is-invalid @enderror" 
-                                id="categorie_id" name="categorie_id" required>
+                        <select class="form-control @error('categorie_id') is-invalid @enderror" id="categorie_id"
+                            name="categorie_id" required>
                             <option value="">Select Category</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}" 
-                                        {{ old('categorie_id', $document->categorie_id) == $category->id ? 'selected' : '' }}>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ old('categorie_id', $document->categorie_id) == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
@@ -125,15 +127,18 @@
                                     <i class="fas fa-flag"></i>
                                     Status <span class="text-danger">*</span>
                                 </label>
-                                <select class="form-control @error('status') is-invalid @enderror" 
-                                        id="status" name="status" required>
-                                    <option value="draft" {{ old('status', $document->status) === 'draft' ? 'selected' : '' }}>
+                                <select class="form-control @error('status') is-invalid @enderror" id="status"
+                                    name="status" required>
+                                    <option value="draft"
+                                        {{ old('status', $document->status) === 'draft' ? 'selected' : '' }}>
                                         <i class="fas fa-edit"></i> Draft
                                     </option>
-                                    <option value="published" {{ old('status', $document->status) === 'published' ? 'selected' : '' }}>
+                                    <option value="published"
+                                        {{ old('status', $document->status) === 'published' ? 'selected' : '' }}>
                                         <i class="fas fa-check"></i> Published
                                     </option>
-                                    <option value="archived" {{ old('status', $document->status) === 'archived' ? 'selected' : '' }}>
+                                    <option value="archived"
+                                        {{ old('status', $document->status) === 'archived' ? 'selected' : '' }}>
                                         <i class="fas fa-archive"></i> Archived
                                     </option>
                                 </select>
@@ -149,8 +154,8 @@
                                     Visibility
                                 </label>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="is_public" name="is_public" value="1" 
-                                           {{ old('is_public', $document->is_public) ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="checkbox" id="is_public" name="is_public"
+                                        value="1" {{ old('is_public', $document->is_public) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="is_public">
                                         <i class="fas fa-globe"></i> Make this document public
                                     </label>
@@ -163,10 +168,10 @@
                     </div>
 
                     <!-- Validation Warning -->
-                    @if($document->validation && $document->validation->isApproved())
+                    @if ($document->validation && $document->validation->isApproved())
                         <div class="alert alert-warning">
                             <i class="fas fa-exclamation-triangle"></i>
-                            <strong>Note:</strong> This document has been validated and approved. 
+                            <strong>Note:</strong> This document has been validated and approved.
                             Making changes may require re-validation.
                         </div>
                     @endif
@@ -200,12 +205,13 @@
                     <i class="{{ $document->getFileIcon() }} fa-4x mb-3"></i>
                     <h6>{{ $document->original_name ?? $document->title }}</h6>
                     <p class="text-muted">{{ $document->getFormattedFileSize() }}</p>
-                    
+
                     <div class="btn-group btn-group-sm w-100">
-                        <a href="{{ route('documents.download', $document) }}" class="btn btn-success">
-                            <i class="fas fa-download"></i> Download
+                        <a href="{{ $document->getDownloadUrl() }}" class="btn btn-success" title="Download">
+                            <i class="fas fa-download"></i>
                         </a>
-                        @if(in_array($document->mime_type, ['application/pdf', 'image/jpeg', 'image/png', 'image/gif']))
+
+                        @if (in_array($document->mime_type, ['application/pdf', 'image/jpeg', 'image/png', 'image/gif']))
                             <a href="{{ route('documents.view', $document) }}" class="btn btn-info" target="_blank">
                                 <i class="fas fa-eye"></i> View
                             </a>
@@ -251,7 +257,7 @@
                         <td><strong>Owner:</strong></td>
                         <td>{{ $document->user->name }}</td>
                     </tr>
-                    @if($document->validation)
+                    @if ($document->validation)
                         <tr>
                             <td><strong>Validation:</strong></td>
                             <td>
@@ -327,81 +333,82 @@
 @stop
 
 @push('js')
-<script>
-$(document).ready(function() {
-    // File input change handler
-    $('#file').change(function() {
-        const file = this.files[0];
-        if (file) {
-            // Update file label
-            $(this).next('.custom-file-label').text(file.name);
-            
-            // Show new file preview
-            showNewFilePreview(file);
-        } else {
-            // Reset preview
-            $('#noNewPreview').show();
-            $('#newFilePreview').hide();
-            $(this).next('.custom-file-label').text('Choose new file...');
-        }
-    });
+    <script>
+        $(document).ready(function() {
+            // File input change handler
+            $('#file').change(function() {
+                const file = this.files[0];
+                if (file) {
+                    // Update file label
+                    $(this).next('.custom-file-label').text(file.name);
 
-    // Form validation
-    $('#editForm').submit(function(e) {
-        const file = $('#file')[0].files[0];
-        if (file && file.size > 30* 1024 * 1024) { // 30MB
-            e.preventDefault();
-            alert('File size must be less than 30MB.');
-            return false;
-        }
-        
-        // Show loading state
-        $('#updateBtn').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Updating...');
-    });
-});
+                    // Show new file preview
+                    showNewFilePreview(file);
+                } else {
+                    // Reset preview
+                    $('#noNewPreview').show();
+                    $('#newFilePreview').hide();
+                    $(this).next('.custom-file-label').text('Choose new file...');
+                }
+            });
 
-function showNewFilePreview(file) {
-    const fileSize = (file.size / 1024 / 1024).toFixed(2);
-    const extension = file.name.split('.').pop().toLowerCase();
-    
-    let icon = 'fas fa-file';
-    let color = 'text-dark';
-    
-    switch(extension) {
-        case 'pdf':
-            icon = 'fas fa-file-pdf';
-            color = 'text-danger';
-            break;
-        case 'doc':
-        case 'docx':
-            icon = 'fas fa-file-word';
-            color = 'text-primary';
-            break;
-        case 'xls':
-        case 'xlsx':
-            icon = 'fas fa-file-excel';
-            color = 'text-success';
-            break;
-        case 'ppt':
-        case 'pptx':
-            icon = 'fas fa-file-powerpoint';
-            color = 'text-warning';
-            break;
-        case 'jpg':
-        case 'jpeg':
-        case 'png':
-        case 'gif':
-            icon = 'fas fa-file-image';
-            color = 'text-info';
-            break;
-        case 'txt':
-            icon = 'fas fa-file-alt';
-            color = 'text-muted';
-            break;
-    }
-    
-    $('#newPreviewIcon').html(`<i class="${icon} ${color} fa-4x mb-2"></i>`);
-    $('#newPreviewInfo').html(`
+            // Form validation
+            $('#editForm').submit(function(e) {
+                const file = $('#file')[0].files[0];
+                if (file && file.size > 30 * 1024 * 1024) { // 30MB
+                    e.preventDefault();
+                    alert('File size must be less than 30MB.');
+                    return false;
+                }
+
+                // Show loading state
+                $('#updateBtn').prop('disabled', true).html(
+                    '<i class="fas fa-spinner fa-spin"></i> Updating...');
+            });
+        });
+
+        function showNewFilePreview(file) {
+            const fileSize = (file.size / 1024 / 1024).toFixed(2);
+            const extension = file.name.split('.').pop().toLowerCase();
+
+            let icon = 'fas fa-file';
+            let color = 'text-dark';
+
+            switch (extension) {
+                case 'pdf':
+                    icon = 'fas fa-file-pdf';
+                    color = 'text-danger';
+                    break;
+                case 'doc':
+                case 'docx':
+                    icon = 'fas fa-file-word';
+                    color = 'text-primary';
+                    break;
+                case 'xls':
+                case 'xlsx':
+                    icon = 'fas fa-file-excel';
+                    color = 'text-success';
+                    break;
+                case 'ppt':
+                case 'pptx':
+                    icon = 'fas fa-file-powerpoint';
+                    color = 'text-warning';
+                    break;
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'gif':
+                    icon = 'fas fa-file-image';
+                    color = 'text-info';
+                    break;
+                case 'txt':
+                    icon = 'fas fa-file-alt';
+                    color = 'text-muted';
+                    break;
+            }
+
+            $('#newPreviewIcon').html(`<i class="${icon} ${color} fa-4x mb-2"></i>`);
+            $('#newPreviewInfo').html(`
         <h6>${file.name}</h6>
         <p class="text-muted">
             ${fileSize} MB<br>
@@ -411,13 +418,13 @@ function showNewFilePreview(file) {
             <small><i class="fas fa-exclamation-triangle"></i> This will replace the current file</small>
         </div>
     `);
-    
-    $('#noNewPreview').hide();
-    $('#newFilePreview').show();
-}
 
-function deleteDocument() {
-    $('#deleteModal').modal('show');
-}
-</script>
+            $('#noNewPreview').hide();
+            $('#newFilePreview').show();
+        }
+
+        function deleteDocument() {
+            $('#deleteModal').modal('show');
+        }
+    </script>
 @endpush

@@ -282,8 +282,8 @@
                                                     title="View">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
-                                                <a href="{{ route('documents.download', $document) }}"
-                                                    class="btn btn-success" title="Download">
+                                                <a href="{{ $document->getDownloadUrl() }}" class="btn btn-success"
+                                                    title="Download">
                                                     <i class="fas fa-download"></i>
                                                 </a>
                                             </div>

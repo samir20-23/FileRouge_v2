@@ -144,9 +144,18 @@ class Document extends Model
 
     public function fileExists()
     {
-        return Storage::exists($this->chemin_fichier);
+        return Storage::disk('public')->exists($this->chemin_fichier);
+    } 
+
+    public function fileUrl()
+    {
+        return asset('storage/' . $this->chemin_fichier);
     }
 
+    public function isImage()
+    {
+        return str_starts_with($this->mime_type, 'image/');
+    }
     public function getDownloadUrl()
     {
         return route('documents.download', $this);

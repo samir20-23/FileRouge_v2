@@ -232,21 +232,35 @@ class DocumentController extends Controller
      * Download document
      */
     public function download(Document $document)
-    {
-        // Check if user can download this document
-        if (!$document->is_public && $document->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
-            abort(403, 'You do not have permission to download this document.');
-        }
+{
+    $user = Auth::user();
 
-        if (!$document->fileExists()) {
-            return redirect()->back()->with('error', 'File not found.');
-        }
-
-        // Increment download count
-        $document->incrementDownloadCount();
-
-        return Storage::download($document->chemin_fichier, $document->original_name ?? $document->title);
+    // Permission check: public OR owner OR admin OR formateur (if needed)
+    if (
+        ! $document->is_public 
+        && $document->user_id !== $user->id 
+        && ! $user->isAdmin() 
+        && ! $user->isFormateur()  // include Formateur if they should also download private docs
+    ) {
+        abort(403, 'You do not have permission to download this document.');
     }
+
+    // Check existence on 'public' disk
+    if (! Storage::disk('public')->exists($document->chemin_fichier)) {
+        return redirect()->back()->with('error', 'File not found.');
+    }
+
+    // Increment download count (ensure this method exists and saves appropriately)
+    if (method_exists($document, 'incrementDownloadCount')) {
+        $document->incrementDownloadCount();
+    }
+
+    // Return download from the 'public' disk
+    return Storage::disk('public')->download(
+        $document->chemin_fichier,
+        $document->original_name ?? $document->title
+    );
+}
 
     /**
      * View document in browser

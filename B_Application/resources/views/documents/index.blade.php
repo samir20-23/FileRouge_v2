@@ -20,7 +20,7 @@
     </div>
 @stop
 
-@section('content') 
+@section('content')
     <div class="row mb-4">
         <div class="col-md-3">
             <div class="small-box bg-info">
@@ -184,7 +184,35 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="text-center mb-3">
-                                        <i class="{{ $document->getFileIcon() }} fa-3x mb-2"></i>
+                                        @if ($document->isImage())
+                                            {{-- Show image thumbnail --}}
+
+                                            @if ($document->fileExists())
+                                                <a href="{{ $document->fileUrl() }}">
+                                                    <a href="{{ $document->fileUrl() }}" target="_blank"
+                                                        rel="noopener noreferrer">
+
+                                                        <i class="{{ $document->getFileIcon() }} fa-3x mb-2"></i>
+                                                        {{-- <img src="{{ $document->fileUrl() }}" alt="{{ $document->title }}"
+                                                        class="img-fluid mb-2" style="max-height:150px;"> --}}
+                                                    </a>
+                                                @else
+                                                    <a href="{{ $document->fileUrl() }}">
+                                                        <a href="{{ $document->fileUrl() }}" target="_blank"
+                                                            rel="noopener noreferrer">
+
+                                                            <i class="{{ $document->getFileIcon() }} fa-3x mb-2"></i>
+                                                        </a>
+                                            @endif
+                                        @else
+                                            <a href="{{ $document->fileUrl() }}">
+                                                <a href="{{ $document->fileUrl() }}" target="_blank"
+                                                    rel="noopener noreferrer">
+
+                                                    <i class="{{ $document->getFileIcon() }} fa-3x mb-2"></i>
+                                                </a>
+                                        @endif
+
                                         <h6 class="card-title">{{ Str::limit($document->title, 30) }}</h6>
                                         <p class="text-muted small">{{ $document->getFormattedFileSize() }}</p>
                                     </div>
@@ -233,9 +261,12 @@
                                             title="View">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('documents.download', $document) }}" class="btn btn-success"
+                                        <a href="{{ $document->getDownloadUrl() }}" class="btn btn-success"
                                             title="Download">
                                             <i class="fas fa-download"></i>
+                                        </a>
+
+
                                         </a>
                                         @can('update', $document)
                                             <a href="{{ route('documents.edit', $document) }}" class="btn btn-warning"
@@ -271,7 +302,7 @@
         <div class="d-flex justify-content-center">
             {{ $documents->appends(request()->query())->links() }}
         </div>
-        
+
     </x-adminlte-card>
 
 @stop
