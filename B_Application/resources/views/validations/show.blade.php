@@ -123,7 +123,31 @@
         <div class="col-md-4">
             <x-adminlte-card title="Document Information" theme="info" collapsible>
                 <div class="text-center mb-3">
-                    <i class="fas fa-file fa-4x text-primary mb-2"></i>
+                    @if ($validation->document->isImage())
+                        {{-- Show image thumbnail --}}
+
+                        @if ($validation->document->fileExists())
+                            <a href="{{ $validation->document->fileUrl() }}">
+                                <a href="{{ $validation->document->fileUrl() }}" target="_blank" rel="noopener noreferrer">
+
+                                    <i class="{{ $validation->document->getFileIcon() }} fa-3x mb-2"></i>
+                                    {{-- <img src="{{ $validation->document->fileUrl() }}" alt="{{ $validation->document->title }}"
+                                                        class="img-fluid mb-2" style="max-height:150px;"> --}}
+                                </a>
+                            @else
+                                <a href="{{ $validation->document->fileUrl() }}">
+                                    <a href="{{ $validation->document->fileUrl() }}" target="_blank" rel="noopener noreferrer">
+
+                                        <i class="{{ $validation->document->getFileIcon() }} fa-3x mb-2"></i>
+                                    </a>
+                        @endif
+                    @else
+                        <a href="{{ $validation->document->fileUrl() }}">
+                            <a href="{{ $validation->document->fileUrl() }}" target="_blank" rel="noopener noreferrer">
+
+                                <i class="{{ $validation->document->getFileIcon() }} fa-3x mb-2"></i>
+                            </a>
+                    @endif
                     <h5>{{ $validation->document->title }}</h5>
                 </div>
 
@@ -162,7 +186,7 @@
                 <hr>
 
                 <div class="btn-group btn-group-sm w-100">
-                    <a href="{{ route('validations.download-document', $validation->document) }}" class="btn btn-primary">
+                    <a href="{{ $validation->document->getDownloadUrl() }}" class="btn btn-primary">
                         <i class="fas fa-download"></i> Download
                     </a>
                     <a href="{{ route('validations.view-document', $validation->document) }}" class="btn btn-info"
@@ -184,7 +208,7 @@
                                 <span
                                     class="bg-{{ $hist->isApproved() ? 'success' : ($hist->isRejected() ? 'danger' : 'warning') }}">
                                     {{ $hist->created_at->format('M d, Y') ?? 'No Date' }}
-                                    
+
                                 </span>
                             </div>
                             <div>
@@ -223,7 +247,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Reject Document</h5>
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close"  style="opacity: 0;"  data-dismiss="modal">
                         <span>&times;</span>
                     </button>
                 </div>
@@ -242,7 +266,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary"  style="opacity: 0;"  data-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-danger">
                             <i class="fas fa-times"></i> Reject Document
                         </button>

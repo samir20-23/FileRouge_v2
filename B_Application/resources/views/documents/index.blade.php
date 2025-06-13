@@ -216,7 +216,11 @@
                                         <h6 class="card-title">{{ Str::limit($document->title, 30) }}</h6>
                                         <p class="text-muted small">{{ $document->getFormattedFileSize() }}</p>
                                     </div>
-
+                                    <div>
+                                        <strong>Type:</strong>
+                                        <span class="badge badge-secondary">{{ $document->type }}</span>
+                                        </td>
+                                    </div>
                                     <div class="mb-2">
                                         <strong>Category:</strong>
                                         <span class="badge badge-info">{{ $document->categorie->name }}</span>

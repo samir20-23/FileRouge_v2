@@ -24,7 +24,7 @@ class ValidationController extends Controller
     {
         $filter = $request->get('filter', 'all');
         $search = $request->get('search');
-
+      
         $query = Validation::with(['document.categorie', 'document.user', 'validator'])
             ->orderBy('created_at', 'desc');
 
@@ -128,7 +128,7 @@ class ValidationController extends Controller
     public function show(Validation $validation)
     {
         $validation->load(['document.categorie', 'document.user', 'validator']);
-
+         
         return view('validations.show', compact('validation'));
     }
 

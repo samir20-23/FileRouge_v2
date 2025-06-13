@@ -159,21 +159,26 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-circle mr-3">
-                                                <i class="fas fa-user"></i>
+                                        <a href="{{ route('users.show', $user) }}"
+                                            class="d-flex align-items-center text-decoration-none text-dark">
+                                            <div class="d-flex align-items-center">
+                                                <div class="d-flex justify-content-center align-items-center rounded-circle bg-primary text-white mr-3"
+                                                    style="width: 40px; height: 40px;">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">
+                                                        {{ $user->name }}
+                                                        @if ($user->id === Auth::id())
+                                                            <span class="badge badge-primary badge-sm">You</span>
+                                                        @endif
+                                                    </h6>
+                                                    <small class="text-muted">{{ $user->email }}</small>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h6 class="mb-0">
-                                                    {{ $user->name }}
-                                                    @if ($user->id === Auth::id())
-                                                        <span class="badge badge-primary badge-sm">You</span>
-                                                    @endif
-                                                </h6>
-                                                <small class="text-muted">{{ $user->email }}</small>
-                                            </div>
-                                        </div>
+                                        </a>
                                     </td>
+
                                     <td>
                                         @if ($user->isAdmin())
                                             <span class="badge badge-danger">
@@ -243,7 +248,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Delete User</h5>
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close" style="opacity: 0;" data-dismiss="modal">
                         <span>&times;</span>
                     </button>
                 </div>
@@ -256,7 +261,7 @@
                     <div id="userInfo"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="opacity: 0;" >Cancel</button>
                     <form id="deleteForm" method="POST" style="display: inline;">
                         @csrf
                         @method('DELETE')

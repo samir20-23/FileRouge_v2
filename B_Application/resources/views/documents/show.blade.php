@@ -32,6 +32,14 @@
                             <tr>
                                 <td><strong>Title:</strong></td>
                                 <td>{{ $document->title }}</td>
+                            </tr> 
+                             <tr>
+                                <td><strong>Type:</strong></td>
+                                <td>
+                                    <span class="badge badge-info badge-lg">
+                                        {{ $document->type }}
+                                    </span>
+                                </td>
                             </tr>
                             <tr>
                                 <td><strong>Category:</strong></td>
@@ -162,7 +170,7 @@
                             </a>
 
                             @if (in_array($document->mime_type, ['application/pdf', 'image/jpeg', 'image/png', 'image/gif']))
-                                <a href="{{ route('documents.view', $document) }}" class="btn btn-info" target="_blank">
+                                <a href="{{ $document->fileUrl() }}" class="btn btn-info" target="_blank">
                                     <i class="fas fa-eye"></i> View in Browser
                                 </a>
                             @endif

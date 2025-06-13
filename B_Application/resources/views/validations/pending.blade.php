@@ -34,6 +34,31 @@
                                 </h6>
                             </div>
                             <div class="card-body">
+                                @if ($document->isImage())
+                                    {{-- Show image thumbnail --}}
+
+                                    @if ($document->fileExists())
+                                        <a href="{{ $document->fileUrl() }}">
+                                            <a href="{{ $document->fileUrl() }}" target="_blank" rel="noopener noreferrer">
+
+                                                <i class="{{ $document->getFileIcon() }} fa-3x mb-2"></i> 
+                                            </a>
+                                        @else
+                                            <a href="{{ $document->fileUrl() }}">
+                                                <a href="{{ $document->fileUrl() }}" target="_blank"
+                                                    rel="noopener noreferrer">
+
+                                                    <i class="{{ $document->getFileIcon() }} fa-3x mb-2"></i>
+                                                </a>
+                                    @endif
+                                @else
+                                    <a href="{{ $document->fileUrl() }}">
+                                        <a href="{{ $document->fileUrl() }}" target="_blank" rel="noopener noreferrer">
+
+                                            <i class="{{ $document->getFileIcon() }} fa-3x mb-2"></i>
+                                        </a>
+                                @endif
+
                                 <div class="mb-2">
                                     <strong>Category:</strong>
                                     <span class="badge badge-info">{{ $document->categorie->name }}</span>
@@ -85,8 +110,7 @@
                                             <i class="fas fa-plus"></i> Create Validation
                                         </a>
                                     @endif
-                                    <a href="{{ route('validations.download-document', $document) }}"
-                                        class="btn btn-secondary">
+                                    <a href="{{ $document->getDownloadUrl() }}" class="btn btn-secondary">
                                         <i class="fas fa-download"></i> Download
                                     </a>
                                     <button type="button" class="btn btn-success"
@@ -126,7 +150,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="validationModalTitle">Validate Document</h5>
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close"   style="opacity: 0;"  data-dismiss="modal">
                         <span>&times;</span>
                     </button>
                 </div>
@@ -149,7 +173,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary"  style="opacity: 0;"  data-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">Submit Validation</button>
                     </div>
                 </form>

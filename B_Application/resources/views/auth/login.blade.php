@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -242,8 +241,7 @@
             background: white;
             border-radius: 16px;
             box-shadow: var(--shadow-sm);
-            padding: 2rem;
-            margin-top: 1rem;
+            padding: 2rem; 
             border: 1px solid var(--border-color);
         }
 
@@ -275,161 +273,162 @@
 
             0%,
             100% {
-                transform: scale(1) rotate(2deg); 
+                transform: scale(1) rotate(2deg);
             }
 
             50% {
-                transform: scale(1.05) rotate(-2deg); 
+                transform: scale(1.05) rotate(-2deg);
                 ;
             }
         }
 
-        .img-logo {box-shadow: none;
+        .img-logo {
+            box-shadow: none;
             animation: logoPulse 4s ease-in-out infinite;
         }
     </style>
 </head>
 
-<body> 
-           <div class="content-wrapper">
-         
+<body>
+    <div class="content-wrapper">
 
 
-     <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
-         <div class="card shadow-lg rounded-3" style="max-width: 420px; width:100%;">
-             <div class="card-body p-4">
 
-                 {{-- ─── Logo / Header ─────────────────────────────────────────────────────── --}}
-                 <div class="text-center mb-4">
-                     @if (config('adminlte.logo_img'))
-                         <img src="{{ asset(config('adminlte.logo_img')) }}" alt="Logo" class="img-logo mb-2"
-                             style="height: 48px;">
-                     @endif
-                     <h2 class="h5 fw-bold mb-1">
-                         {!! config('adminlte.logo', '<b>Admin</b>Panel') !!}
-                     </h2>
-                     <p class="text-muted small">Sign in to your account</p>
-                 </div>
+        <div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+            <div class="card shadow-lg rounded-3" style="max-width: 420px; width:100%;">
+                <div class="card-body p-4">
 
-                 {{-- ─── Form ──────────────────────────────────────────────────────────────── --}}
-                 <form method="POST" action="{{ route('login') }}">
-                     @csrf
+                    {{-- ─── Logo / Header ─────────────────────────────────────────────────────── --}}
+                    <div class="text-center mb-4">
+                        @if (config('adminlte.logo_img'))
+                            <img src="{{ asset(config('adminlte.logo_img')) }}" alt="Logo" class="img-logo mb-2"
+                                style="height: 48px;">
+                        @endif
+                        <h2 class="h5 fw-bold mb-1">
+                            {!! config('adminlte.logo', '<b>Admin</b>Panel') !!}
+                        </h2>
+                        <p class="text-muted small">Sign in to your account</p>
+                    </div>
 
-                     {{-- Email --}}
-                     <div class="form-floating mb-3">
-                         <input id="email" type="email" name="email" value="{{ old('email') }}"
-                             class="form-control @error('email') is-invalid @enderror" placeholder="name@example.com"
-                             required autocomplete="email" autofocus>
-                         <label for="email">Email address</label>
+                    {{-- ─── Form ──────────────────────────────────────────────────────────────── --}}
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
 
-                         @error('email')
-                             <div class="invalid-feedback">
-                                 {{ $message }}
-                             </div>
-                         @enderror
-                     </div>
+                        {{-- Email --}}
+                        <div class="form-floating mb-3">
+                            <input id="email" type="email" name="email" value="{{ old('email') }}"
+                                class="form-control @error('email') is-invalid @enderror" placeholder="name@example.com"
+                                required autocomplete="email" autofocus>
+                            <label for="email">Email address</label>
 
-                     {{-- Password --}}
-                     <div class="form-floating mb-3">
-                         <input id="password" type="password" name="password"
-                             class="form-control @error('password') is-invalid @enderror" placeholder="Password"
-                             required autocomplete="current-password">
-                         <label for="password">Password</label>
+                            @error('email')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
 
-                         @error('password')
-                             <div class="invalid-feedback">
-                                 {{ $message }}
-                             </div>
-                         @enderror
-                     </div>
+                        {{-- Password --}}
+                        <div class="form-floating mb-3">
+                            <input id="password" type="password" name="password"
+                                class="form-control @error('password') is-invalid @enderror" placeholder="Password"
+                                required autocomplete="current-password">
+                            <label for="password">Password</label>
 
-                     {{-- Remember Me + Forgot --}}
-                     <div class="d-flex justify-content-between align-items-center mb-4">
-                         <div class="form-check">
-                             <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                 {{ old('remember') ? 'checked' : '' }}>
-                             <label class="form-check-label small" for="remember">
-                                 {{ __('Remember Me') }}
-                             </label>
-                         </div>
+                            @error('password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
 
-                         @if (Route::has('password.request'))
-                             <a class="small" href="{{ route('password.request') }}">
-                                 {{ __('Forgot Password?') }}
-                             </a>
-                         @endif
-                     </div>
+                        {{-- Remember Me + Forgot --}}
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="remember" id="remember"
+                                    {{ old('remember') ? 'checked' : '' }}>
+                                <label class="form-check-label small" for="remember">
+                                    {{ __('Remember Me') }}
+                                </label>
+                            </div>
 
-                     {{-- Submit Button --}}
-                     <div class="d-grid mb-3">
-                         <button type="submit" class="btn btn-primary btn-lg">
-                             {{ __('Login') }}
-                         </button>
-                     </div>
+                            @if (Route::has('password.request'))
+                                <a class="small" href="{{ route('password.request') }}">
+                                    {{ __('Forgot Password?') }}
+                                </a>
+                            @endif
+                        </div>
 
-                     {{-- Divider with “OR” --}}
-                     <div class="d-flex align-items-center mb-3">
-                         <hr class="flex-grow-1">
-                         <span class="mx-2 small text-muted">or</span>
-                         <hr class="flex-grow-1">
-                     </div>
+                        {{-- Submit Button --}}
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                {{ __('Login') }}
+                            </button>
+                        </div>
 
-                     {{-- Register Link --}}
-                     <div class="text-center">
-                         <a href="{{ route('register') }}" class="btn btn-outline-secondary btn-sm">
-                             <i class="bi bi-person-plus me-1"></i> Register
-                         </a>
-                     </div>
-                 </form>
-                 {{-- ──────────────────────────────────────────────────────────────────────── --}}
+                        {{-- Divider with “OR” --}}
+                        <div class="d-flex align-items-center mb-3">
+                            <hr class="flex-grow-1">
+                            <span class="mx-2 small text-muted">or</span>
+                            <hr class="flex-grow-1">
+                        </div>
 
-             </div>
-         </div>
-     </div>
-     </div>
-     <!-- Footer -->
-     <footer class="text-center py-4 mt-5">
-         <div class="container">
-             <p class="text-muted mb-0">
-                 &copy; {{ date('Y') }} {{ config('app.name', 'SoliLMS') }}.
-                 <span class="text-gradient">Built with  samir aoulad amar</span>
-             </p>
-         </div>
-     </footer>
+                        {{-- Register Link --}}
+                        <div class="text-center">
+                            <a href="{{ route('register') }}" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-person-plus me-1"></i> Register
+                            </a>
+                        </div>
+                    </form>
+                    {{-- ──────────────────────────────────────────────────────────────────────── --}}
 
-     <!-- Bootstrap JS -->
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="text-center py-4 mt-5">
+        <div class="container">
+            <p class="text-muted mb-0">
+                &copy; {{ date('Y') }} {{ config('app.name', 'SoliLMS') }}.
+                <span class="text-gradient">Built with samir aoulad amar</span>
+            </p>
+        </div>
+    </footer>
 
-     <!-- Custom JavaScript -->
-     <script>
-         // Auto-hide alerts after 5 seconds
-         document.addEventListener('DOMContentLoaded', function() {
-             const alerts = document.querySelectorAll('.alert-custom');
-             alerts.forEach(function(alert) {
-                 setTimeout(function() {
-                     alert.style.opacity = '0';
-                     alert.style.transform = 'translateY(-20px)';
-                     setTimeout(function() {
-                         alert.remove();
-                     }, 300);
-                 }, 5000);
-             });
-         });
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-         // Smooth scroll for anchor links
-         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-             anchor.addEventListener('click', function(e) {
-                 e.preventDefault();
-                 const target = document.querySelector(this.getAttribute('href'));
-                 if (target) {
-                     target.scrollIntoView({
-                         behavior: 'smooth',
-                         block: 'start'
-                     });
-                 }
-             });
-         });
-     </script>
- </body>
+    <!-- Custom JavaScript -->
+    <script>
+        // Auto-hide alerts after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert-custom');
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateY(-20px)';
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 300);
+                }, 5000);
+            });
+        });
 
- </html>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
