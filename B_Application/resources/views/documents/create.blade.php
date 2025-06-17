@@ -3,8 +3,6 @@
 
 @section('content_header')
 
-@if (auth()->check() && auth()->user()->isAdmin())
-    
 @section('title', 'Upload Document')
 
 @section('content_header')
@@ -13,161 +11,163 @@
             <i class="fas fa-upload"></i>
             Upload New Document
             <h1>
-          
-        </h1>
-        <div>
-            <a href="{{ route('documents.my-documents') }}" class="btn btn-info">
-                <i class="fas fa-user"></i> My Documents
-            </a>
-            <a href="{{ route('documents.index') }}" class="btn btn-secondary">
-                <i class="fas fa-list"></i> All Documents
-            </a>
-        </div>
+
+            </h1>
+            <div>
+                <a href="{{ route('documents.my-documents') }}" class="btn btn-info">
+                    <i class="fas fa-user"></i> My Documents
+                </a>
+                <a href="{{ route('documents.index') }}" class="btn btn-secondary">
+                    <i class="fas fa-list"></i> All Documents
+                </a>
+            </div>
     </div>
 @stop
-    
+
 @section('content')
 
     <div class="row">
         <!-- Upload Form -->
         <div class="col-md-8">
             <x-adminlte-card title="Document Upload Form" theme="primary" collapsible>
-                <form action="{{ route('documents.store') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
-                    @csrf
+                    <form action="{{ route('documents.store') }}" method="POST" enctype="multipart/form-data" id="uploadForm">
+                        @csrf
 
-                    <!-- File Upload -->
-                    <div class="form-group">
-                        <label for="file">
-                            <i class="fas fa-file"></i>
-                            Select File <span class="text-danger">*</span>
-                        </label>
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input @error('file') is-invalid @enderror"
-                                id="file" name="file" required
-                                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif">
-                            <label class="custom-file-label" for="file">Choose file...</label>
-                        </div>
-                        @error('file')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                        @enderror
-                        <small class="form-text text-muted">
-                            Supported formats: PDF, Word, Excel, PowerPoint, Text, Images. Maximum size: 30MB
-                        </small>
-                    </div>
-
-                    <!-- Document Title -->
-                    <div class="form-group">
-                        <label for="title">
-                            <i class="fas fa-heading"></i>
-                            Document Title <span class="text-danger">*</span>
-                        </label>
-                        <input type="text" class="form-control @error('title') is-invalid @enderror" id="title"
-                            name="title" value="{{ old('title') }}" required placeholder="Enter document title...">
-                        @error('title')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <!-- Description -->
-                    <div class="form-group">
-                        <label for="description">
-                            <i class="fas fa-align-left"></i>
-                            Description
-                        </label>
-                        <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
-                            rows="4" placeholder="Enter document description...">{{ old('description') }}</textarea>
-                        @error('description')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <small class="form-text text-muted">
-                            Provide a brief description of the document content.
-                        </small>
-                    </div>
-
-                    <!-- Category -->
-                    <div class="form-group">
-                        <label for="categorie_id">
-                            <i class="fas fa-folder"></i>
-                            Category <span class="text-danger">*</span>
-                        </label>
-                        <select class="form-control @error('categorie_id') is-invalid @enderror" id="categorie_id"
-                            name="categorie_id" required>
-                            <option value="">Select Category</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}"
-                                    {{ old('categorie_id') == $category->id ? 'selected' : '' }}>
-                                    {{ $category->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('categorie_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <!-- Status and Visibility -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="status">
-                                    <i class="fas fa-flag"></i>
-                                    Status <span class="text-danger">*</span>
-                                </label>
-                                <select class="form-control @error('status') is-invalid @enderror" id="status"
-                                    name="status" required>
-                                    <option value="draft" {{ old('status', 'draft') === 'draft' ? 'selected' : '' }}>
-                                        <i class="fas fa-edit"></i> Draft
-                                    </option>
-                                    <option value="published" {{ old('status') === 'published' ? 'selected' : '' }}>
-                                        <i class="fas fa-check"></i> Published
-                                    </option>
-                                    <option value="archived" {{ old('status') === 'archived' ? 'selected' : '' }}>
-                                        <i class="fas fa-archive"></i> Archived
-                                    </option>
-                                </select>
-                                @error('status')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                        <!-- File Upload -->
+                        <div class="form-group">
+                            <label for="file">
+                                <i class="fas fa-file"></i>
+                                Select File <span class="text-danger">*</span>
+                            </label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input @error('file') is-invalid @enderror"
+                                    id="file" name="file" required
+                                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif">
+                                <label class="custom-file-label" for="file">Choose file...</label>
                             </div>
+                            @error('file')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                            <small class="form-text text-muted">
+                                Supported formats: PDF, Word, Excel, PowerPoint, Text, Images. Maximum size: 30MB
+                            </small>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>
-                                    <i class="fas fa-eye"></i>
-                                    Visibility
-                                </label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="is_public" name="is_public"
-                                        value="1" {{ old('is_public') ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="is_public">
-                                        <i class="fas fa-globe"></i> Make this document public
-                                    </label>
+
+                        <!-- Document Title -->
+                        <div class="form-group">
+                            <label for="title">
+                                <i class="fas fa-heading"></i>
+                                Document Title <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control @error('title') is-invalid @enderror" id="title"
+                                name="title" value="{{ old('title') }}" required placeholder="Enter document title...">
+                            @error('title')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label for="description">
+                                <i class="fas fa-align-left"></i>
+                                Description
+                            </label>
+                            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                                rows="4" placeholder="Enter document description...">{{ old('description') }}</textarea>
+                            @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            <small class="form-text text-muted">
+                                Provide a brief description of the document content.
+                            </small>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="form-group">
+                            <label for="categorie_id">
+                                <i class="fas fa-folder"></i>
+                                Category <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-control @error('categorie_id') is-invalid @enderror" id="categorie_id"
+                                name="categorie_id" required>
+                                <option value="">Select Category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}"
+                                        {{ old('categorie_id') == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('categorie_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Status and Visibility -->
+
+                        @if (auth()->check() && auth()->user()->isAdmin() || auth()->user()->isFormateur())
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="status">
+                                            <i class="fas fa-flag"></i>
+                                            Status <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-control @error('status') is-invalid @enderror" id="status"
+                                            name="status" required>
+                                            <option value="draft" {{ old('status', 'draft') === 'draft' ? 'selected' : '' }}>
+                                                <i class="fas fa-edit"></i> Draft
+                                            </option>
+                                            <option value="published" {{ old('status') === 'published' ? 'selected' : '' }}>
+                                                <i class="fas fa-check"></i> Published
+                                            </option>
+                                            <option value="archived" {{ old('status') === 'archived' ? 'selected' : '' }}>
+                                                <i class="fas fa-archive"></i> Archived
+                                            </option>
+                                        </select>
+                                        @error('status')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
-                                <small class="form-text text-muted">
-                                    Public documents can be viewed by all users.
-                                </small>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>
+                                            <i class="fas fa-eye"></i>
+                                            Visibility
+                                        </label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="is_public" name="is_public"
+                                                value="1" {{ old('is_public') ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="is_public">
+                                                <i class="fas fa-globe"></i> Make this document public
+                                            </label>
+                                        </div>
+                                        <small class="form-text text-muted">
+                                            Public documents can be viewed by all users.
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        <!-- Submit Buttons -->
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
+                                    <i class="fas fa-upload"></i> Upload Document
+                                </button>
+                                <button type="button" class="btn btn-warning btn-lg" onclick="saveDraft()">
+                                    <i class="fas fa-save"></i> Save as Draft
+                                </button>
+                            </div>
+                            <div>
+                                <a href="{{ route('documents.index') }}" class="btn btn-secondary btn-lg">
+                                    <i class="fas fa-times"></i> Cancel
+                                </a>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Submit Buttons -->
-                    <hr>
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
-                                <i class="fas fa-upload"></i> Upload Document
-                            </button>
-                            <button type="button" class="btn btn-warning btn-lg" onclick="saveDraft()">
-                                <i class="fas fa-save"></i> Save as Draft
-                            </button>
-                        </div>
-                        <div>
-                            <a href="{{ route('documents.index') }}" class="btn btn-secondary btn-lg">
-                                <i class="fas fa-times"></i> Cancel
-                            </a>
-                        </div>
-                    </div>
-                </form>
+                    </form>
             </x-adminlte-card>
         </div>
 
@@ -362,28 +362,4 @@
     </script>
 @endpush
 
-@else
-       <!-- User warning card with animation -->
-  <!-- User warning card with animation -->
-<div class="text-center mt-6 max-w-md mx-auto">
-    <!-- 404-style image (smaller) -->
-    <img src="{{ asset('vendor/adminlte/dist/img/404GIF.gif') }}"
-     alt="Access Denied"
-     class="mx-auto mb-6 animate__animated animate__zoomIn"
-     style="max-width: 240px;">
-
-    <!-- Warning Text -->
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded shadow-sm animate__animated animate__fadeInUp">
-        <strong class="font-bold">Oops!</strong>
-        <span class="block text-sm">Admins only — you don’t have access to this page.</span>
-    </div>
-
-    <!-- Optional link back -->
-    <a href="{{ route('home') }}"
-       class="inline-block mt-3 text-sm text-blue-600 underline hover:text-blue-800">
-        Go back to Home
-    </a>
-</div>
-
-@endif
 @stop

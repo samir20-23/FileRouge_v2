@@ -888,11 +888,13 @@ text-muted
             @endauth
 
             <nav class="nav flex-column sidebar-nav">
+                 @if (auth()->check() && auth()->user()->isAdmin())
                 <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
                     href="{{ route('dashboard') }}">
                     <i class="bi bi-speedometer2"></i>
                     Dashboard
                 </a>
+                @endif
                 <a class="nav-link {{ request()->routeIs('profile') ? 'active' : '' }}">
                     <i class="bi bi-person-circle"></i>
                     Profile

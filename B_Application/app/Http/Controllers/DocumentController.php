@@ -63,14 +63,22 @@ class DocumentController extends Controller
             'draft' => Document::where('status', 'draft')->count(),
             'archived' => Document::where('status', 'archived')->count(),
             'needs_validation' => Document::whereDoesntHave('validation')
-                                        ->orWhereHas('validation', function($q) {
-                                            $q->where('status', 'Pending');
-                                        })->count(),
+                ->orWhereHas('validation', function ($q) {
+                    $q->where('status', 'Pending');
+                })->count(),
         ];
 
         return view('documents.index', compact(
-            'documents', 'categories', 'users', 'stats',
-            'search', 'category', 'status', 'user', 'sort', 'direction'
+            'documents',
+            'categories',
+            'users',
+            'stats',
+            'search',
+            'category',
+            'status',
+            'user',
+            'sort',
+            'direction'
         ));
     }
 
@@ -88,38 +96,52 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Base rules
+        $rules = [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'categorie_id' => 'required|exists:categories,id',
-            'status' => 'required|in:draft,published,archived',
-            'is_public' => 'boolean',
-            'file' => 'required|file|max:10240', // 10MB max
-        ]);
+            'file' => 'required|file|max:30720', // 30MB: 30720 KB
+        ];
+
+        // Only validate status/is_public if user is admin; otherwise skip or default
+        if (auth()->user()->isAdmin() || auth()->user()->isFormateur()) {
+            $rules['status'] = 'required|in:draft,published,archived';
+            $rules['is_public'] = 'boolean';
+        }
+
+        $validated = $request->validate($rules);
 
         $file = $request->file('file');
-        
-        // Generate unique filename
         $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('documents', $filename, 'public');
 
-        $document = Document::create([
-            'title' => $request->title,
-            'description' => $request->description,
+        $data = [
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
             'type' => $file->getClientOriginalExtension(),
             'chemin_fichier' => $path,
             'original_name' => $file->getClientOriginalName(),
             'file_size' => $file->getSize(),
             'mime_type' => $file->getMimeType(),
-            'status' => $request->status,
-            'is_public' => $request->boolean('is_public'),
-            'categorie_id' => $request->categorie_id,
+            'categorie_id' => $validated['categorie_id'],
             'user_id' => Auth::id(),
-        ]);
+        ]; 
+        // Assign status/is_public only for admin/formateur; else default
+        if (auth::user()->isAdmin() || auth::user()->isFormateur()) {
+            $data['status'] = $validated['status'];
+            $data['is_public'] = $request->boolean('is_public');
+        } else {
+            $data['status'] = 'draft';
+            $data['is_public'] = false; // or true if you want all uploads public
+        }
+
+        $document = Document::create($data);
 
         return redirect()->route('documents.show', $document)
-                        ->with('success', 'Document uploaded successfully!');
+            ->with('success', 'Document uploaded successfully!');
     }
+
 
     /**
      * Display the specified document
@@ -127,7 +149,7 @@ class DocumentController extends Controller
     public function show(Document $document)
     {
         $document->load(['categorie', 'user', 'validation.validator']);
-        
+
         // Check if user can view this document
         if (!$document->is_public && $document->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403, 'You do not have permission to view this document.');
@@ -135,10 +157,10 @@ class DocumentController extends Controller
 
         // Get related documents
         $relatedDocuments = Document::where('categorie_id', $document->categorie_id)
-                                  ->where('id', '!=', $document->id)
-                                  ->where('status', 'published')
-                                  ->limit(5)
-                                  ->get();
+            ->where('id', '!=', $document->id)
+            ->where('status', 'published')
+            ->limit(5)
+            ->get();
 
         return view('documents.show', compact('document', 'relatedDocuments'));
     }
@@ -187,12 +209,12 @@ class DocumentController extends Controller
         // Handle file replacement
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            
+
             // Delete old file
             if ($document->fileExists()) {
                 Storage::delete($document->chemin_fichier);
             }
-            
+
             // Store new file
             $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('documents', $filename, 'public');
@@ -209,7 +231,7 @@ class DocumentController extends Controller
         $document->update($updateData);
 
         return redirect()->route('documents.show', $document)
-                        ->with('success', 'Document updated successfully!');
+            ->with('success', 'Document updated successfully!');
     }
 
     /**
@@ -225,42 +247,42 @@ class DocumentController extends Controller
         $document->delete(); // File deletion handled in model boot method
 
         return redirect()->route('documents.index')
-                        ->with('success', 'Document deleted successfully!');
+            ->with('success', 'Document deleted successfully!');
     }
 
     /**
      * Download document
      */
     public function download(Document $document)
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    // Permission check: public OR owner OR admin OR formateur (if needed)
-    if (
-        ! $document->is_public 
-        && $document->user_id !== $user->id 
-        && ! $user->isAdmin() 
-        && ! $user->isFormateur()  // include Formateur if they should also download private docs
-    ) {
-        abort(403, 'You do not have permission to download this document.');
+        // Permission check: public OR owner OR admin OR formateur (if needed)
+        if (
+            !$document->is_public
+            && $document->user_id !== $user->id
+            && !$user->isAdmin()
+            && !$user->isFormateur()  // include Formateur if they should also download private docs
+        ) {
+            abort(403, 'You do not have permission to download this document.');
+        }
+
+        // Check existence on 'public' disk
+        if (!Storage::disk('public')->exists($document->chemin_fichier)) {
+            return redirect()->back()->with('error', 'File not found.');
+        }
+
+        // Increment download count (ensure this method exists and saves appropriately)
+        if (method_exists($document, 'incrementDownloadCount')) {
+            $document->incrementDownloadCount();
+        }
+
+        // Return download from the 'public' disk
+        return Storage::disk('public')->download(
+            $document->chemin_fichier,
+            $document->original_name ?? $document->title
+        );
     }
-
-    // Check existence on 'public' disk
-    if (! Storage::disk('public')->exists($document->chemin_fichier)) {
-        return redirect()->back()->with('error', 'File not found.');
-    }
-
-    // Increment download count (ensure this method exists and saves appropriately)
-    if (method_exists($document, 'incrementDownloadCount')) {
-        $document->incrementDownloadCount();
-    }
-
-    // Return download from the 'public' disk
-    return Storage::disk('public')->download(
-        $document->chemin_fichier,
-        $document->original_name ?? $document->title
-    );
-}
 
     /**
      * View document in browser
@@ -297,7 +319,7 @@ class DocumentController extends Controller
         ]);
 
         $documents = Document::whereIn('id', $request->document_ids)->get();
-        
+
         // Check permissions for each document
         foreach ($documents as $document) {
             if ($document->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
@@ -327,7 +349,7 @@ class DocumentController extends Controller
             }
         }
 
-        $actionText = match($request->action) {
+        $actionText = match ($request->action) {
             'delete' => 'deleted',
             'publish' => 'published',
             'archive' => 'archived',
@@ -347,7 +369,7 @@ class DocumentController extends Controller
         $status = $request->get('status');
 
         $query = Document::with(['categorie', 'validation'])
-                        ->where('user_id', Auth::id());
+            ->where('user_id', Auth::id());
 
         if ($search) {
             $query->search($search);

@@ -35,5 +35,5 @@ in http://127.0.0.1:8000/validations-pending the download is dont work
 
 the buttons is work all buttons in  the app
 add page for normal user about upload documents 
-
- 
+in http://127.0.0.1:8000/validations the pending is dont can show it in table all pending . why ? 
+in show document the create by name is white .http://127.0.0.1:8000/documents/16

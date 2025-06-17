@@ -179,7 +179,7 @@
                                     <i class="fas fa-edit"></i> Edit Document
                                 </a>
                             @endcan
-                            @if ($document->needsValidation() && Auth::user()->isAdmin())
+                            @if ($document->needsValidation() && auth()->user()->isAdmin() || auth()->user()->isFormateur())
                                 <a href="{{ route('validations.create', $document) }}" class="btn btn-primary">
                                     <i class="fas fa-check-circle"></i> Validate Document
                                 </a>
