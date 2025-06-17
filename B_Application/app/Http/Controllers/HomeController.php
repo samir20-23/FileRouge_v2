@@ -24,26 +24,30 @@ class HomeController extends Controller
         $user = Auth::user();
 
         // Get filter parameters
-        $search    = $request->get('search');
-        $categoryId= $request->get('category');
-        $type      = $request->get('type');
-        $sortBy    = $request->get('sort_by', 'created_at');
+        $search = $request->get('search');
+        $categoryId = $request->get('category');
+        $type = $request->get('type');
+        $sortBy = $request->get('sort_by', 'created_at');
         $sortOrder = strtolower($request->get('sort_order', 'desc')) === 'asc' ? 'asc' : 'desc';
 
         // Base query: published, public, approved validations
-        $documentsQuery = Document::with(['categorie', 'validations', 'user'])
+        $documentsQuery = Document::with(['categorie', 'user'])
             ->where('status', 'published')
-            ->where('is_public', true)
-            ->whereHas('validations', function($q) {
-                $q->where('status', 'Approved');
-            });
+            ->where('is_public', true);
+
+        //  $documentsQuery = Document::with(['categorie', 'validations', 'user'])
+        // ->where('status', 'published')
+        // ->where('is_public', true)
+        // ->whereHas('validations', function ($q) {
+        //     $q->where('status', 'Approved');
+        // });
 
         // Apply search
         if ($search) {
-            $documentsQuery->where(function($q) use ($search) {
+            $documentsQuery->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('type', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('type', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
@@ -83,7 +87,7 @@ class HomeController extends Controller
         $recentDocuments = Document::with(['categorie', 'validations', 'user'])
             ->where('status', 'published')
             ->where('is_public', true)
-            ->whereHas('validations', function($q) {
+            ->whereHas('validations', function ($q) {
                 $q->where('status', 'Approved');
             })
             ->orderBy('created_at', 'desc')
@@ -91,13 +95,15 @@ class HomeController extends Controller
             ->get();
 
         // Popular categories: count public/published/approved documents
-        $popularCategories = Categorie::withCount(['documents' => function($q) {
+        $popularCategories = Categorie::withCount([
+            'documents' => function ($q) {
                 $q->where('status', 'published')
-                  ->where('is_public', true)
-                  ->whereHas('validations', function($q2) {
-                      $q2->where('status', 'Approved');
-                  });
-            }])
+                    ->where('is_public', true)
+                    ->whereHas('validations', function ($q2) {
+                        $q2->where('status', 'Approved');
+                    });
+            }
+        ])
             ->orderByDesc('documents_count')
             ->limit(6)
             ->get();
@@ -106,7 +112,7 @@ class HomeController extends Controller
         $stats = [
             'total_documents' => Document::where('status', 'published')
                 ->where('is_public', true)
-                ->whereHas('validations', function($q) {
+                ->whereHas('validations', function ($q) {
                     $q->where('status', 'Approved');
                 })->count(),
             'total_categories' => Categorie::count(),
@@ -141,7 +147,8 @@ class HomeController extends Controller
     public function show(Document $document)
     {
         // Only published/public/approved
-        if ($document->status !== 'published'
+        if (
+            $document->status !== 'published'
             || !$document->is_public
             || !$document->validations()->where('status', 'Approved')->exists()
         ) {
@@ -156,13 +163,13 @@ class HomeController extends Controller
             ->where('id', '!=', $document->id)
             ->where('status', 'published')
             ->where('is_public', true)
-            ->whereHas('validations', function($q) {
+            ->whereHas('validations', function ($q) {
                 $q->where('status', 'Approved');
             })
             ->limit(4)
             ->get();
 
-        return view('documents.public-show', compact('document', 'relatedDocuments'));
+        return view('documents.show', compact('document', 'relatedDocuments'));
     }
 
     /**
@@ -170,12 +177,21 @@ class HomeController extends Controller
      */
     public function download(Document $document)
     {
-        if ($document->status !== 'published'
+        // if (
+        //     $document->status !== 'published'
+        //     || !$document->is_public
+        //     || !$document->validations()->where('status', 'Approved')->exists()
+        // ) {
+        //     return redirect()->route('home')->with('error', 'This document is not available for download.');
+        // }
+        if (
+            $document->status !== 'published'
             || !$document->is_public
-            || !$document->validations()->where('status', 'Approved')->exists()
         ) {
-            return redirect()->route('home')->with('error', 'This document is not available for download.');
+            return redirect()->route('home')
+                ->with('error', 'This document is not available for download.');
         }
+
 
         // Check file on public disk
         if (!Storage::disk('public')->exists($document->chemin_fichier)) {
@@ -193,25 +209,25 @@ class HomeController extends Controller
      */
     public function category(Categorie $categorie, Request $request)
     {
-        $search   = $request->get('search');
-        $type     = $request->get('type');
-        $sortBy   = $request->get('sort_by', 'created_at');
-        $sortOrder= strtolower($request->get('sort_order', 'desc')) === 'asc' ? 'asc' : 'desc';
+        $search = $request->get('search');
+        $type = $request->get('type');
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = strtolower($request->get('sort_order', 'desc')) === 'asc' ? 'asc' : 'desc';
 
         // Base: published/public/approved in this category
         $documentsQuery = $categorie->documents()
             ->with(['validations', 'user'])
             ->where('status', 'published')
             ->where('is_public', true)
-            ->whereHas('validations', function($q) {
+            ->whereHas('validations', function ($q) {
                 $q->where('status', 'Approved');
             });
 
         if ($search) {
-            $documentsQuery->where(function($q) use ($search) {
+            $documentsQuery->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('type', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('type', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
@@ -263,16 +279,16 @@ class HomeController extends Controller
         $documents = Document::with(['categorie', 'validations', 'user'])
             ->where('status', 'published')
             ->where('is_public', true)
-            ->whereHas('validations', function($q) {
+            ->whereHas('validations', function ($q) {
                 $q->where('status', 'Approved');
             })
-            ->where(function($q) use ($query) {
+            ->where(function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
-                  ->orWhere('type', 'like', "%{$query}%")
-                  ->orWhere('description', 'like', "%{$query}%")
-                  ->orWhereHas('categorie', function($cq) use ($query) {
-                      $cq->where('name', 'like', "%{$query}%");
-                  });
+                    ->orWhere('type', 'like', "%{$query}%")
+                    ->orWhere('description', 'like', "%{$query}%")
+                    ->orWhereHas('categorie', function ($cq) use ($query) {
+                        $cq->where('name', 'like', "%{$query}%");
+                    });
             })
             ->orderBy('created_at', 'desc')
             ->paginate(12)

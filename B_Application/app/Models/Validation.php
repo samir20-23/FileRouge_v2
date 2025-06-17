@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Models;
 
@@ -51,6 +51,10 @@ class Validation extends Model
     {
         return $query->where('status', 'Rejected');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     // Helper methods
     public function isPending()
@@ -70,7 +74,7 @@ class Validation extends Model
 
     public function getStatusBadgeClass()
     {
-        return match($this->status) {
+        return match ($this->status) {
             'Pending' => 'badge-warning',
             'Approved' => 'badge-success',
             'Rejected' => 'badge-danger',
@@ -80,7 +84,7 @@ class Validation extends Model
 
     public function getStatusIcon()
     {
-        return match($this->status) {
+        return match ($this->status) {
             'Pending' => 'fas fa-clock',
             'Approved' => 'fas fa-check-circle',
             'Rejected' => 'fas fa-times-circle',
@@ -92,7 +96,7 @@ class Validation extends Model
     public function setStatusAttribute($value)
     {
         $this->attributes['status'] = $value;
-        
+
         if ($value !== 'Pending' && !$this->validated_at) {
             $this->attributes['validated_at'] = now();
         }

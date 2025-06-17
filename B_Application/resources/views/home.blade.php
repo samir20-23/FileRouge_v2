@@ -15,7 +15,7 @@
                     <form action="{{ route('home') }}" method="GET" class="search-form">
                         <div class="search-input-group">
                             <i class="fas fa-search search-icon"></i>
-                            <input type="text" name="search" value="{{ $search ?? '' }}"
+                            <input type="text" name="search" value="{{ $search }}"
                                 placeholder="Search documents, categories, or file types..." class="search-input">
                             <button type="submit" class="search-btn">
                                 <i class="fas fa-arrow-right"></i>
@@ -28,28 +28,39 @@
             {{-- Stats Cards --}}
             <div class="stats-grid">
                 <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+                    <div class="stat-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
                     <div class="stat-content">
                         <h3 class="stat-number">{{ number_format($stats['total_documents']) }}</h3>
                         <p class="stat-label">Total Documents</p>
                     </div>
                 </div>
+
                 <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="stat-icon"><i class="fas fa-folder"></i></div>
+                    <div class="stat-icon">
+                        <i class="fas fa-folder"></i>
+                    </div>
                     <div class="stat-content">
                         <h3 class="stat-number">{{ number_format($stats['total_categories']) }}</h3>
                         <p class="stat-label">Categories</p>
                     </div>
                 </div>
+
                 <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="stat-icon"><i class="fas fa-upload"></i></div>
+                    <div class="stat-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
                     <div class="stat-content">
                         <h3 class="stat-number">{{ number_format($stats['user_uploads']) }}</h3>
                         <p class="stat-label">Your Uploads</p>
                     </div>
                 </div>
+
                 <div class="stat-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
                     <div class="stat-content">
                         <h3 class="stat-number">{{ number_format($stats['recent_uploads']) }}</h3>
                         <p class="stat-label">This Week</p>
@@ -71,6 +82,7 @@
                         <div class="category-list">
                             @foreach ($popularCategories as $category)
                                 <a href="{{ route('category.show', $category) }}" class="category-item">
+
                                     <span class="category-name">{{ $category->name }}</span>
                                     <span class="category-count">{{ $category->documents_count }}</span>
                                 </a>
@@ -90,7 +102,7 @@
                                         <i class="fas fa-file-{{ $doc->type === 'pdf' ? 'pdf' : 'alt' }}"></i>
                                     </div>
                                     <div class="recent-content">
-                                        <p class="recent-title">{{ \Illuminate\Support\Str::limit($doc->title, 30) }}</p>
+                                        <p class="recent-title">{{ Str::limit($doc->title, 30) }}</p>
                                         <small class="recent-date">{{ $doc->created_at->diffForHumans() }}</small>
                                     </div>
                                 </a>
@@ -118,22 +130,26 @@
                             <h2 class="filters-title">Browse Documents</h2>
                             <div class="filters-actions">
                                 <div class="view-toggle">
-                                    <button class="view-btn active" data-view="grid"><i class="fas fa-th"></i></button>
-                                    <button class="view-btn" data-view="list"><i class="fas fa-list"></i></button>
+                                    <button class="view-btn active" data-view="grid">
+                                        <i class="fas fa-th"></i>
+                                    </button>
+                                    <button class="view-btn" data-view="list">
+                                        <i class="fas fa-list"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
 
                         <form action="{{ route('home') }}" method="GET" class="filters-form">
-                            <input type="hidden" name="search" value="{{ $search ?? '' }}">
+                            <input type="hidden" name="search" value="{{ $search }}">
 
                             <div class="filter-group">
                                 <select name="category" class="filter-select">
                                     <option value="">All Categories</option>
-                                    @foreach ($categories as $cat)
-                                        <option value="{{ $cat->id }}"
-                                            @if (($categoryId ?? '') == $cat->id) selected @endif>
-                                            {{ $cat->name }}
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ $categoryId == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -143,8 +159,7 @@
                                 <select name="type" class="filter-select">
                                     <option value="">All Types</option>
                                     @foreach ($documentTypes as $docType)
-                                        <option value="{{ $docType }}"
-                                            @if (($type ?? '') == $docType) selected @endif>
+                                        <option value="{{ $docType }}" {{ $type == $docType ? 'selected' : '' }}>
                                             {{ ucfirst($docType) }}
                                         </option>
                                     @endforeach
@@ -153,18 +168,18 @@
 
                             <div class="filter-group">
                                 <select name="sort_by" class="filter-select">
-                                    <option value="created_at" @if (($sortBy ?? '') == 'created_at') selected @endif>Date
+                                    <option value="created_at" {{ $sortBy == 'created_at' ? 'selected' : '' }}>Date
                                     </option>
-                                    <option value="title" @if (($sortBy ?? '') == 'title') selected @endif>Title</option>
-                                    <option value="type" @if (($sortBy ?? '') == 'type') selected @endif>Type</option>
+                                    <option value="title" {{ $sortBy == 'title' ? 'selected' : '' }}>Title</option>
+                                    <option value="type" {{ $sortBy == 'type' ? 'selected' : '' }}>Type</option>
                                 </select>
                             </div>
 
                             <div class="filter-group">
                                 <select name="sort_order" class="filter-select">
-                                    <option value="desc" @if (($sortOrder ?? '') == 'desc') selected @endif>Newest First
+                                    <option value="desc" {{ $sortOrder == 'desc' ? 'selected' : '' }}>Newest First
                                     </option>
-                                    <option value="asc" @if (($sortOrder ?? '') == 'asc') selected @endif>Oldest First
+                                    <option value="asc" {{ $sortOrder == 'asc' ? 'selected' : '' }}>Oldest First
                                     </option>
                                 </select>
                             </div>
@@ -173,7 +188,7 @@
                                 <i class="fas fa-filter me-2"></i>Apply Filters
                             </button>
 
-                            @if (($search ?? '') || ($categoryId ?? '') || ($type ?? ''))
+                            @if ($search || $categoryId || $type)
                                 <a href="{{ route('home') }}" class="filter-clear-btn">
                                     <i class="fas fa-times me-2"></i>Clear
                                 </a>
@@ -199,19 +214,14 @@
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item"
+                                                <li><a class="dropdown-item"
                                                         href="{{ route('documents.show', $document) }}">
                                                         <i class="fas fa-eye me-2"></i>View Details
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item"
-                                                        href="{{ $document->getDownloadUrl() }}">
+                                                    </a></li>
+                                                <li><a class="dropdown-item" href="{{ $document->getDownloadUrl() }}">
                                                         <i class="fas fa-download me-2"></i>Download
-                                                    </a>
-                                                    
-                                                </li>
+                                                    </a></li>
+
                                             </ul>
                                         </div>
                                     </div>
@@ -221,6 +231,7 @@
                                     <h3 class="document-title">
                                         <a href="{{ route('documents.show', $document) }}">{{ $document->title }}</a>
                                     </h3>
+
                                     <div class="document-meta">
                                         <span class="document-category">
                                             <i class="fas fa-folder me-1"></i>
@@ -270,6 +281,7 @@
         </div>
     </div>
 @endsection
+
 @push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
     <style>
@@ -961,6 +973,7 @@
 
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize AOS

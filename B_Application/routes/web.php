@@ -26,7 +26,6 @@ Route::middleware('auth')->group(function () {
 
     // Public viewing
     Route::get('document/{document}', [HomeController::class, 'show'])->name('document.show');
-    Route::get('document/{document}/download', [HomeController::class, 'download'])->name('document.download');
     Route::get('documents/{document}/download', [DocumentController::class, 'download'])->name('documents.download');
     Route::get('document/{document}/download', [HomeController::class, 'download'])->name('document.download');
 
