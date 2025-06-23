@@ -1,32 +1,31 @@
 @startuml
 left to right direction
+skinparam packageStyle rectangle
 
-title Centralized Sharing – Global Use Cases (with Validation)
+' Define actors
+actor "Formateur & Admin" as FA
+actor Apprenant          as U
 
-actor Formateur    as F
-actor Apprenant as U
-actor Admin       as A
-
-package "Document Management" {
-  usecase "Upload Document"    as UC_UD
-  usecase "Download Document"  as UC_DD
-  usecase "Validate Document"  as UC_VD
+' Define use cases grouped in a package
+package " " {
+  usecase "Upload Document & Resource"    as UC_Upload
+  usecase "Download Document & Resource"  as UC_Download
+  usecase "Validate Document & Resource"  as UC_Validate
+  usecase "Create Category"               as UC_Create
 }
 
-usecase "Manage Users"         as UC_MU
+package "User Management" {
+  usecase "Manage Users"                  as UC_ManageUsers
+}
 
-' Formateur permissions
-F -- UC_UD : uploads
-F -- UC_DD : downloads
-F -- UC_VD : validates
+' Formateur & Admin permissions
+FA --> UC_Upload
+FA --> UC_Download
+FA --> UC_Validate
+FA --> UC_Create
+FA --> UC_ManageUsers
 
 ' Apprenant permissions
-U -- UC_UD : uploads
-U -- UC_DD : downloads
-
-' Admin permissions
-A -- UC_UD : uploads
-A -- UC_DD : downloads
-A -- UC_VD : validates
-A -- UC_MU : manages users
+U  --> UC_Upload
+U  --> UC_Download
 @enduml

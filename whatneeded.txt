@@ -49,3 +49,4 @@ http://127.0.0.1:8000/profile i have error
 add button about 'my doucments'
 if formator or admin add the button in nav bar in home page the button for dashboard .if click go dahsobard
 add in seed er Apprenant dont utilisator
+in page home change the title welcome library . 

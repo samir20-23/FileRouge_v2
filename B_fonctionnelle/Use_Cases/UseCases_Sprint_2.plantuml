@@ -1,26 +1,23 @@
 @startuml
-title Partage de documents – Use Cases Sprint 2 (Formateur + Admin)
 left to right direction
 
-actor Formateur as F
-actor Admin as A
+actor "Formateur & Admin" as FA
 
-package "Sprint 2 – Fonctions avancées" {
-  usecase "Uploader un document"    as UC_Upload
-  usecase "Télécharger un document" as UC_Download
-  usecase "Valider un document"     as UC_Validate
-  usecase "Gérer les utilisateurs"  as UC_ManageUsers
+package " " {
+  usecase "Uploader un document & Ressource"    as UC_Upload
+  usecase "Télécharger un document & Ressource" as UC_Download
+  usecase "Valider un document & Ressource"    as UC_Validate
+  usecase "Créer une catégorie"                as UC_Create
 }
 
-' Formateur
-F -- UC_Upload
-F -- UC_Download
-F -- UC_Validate
+package "User Management" {
+  usecase "Gérer les utilisateurs"             as UC_ManageUsers
+}
 
-' Admin
-A -- UC_Upload
-A -- UC_Download
-A -- UC_Validate
-A -- UC_ManageUsers
-
+FA --> UC_Upload
+FA --> UC_Download
+FA --> UC_Validate
+FA --> UC_Create
+FA --> UC_ManageUsers
 @enduml
+ 

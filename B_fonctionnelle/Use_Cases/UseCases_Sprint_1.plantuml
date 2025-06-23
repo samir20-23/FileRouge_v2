@@ -1,15 +1,13 @@
 @startuml
-title Partage de documents – Use Cases Sprint 1
 left to right direction
 
 actor Apprenant as U
 
-package "Sprint 1 – Fonctions Apprenant" {
-  usecase "Uploader un document"    as UC_Upload
-  usecase "Télécharger un document" as UC_Download
+package " " {
+  usecase "Uploader un document & Ressource"    as UC_Upload
+  usecase "Télécharger un document & Ressource" as UC_Download
 }
 
-U -- UC_Upload : uploads
-U -- UC_Download : downloads
-
+U --> UC_Upload : uploads
+U --> UC_Download : downloads
 @enduml
