@@ -1,64 +1,69 @@
 @startuml
 left to right direction
+skinparam classAttributeIconSize 0
 
-title Partage centralisé de documents et ressources pédagogiques
-
-' ======= CLASSES =======
+title Système de gestion de documents – Diagramme de classes
 
 class Utilisateur {
     +id: Integer
-    +nom: String
+    +name: String
     +email: String
-    +password: String
+    -password: String
+    +role: String <<admin, formateur, apprenant>>
+    +email_verified_at: DateTime
+    +remember_token: String
     +created_at: DateTime
     +updated_at: DateTime
-}
-
-class Formateur {
-    +id: Integer
-    +nom: String
-    +email: String
-    +password: String
-    +created_at: DateTime
-    +updated_at: DateTime
+    --
+    +isAdmin(): Boolean
+    +isFormateur(): Boolean
+    +isApprenant(): Boolean
 }
 
 class Document {
     +id: Integer
     +title: String
-    +chemin_fichier: String
+    +description: Text
+    +original_name: String
+    +file_path: String
+    +file_size: Integer
+    +mime_type: String
     +type: String
-    +date_telechargement: DateTime
-    +category_id: Integer
+    +status: String <<draft, published, archived, pending, approved, rejected>>
+    +is_public: Boolean
+    +download_count: Integer
+    +user_id: Integer
+    +categorie_id: Integer
     +created_at: DateTime
     +updated_at: DateTime
+    --
 }
 
 class Categorie {
     +id: Integer
-    +nom: String
-    +description: String
+    +name: String
+    +description: Text
     +created_at: DateTime
     +updated_at: DateTime
+    --
 }
 
 class Validation {
     +id: Integer
     +document_id: Integer
     +validated_by: Integer
-    +status: String <<Pending, Approved, Rejected>>
-    +commentaire: String
+    +status: String <<pending, approved, rejected, blocked>>
+    +comments: Text
     +validated_at: DateTime
     +created_at: DateTime
     +updated_at: DateTime
+    --
 }
 
-' ======= RELATIONS =======
-
-Utilisateur "1" -- "*" Document   : crée
-Formateur   "1" -- "*" Document   : crée
-Document    "*" -- "1" Categorie  : appartient à
-Document    "1" -- "*" Validation : fait l'objet de
-Formateur   "1" -- "*" Validation : valide
+' Relationships
+Utilisateur "1" -- "0..*" Document : owns
+Document "*" -- "1" Categorie : belongs to
+Validation "1" -- "1" Document : pertains to
+Validation "1" -- "1" Utilisateur : validated by
 
 @enduml

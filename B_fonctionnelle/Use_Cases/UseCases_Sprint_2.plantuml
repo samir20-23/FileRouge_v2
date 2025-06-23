@@ -1,29 +1,26 @@
 @startuml
-title Partage centralisé – Cas d'utilisation global
+title Partage de documents – Use Cases Sprint 2 (Formateur + Admin)
+left to right direction
 
-actor Formateur   as F
-actor Apprenant   as U
+actor Formateur as F
+actor Admin as A
 
-package "Gestion des Documents & Ressources" {
-  usecase "Créer et téléverser\nun document"   as UC_A
-  usecase "Téléverser une ressource"           as UC_B
-  usecase "Télécharger un document"            as UC_C
-  usecase "Consulter une ressource"            as UC_D
+package "Sprint 2 – Fonctions avancées" {
+  usecase "Uploader un document"    as UC_Upload
+  usecase "Télécharger un document" as UC_Download
+  usecase "Valider un document"     as UC_Validate
+  usecase "Gérer les utilisateurs"  as UC_ManageUsers
 }
 
-package "Gestion des Catégories" {
-  usecase "Ajouter une catégorie"   as UC_E
-  usecase "Modifier une catégorie"  as UC_F
-  usecase "Supprimer une catégorie" as UC_G
-}
+' Formateur
+F -- UC_Upload
+F -- UC_Download
+F -- UC_Validate
 
-F -- UC_A : crée
-F -- UC_B : crée
-U -- UC_C : télécharge
-U -- UC_D : consulte
-
-F -- UC_E : gère
-F -- UC_F : gère
-F -- UC_G : gère
+' Admin
+A -- UC_Upload
+A -- UC_Download
+A -- UC_Validate
+A -- UC_ManageUsers
 
 @enduml

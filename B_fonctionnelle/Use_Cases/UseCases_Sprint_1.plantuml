@@ -1,15 +1,15 @@
 @startuml
-title Partage de documents et de ressources – Use Cases Sprint 1
+title Partage de documents – Use Cases Sprint 1
 left to right direction
 
-actor Utilisateur as U
+actor Apprenant as U
 
-package "Sprint 1" {
-  usecase "Téléverser un document"           as UC1
-  usecase "Consulter les ressources partagées" as UC2
+package "Sprint 1 – Fonctions Apprenant" {
+  usecase "Uploader un document"    as UC_Upload
+  usecase "Télécharger un document" as UC_Download
 }
 
-U -- UC1 : téléverse
-U -- UC2 : consulte
+U -- UC_Upload : uploads
+U -- UC_Download : downloads
 
 @enduml

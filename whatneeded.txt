@@ -16,7 +16,7 @@ button nav about dark and many is dont work in any page
 box of the delete  validation the close buton dont work http://127.0.0.1:8000/validations/4/edit and color white
 dete the card if example me in validation dont select card validaton 
 error View [users.profile] not found. if me click edit in users   
- -
+ - 
 change the logo of the laravel in chrome n top windows .
 in login page or register remove the box last box i mean the dev background .  
 in document show in button opne in browser is dont work . 
@@ -37,3 +37,15 @@ the buttons is work all buttons in  the app
 add page for normal user about upload documents 
 in http://127.0.0.1:8000/validations the pending is dont can show it in table all pending . why ? 
 in show document the create by name is white .http://127.0.0.1:8000/documents/16
+
+fix(actions) the nav buttons in app   
+fix(UI,actions) the home page about user actions 
+fix(UI) the cards design to better 
+
+bugs
+http://127.0.0.1:8000/profile i have error 
+
+
+add button about 'my doucments'
+if formator or admin add the button in nav bar in home page the button for dashboard .if click go dahsobard
+add in seed er Apprenant dont utilisator

@@ -4,33 +4,29 @@ left to right direction
 title Centralized Sharing – Global Use Cases (with Validation)
 
 actor Formateur    as F
-actor utilisateur       as U
+actor Apprenant as U
+actor Admin       as A
 
-package "Document & Resource Management" {
-  usecase "Upload Document"      as UC_UD
-  usecase "Download Document"    as UC_DD
-  usecase "Validate Document"    as UC_VD
-  usecase "Upload Resource"      as UC_UR
-  usecase "Download Resource"    as UC_DR
-  usecase "Validate Resource"    as UC_VR
+package "Document Management" {
+  usecase "Upload Document"    as UC_UD
+  usecase "Download Document"  as UC_DD
+  usecase "Validate Document"  as UC_VD
 }
 
-' Trainer can upload, download and validate
-F -- UC_UD : uploads  
-F -- UC_DD : downloads  
-F -- UC_VD : validates  
-F -- UC_UR : uploads  
-F -- UC_DR : downloads  
-F -- UC_VR : validates  
+usecase "Manage Users"         as UC_MU
 
-' User can upload and download only
-U -- UC_UD : uploads  
-U -- UC_DD : downloads  
-U -- UC_UR : uploads  
-U -- UC_DR : downloads  
+' Formateur permissions
+F -- UC_UD : uploads
+F -- UC_DD : downloads
+F -- UC_VD : validates
+
+' Apprenant permissions
+U -- UC_UD : uploads
+U -- UC_DD : downloads
+
+' Admin permissions
+A -- UC_UD : uploads
+A -- UC_DD : downloads
+A -- UC_VD : validates
+A -- UC_MU : manages users
 @enduml
-
-
-
-
- 
