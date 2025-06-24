@@ -7,8 +7,10 @@
         {{-- Hero Section --}}
         <div class="hero-section" data-aos="fade-up">
             <div class="hero-content">
-                <h1 class="hero-title">Welcome to Document Library</h1>
-                <p class="hero-subtitle">Discover, download, and share educational resources and documents</p>
+                <h1 class="hero-title">Welcome to SoliLMS</h1>
+             <p class="hero-subtitle">
+    Manage, share, and access all your course materials and documents in one secure platform.
+</p>
 
                 {{-- Search Bar --}}
                 <div class="hero-search">
@@ -973,7 +975,7 @@
 
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize AOS

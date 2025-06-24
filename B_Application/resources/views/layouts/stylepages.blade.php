@@ -660,12 +660,7 @@
         font-weight-bold text-dark
         font-weight-bold text-dark  */
         /*--bg-table
-table table-striped table-hover
-table-responsive
-mb-0
-text-muted
-*/
-
+ 
         /* body[data-theme='dark'] .d-flex,
         body[data-theme='dark'] .d-flex * {
             color: rgb(255, 255, 255) !important;
@@ -1490,10 +1485,24 @@ text-muted
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('home') }}">
-                            <i class="bi bi-house me-1"></i>Home
-                        </a>
+                        @php
+                            $user = auth()->user();
+                            $path = request()->path(); // 'home', '', 'dashboard'
+                        @endphp
+
+                        @if ($user && ($user->isAdmin() || $user->isFormateur()))
+                            @if ($path === '/' || $path === 'home')
+                                <a class="nav-link" href="{{ route('dashboard') }}">
+                                    <i class="bi bi-house me-1"></i>Dashboard
+                                </a>
+                            @elseif ($path === 'dashboard')
+                                <a class="nav-link" href="{{ route('home') }}">
+                                    <i class="bi bi-house me-1"></i>Home
+                                </a>
+                            @endif
+                        @endif
                     </li>
+
                     @guest
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">
@@ -1584,7 +1593,7 @@ text-muted
             @endauth
 
             <nav class="nav flex-column sidebar-nav">
-                @if (auth()->check() && auth()->user()->isAdmin())
+                @if ((auth()->check() && auth()->user()->isAdmin()) || auth()->user()->isFormateur())
                     <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
                         href="{{ route('dashboard') }}">
                         <i class="bi bi-speedometer2"></i>
@@ -1649,12 +1658,15 @@ text-muted
             });
         });
     </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    AOS.init({ duration: 600, once: true });
-  });
-</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({
+                duration: 600,
+                once: true
+            });
+        });
+    </script>
 
     <!-- AOS JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>

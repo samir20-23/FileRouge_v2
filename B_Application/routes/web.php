@@ -14,11 +14,12 @@ use App\Http\Middleware\CheckRole;
 Auth::routes();
 
 // Public Home
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/home', [HomeController::class, 'index']);
 
 // Protected Routes
 Route::middleware('auth')->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index']);
+
     // Common routes
     Route::get('/search', [HomeController::class, 'search'])->name('search');
     Route::get('profile', [UserController::class, 'profile'])->name('users.profile');

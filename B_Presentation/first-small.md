@@ -1,9 +1,12 @@
 **الجزء 1: الافتتاحية (≈1.5 د)**
+
+
 “السلام عليكم الأساتذة الكرام، أنا سامير، واليوم نقدّم لكم مشروع **Gestion du partage de documents et de ressources** ضمن منصة Soli-LMS، من ضمن برنامج Mobile Bootcamp 2024/2025.”
 
 ---
 
 **الجزء 2: سياق المشروع والأهداف (≈2 د)**
+
 “في الواقع، le documents pédagogiques متفرّقة فالإيميلات وخدمات خارجية، وكيضيعوا وكيمكن يوقع اختراق أو يضيع التعاون.
 أنا طوّرت تطبيق ويب مركزي لتحقيق:
 
@@ -14,6 +17,7 @@
 ---
 
 **الجزء 3: منهجية العمل (≈2.5 د)**
+
 “بديت بمنهجية **Agile** على شكل سبرينتات.
 
 * كرّسنا **Scrum**: Sprint Planning، Daily Stand-up، Sprint Review وRetrospective.
@@ -28,6 +32,7 @@
 ---
 
 **الجزء 4: الجانب التقني (≈2.5 د)**
+
 “في **Branche Technique**:
 
 * **Besoin technique**: رفع/download document حتى 50 MB، واجهة responsive بـ Tailwind CSS.
@@ -42,6 +47,7 @@
 ---
 
 **الجزء 5: الجانب الوظيفي (≈2 د)**
+
 “في **Branche Fonctionnelle**:
 
 1. **Carte d’empathie**: لفهم احتياجات Formateurs وApprenants.
@@ -62,6 +68,7 @@
 ---
 
 **الجزء 6: الديمو العملي (5 د)**
+
 “دابا غادي نورِّيكم التطبيق عمليًا:
 
 1. كندخل للـ dashboard.
@@ -74,6 +81,7 @@
 ---
 
 **الجزء 7: التصميم والنماذج (≈2 د)**
+
 “هادي **UML Class Diagram**: Utilisateur, Document, Categorie, Validation والعلاقات بينهم.
 وهادی **les maquettes**:
 
@@ -85,12 +93,14 @@
 ---
 
 **الجزء 8: الخاتمة (≈1 د)**
+
 “بالخلاصة، هاد المشروع يوفر حلًّا شاملًا لمشاركة وتنظيم الـ documents pédagogiques بأمان وفعالية. تعلمت Agile و2TUP، حسّنت UX، واستخدمت Laravel، MySQL، AdminLTE وTailwind لإنجاز تطبيق قوي.
 شكراً على حسن الاستماع، وأنا جاهز للأسئلة.”
 
 ---
 
 **الجزء 9: الأسئلة (≈2 د)**
+
 *(رد بلغة واضحة، ركّز على Clarté des réponses وMaîtrise du code).*
 
 > **المجموع التقريبي:** 16 دقيقة.

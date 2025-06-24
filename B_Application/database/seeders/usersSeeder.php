@@ -16,19 +16,19 @@ class UsersSeeder extends Seeder
                 'name'     => 'admin',
                 'email'    => 'admin@gmail.com',
                 'role'     => 'admin',
-                'password' => Hash::make('admin'),
+                'password' => Hash::make('password'),
             ],
             [
                 'name'     => 'formateur',
                 'email'    => 'formateur@gmail.com',
                 'role'     => 'Formateur',
-                'password' => Hash::make('formateur'),
+                'password' => Hash::make('password'),
             ],
             [
-                'name'     => 'user',
-                'email'    => 'user@gmail.com',
+                'name'     => 'Apprenant',
+                'email'    => 'Apprenant@gmail.com',
                 'role'     => 'User',
-                'password' => Hash::make('user'),
+                'password' => Hash::make('password'),
             ],
         ];
 
