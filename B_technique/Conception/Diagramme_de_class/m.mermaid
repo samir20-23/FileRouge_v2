@@ -1,0 +1,62 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+
+title Partage centralisé de documents et ressources pédagogiques
+
+class Apprenant <<C>> {
+  + id: Integer
+  + nom: String
+  + email: String
+  + password: String
+  + created_at: DateTime
+  + updated_at: DateTime
+}
+
+class Formateur <<C>> {
+  + id: Integer
+  + nom: String
+  + email: String
+  + password: String
+  + created_at: DateTime
+  + updated_at: DateTime
+}
+
+class Document <<C>> {
+  + id: Integer
+  + title: String
+  + chemin_fichier: String
+  + type: String
+  + date_telechargement: DateTime
+  + category_id: Integer
+  + created_at: DateTime
+  + updated_at: DateTime
+}
+
+class Categorie <<C>> {
+  + id: Integer
+  + nom: String
+  + description: String
+  + created_at: DateTime
+  + updated_at: DateTime
+}
+
+class Validation <<C>> {
+  + id: Integer
+  + document_id: Integer
+  + validated_by: Integer
+  + status: String «Pending, Approved, Rejected»
+  + commentaire: String
+  + validated_at: DateTime
+  + created_at: DateTime
+  + updated_at: DateTime
+}
+
+' Relations
+Apprenant   "1" --> "*" Document    : crée
+Formateur   "1" --> "*" Document    : crée
+Document    "*" --> "1" Categorie   : appartient à
+Document    "1" --> "*" Validation  : fait l'objet de
+Formateur   "1" --> "*" Validation  : valide
+@enduml
